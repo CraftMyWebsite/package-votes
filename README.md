@@ -1,2 +1,1 @@
-# package-votes
-Package Votes pour CraftMyWebsite
+Package vote pour CraftMyWebsite

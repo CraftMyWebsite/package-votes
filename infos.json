@@ -1,0 +1,18 @@
+{
+  "name": "votes",
+  "name_menu": "Votes",
+  "icon_menu": "fas fa-vote-yea",
+  "url_menu": "",
+  "urls_submenu": {
+    "Configuration": "votes/config",
+    "Ajouter un site": "votes/site/add",
+    "Liste des sites": "votes/site/list",
+    "Récompenses": "votes/rewards",
+    "Statistiques de votes": "votes/stats",
+    "Muliplicateur de votes": "votes/boost/",
+    "VoteShop": "votes/voteshop"
+  },
+  "description": "Intégrez un système de votes complet pour votre site.",
+  "version": "1.0.0",
+  "author": "Teyir"
+}
