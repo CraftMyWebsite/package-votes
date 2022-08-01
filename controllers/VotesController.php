@@ -2,7 +2,7 @@
 
 namespace CMW\Controller\Votes;
 
-use CMW\Controller\coreController;
+use CMW\Controller\Core\CoreController;
 use CMW\Controller\Menus\menusController;
 use CMW\Controller\users\usersController;
 use CMW\Model\users\usersModel;
@@ -12,6 +12,7 @@ use CMW\Model\votes\sitesModel;
 use CMW\Model\Votes\statsModel;
 use CMW\Model\Votes\VotesModel;
 use CMW\Router\Link;
+use CMW\Utils\Utils;
 use CMW\Utils\View;
 
 
@@ -32,8 +33,7 @@ class VotesController extends CoreController
     private VotesModel $votesModel;
 
 
-
-    public function __construct($themePath = null,  )
+    public function __construct($themePath = null,)
     {
         parent::__construct($themePath);
         $this->configModel = new configModel();
@@ -62,10 +62,10 @@ class VotesController extends CoreController
         //Keep this perm control just for the post function
         usersController::isAdminLogged();
 
-        $topShow = filter_input(INPUT_POST,'topShow');
+        $topShow = filter_input(INPUT_POST, 'topShow');
         $reset = filter_input(INPUT_POST, 'reset');
-        $autoTopRewardActive = filter_input(INPUT_POST,'autoTopRewardActive');
-        $autoTopReward = filter_input(INPUT_POST,'autoTopReward');
+        $autoTopRewardActive = filter_input(INPUT_POST, 'autoTopRewardActive');
+        $autoTopReward = filter_input(INPUT_POST, 'autoTopReward');
 
 
         //Faire la config pour les rewards
@@ -147,7 +147,7 @@ class VotesController extends CoreController
     {
         usersController::isAdminLogged();
 
-        $siteId = filter_input(INPUT_POST,'siteId');
+        $siteId = filter_input(INPUT_POST, 'siteId');
         $title = filter_input(INPUT_POST, 'title');
         $time = filter_input(INPUT_POST, 'time');
         $idUnique = filter_input(INPUT_POST, 'idUnique');
@@ -288,7 +288,8 @@ class VotesController extends CoreController
     }
 
     //Return the reward with a specific ID
-    public function getReward(){
+    public function getReward()
+    {
         /* Error section */
         if (empty(filter_input(INPUT_POST, "id"))) {
             echo json_encode(array("response" => "ERROR-EMPTY_ID"));
@@ -337,25 +338,24 @@ class VotesController extends CoreController
     public function votesPublic()
     {
         //Default controllers (important)
-        $core = new coreController();
+        $core = new CoreController();
         $menu = new menusController();
 
         $vote = new VotesModel();
 
-        $sites = new sitesModel();
-        $sites = $sites->fetchAll();
 
-        $_SESSION['votes']['token'] = $vote->generateToken();
+        $sites = $this->sitesModel->getSites();
 
-        $stats = new statsModel();
+        $_SESSION['votes']['token'] = Utils::genId(15);
 
-        $topCurrent = $stats->getActualTop();
-        $topGlobal = $stats->getGlobalTop();
+
+        $topCurrent = $this->statsModel->getActualTop();
+        $topGlobal = $this->statsModel->getGlobalTop();
 
         //Include the public view file ("public/themes/$themePath/views/votes/main.view.php")
         $view = new View('votes', 'main');
 
-        $view->addVariableList(["votes" => $vote, "sites" => $sites, "stats" => $stats,
+        $view->addVariableList(["votes" => $vote, "sites" => $sites,
             "topCurrent" => $topCurrent, "topGlobal" => $topGlobal, "core" => $core, "menu" => $menu]);
         $view->view();
 
