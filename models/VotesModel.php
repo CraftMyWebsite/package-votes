@@ -35,7 +35,7 @@ class VotesModel extends DatabaseManager
 
         $sql = "SELECT * FROM cmw_votes_sites WHERE votes_sites_url=:url";
 
-        $db = DatabaseManager::dbConnect();
+        $db = self::getInstance();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
@@ -55,7 +55,7 @@ class VotesModel extends DatabaseManager
 
         $sql = "SELECT * FROM cmw_votes_votes WHERE votes_id_user = :id_user AND votes_id_site = :id_site";
 
-        $db = DatabaseManager::dbConnect();
+        $db = self::getInstance();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
@@ -77,7 +77,7 @@ class VotesModel extends DatabaseManager
 
         $sql = "SELECT votes_sites_time FROM cmw_votes_sites WHERE votes_sites_id = :id";
 
-        $db = DatabaseManager::dbConnect();
+        $db = self::getInstance();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
@@ -95,7 +95,7 @@ class VotesModel extends DatabaseManager
         $sql = "SELECT votes_date FROM cmw_votes_votes WHERE votes_id_user = :id_user AND votes_id_site = :id_site 
                                        ORDER BY `cmw_votes_votes`.`votes_date` DESC LIMIT 1";
 
-        $db = DatabaseManager::dbConnect();
+        $db = self::getInstance();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
@@ -132,7 +132,7 @@ class VotesModel extends DatabaseManager
 
         $sql = "INSERT INTO cmw_votes_votes (votes_id_user, votes_ip, votes_id_site) VALUES (:id_user, :ip, :id_site)";
 
-        $db = DatabaseManager::dbConnect();
+        $db = self::getInstance();
         $req = $db->prepare($sql);
         $req->execute($var);
     }

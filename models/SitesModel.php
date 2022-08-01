@@ -28,7 +28,7 @@ class SitesModel extends DatabaseManager
 
         $sql = "INSERT INTO cmw_votes_sites (votes_sites_title, votes_sites_time, votes_sites_id_unique, 
                              votes_sites_url, votes_sites_rewards_id) VALUES (:title, :time, :id_unique, :url, :rewards_id)";
-        $db = DatabaseManager::dbConnect();
+        $db = self::getInstance();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
@@ -43,7 +43,7 @@ class SitesModel extends DatabaseManager
     public function getSites(): array
     {
         $sql = "SELECT * FROM cmw_votes_sites";
-        $db = DatabaseManager::dbConnect();
+        $db = self::getInstance();
 
         $res = $db->prepare($sql);
 
@@ -68,7 +68,7 @@ class SitesModel extends DatabaseManager
 
         $sql = "SELECT * FROM cmw_votes_sites WHERE votes_sites_id=:id";
 
-        $db = DatabaseManager::dbConnect();
+        $db = self::getInstance();
         $res = $db->prepare($sql);
 
 
@@ -107,7 +107,7 @@ class SitesModel extends DatabaseManager
                            votes_sites_id_unique=:id_unique, votes_sites_url=:url, votes_sites_rewards_id=:rewards_id 
                        WHERE votes_sites_id=:id";
 
-        $db = DatabaseManager::dbConnect();
+        $db = self::getInstance();
         $req = $db->prepare($sql);
         if ($req->execute($info)) {
             return $this->getSiteById($siteId);
@@ -121,7 +121,7 @@ class SitesModel extends DatabaseManager
     {
         $sql = "DELETE FROM cmw_votes_sites WHERE votes_sites_id=:id";
 
-        $db = DatabaseManager::dbConnect();
+        $db = self::getInstance();
         $req = $db->prepare($sql);
         $req->execute(array("id" => $id));
     }
