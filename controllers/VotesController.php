@@ -334,13 +334,12 @@ class VotesController extends CoreController
     /* ///////////////////// PUBLIC VOTE SECTION ////////////////////*/
     /* //////////////////////////////////////////////////////////////*/
 
+    /**
+     * @throws \CMW\Router\RouterException
+     */
     #[Link('/vote', Link::GET)]
     public function votesPublic()
     {
-        //Default controllers (important)
-        $core = new CoreController();
-        $menu = new menusController();
-
         $vote = new VotesModel();
 
 
@@ -356,7 +355,7 @@ class VotesController extends CoreController
         $view = new View('votes', 'main');
 
         $view->addVariableList(["votes" => $vote, "sites" => $sites,
-            "topCurrent" => $topCurrent, "topGlobal" => $topGlobal, "core" => $core, "menu" => $menu]);
+            "topCurrent" => $topCurrent, "topGlobal" => $topGlobal]);
         $view->view();
 
 
