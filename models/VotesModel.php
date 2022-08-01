@@ -2,7 +2,7 @@
 
 namespace CMW\Model\Votes;
 
-use CMW\Model\Manager;
+use CMW\Manager\Database\DatabaseManager;
 
 /**
  * Class @VotesModel
@@ -10,7 +10,7 @@ use CMW\Model\Manager;
  * @author Teyir
  * @version 1.0
  */
-class VotesModel extends Manager
+class VotesModel extends DatabaseManager
 {
     public int $id;
     public string $title;
@@ -35,7 +35,7 @@ class VotesModel extends Manager
 
         $sql = "SELECT * FROM cmw_votes_sites WHERE votes_sites_url=:url";
 
-        $db = manager::dbConnect();
+        $db = DatabaseManager::dbConnect();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
@@ -55,7 +55,7 @@ class VotesModel extends Manager
 
         $sql = "SELECT * FROM cmw_votes_votes WHERE votes_id_user = :id_user AND votes_id_site = :id_site";
 
-        $db = manager::dbConnect();
+        $db = DatabaseManager::dbConnect();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
@@ -77,7 +77,7 @@ class VotesModel extends Manager
 
         $sql = "SELECT votes_sites_time FROM cmw_votes_sites WHERE votes_sites_id = :id";
 
-        $db = manager::dbConnect();
+        $db = DatabaseManager::dbConnect();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
@@ -95,7 +95,7 @@ class VotesModel extends Manager
         $sql = "SELECT votes_date FROM cmw_votes_votes WHERE votes_id_user = :id_user AND votes_id_site = :id_site 
                                        ORDER BY `cmw_votes_votes`.`votes_date` DESC LIMIT 1";
 
-        $db = manager::dbConnect();
+        $db = DatabaseManager::dbConnect();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
@@ -132,7 +132,7 @@ class VotesModel extends Manager
 
         $sql = "INSERT INTO cmw_votes_votes (votes_id_user, votes_ip, votes_id_site) VALUES (:id_user, :ip, :id_site)";
 
-        $db = manager::dbConnect();
+        $db = DatabaseManager::dbConnect();
         $req = $db->prepare($sql);
         $req->execute($var);
     }

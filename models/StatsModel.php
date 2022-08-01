@@ -2,16 +2,16 @@
 
 namespace CMW\Model\Votes;
 
-use CMW\Model\Manager;
+use CMW\Manager\Database\DatabaseManager;
 
 
 /**
  * Class @statsModel
  * @package votes
- * @author Teyir | CraftMySite <contact@craftmysite.fr>
+ * @author Teyir
  * @version 1.0
  */
-class StatsModel extends Manager
+class StatsModel extends DatabaseManager
 {
 
     public int $votePoints;
@@ -22,7 +22,7 @@ class StatsModel extends Manager
 
     /**
      * @param string $type insert the type you want: "all", "month", "week", "day", "hour", "minute"
-     * @return void
+     * @return array
      */
     public function statsVotes($type): array
     {
@@ -31,7 +31,7 @@ class StatsModel extends Manager
 
             $sql = "SELECT * FROM cmw_votes_votes";
 
-            $db = manager::dbConnect();
+            $db = DatabaseManager::dbConnect();
             $req = $db->prepare($sql);
             $res = $req->execute();
 
@@ -73,7 +73,7 @@ class StatsModel extends Manager
 
             $sql = "SELECT * FROM cmw_votes_votes WHERE votes_date BETWEEN (:range_start) AND (:range_finish)";
 
-            $db = manager::dbConnect();
+            $db = DatabaseManager::dbConnect();
             $req = $db->prepare($sql);
             $res = $req->execute($var);
         }
@@ -97,7 +97,7 @@ class StatsModel extends Manager
                     JOIN cmw_votes_sites ON cmw_votes_votes.votes_id_site = cmw_votes_sites.votes_sites_id 
                                                                    WHERE cmw_votes_sites.votes_sites_title = :title;';
 
-        $db = manager::dbConnect();
+        $db = DatabaseManager::dbConnect();
         $req = $db->prepare($sql);
         $res = $req->execute($var);
 
@@ -128,7 +128,7 @@ class StatsModel extends Manager
                     WHERE cmw_votes_sites.votes_sites_title = :title
                     AND cmw_votes_votes.votes_date BETWEEN (:range_start) AND (:range_finish);';
 
-        $db = manager::dbConnect();
+        $db = DatabaseManager::dbConnect();
         $req = $db->prepare($sql);
         $res = $req->execute($var);
 
@@ -145,7 +145,7 @@ class StatsModel extends Manager
     public function getNumberOfSites(): int
     {
         $sql = "SELECT votes_sites_id FROM cmw_votes_sites";
-        $db = manager::dbConnect();
+        $db = DatabaseManager::dbConnect();
         $req = $db->prepare($sql);
         $res = $req->execute();
 
@@ -171,7 +171,7 @@ class StatsModel extends Manager
                     WHERE MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE()) GROUP BY cmw_users.user_pseudo 
                     ORDER BY COUNT(cmw_votes_votes.votes_id) DESC LIMIT 10";
 
-        $db = manager::dbConnect();
+        $db = DatabaseManager::dbConnect();
         $req = $db->prepare($sql);
 
         if ($req->execute()) {
@@ -193,7 +193,7 @@ class StatsModel extends Manager
                     JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user GROUP BY cmw_users.user_pseudo 
                     ORDER BY COUNT(cmw_votes_votes.votes_id) DESC LIMIT 10";
 
-        $db = manager::dbConnect();
+        $db = DatabaseManager::dbConnect();
         $req = $db->prepare($sql);
 
         if ($req->execute()) {
@@ -213,7 +213,7 @@ class StatsModel extends Manager
                     WHERE MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE()) GROUP BY cmw_users.user_pseudo 
                     ORDER BY COUNT(cmw_votes_votes.votes_id) DESC";
 
-        $db = manager::dbConnect();
+        $db = DatabaseManager::dbConnect();
         $req = $db->prepare($sql);
 
         if ($req->execute()) {
@@ -232,7 +232,7 @@ class StatsModel extends Manager
                     GROUP BY cmw_users.user_pseudo 
                     ORDER BY COUNT(cmw_votes_votes.votes_id) DESC";
 
-        $db = manager::dbConnect();
+        $db = DatabaseManager::dbConnect();
         $req = $db->prepare($sql);
 
         if ($req->execute()) {
@@ -252,7 +252,7 @@ class StatsModel extends Manager
                     GROUP BY cmw_users.user_pseudo 
                     ORDER BY COUNT(cmw_votes_votes.votes_id) DESC";
 
-        $db = manager::dbConnect();
+        $db = DatabaseManager::dbConnect();
         $req = $db->prepare($sql);
 
         if ($req->execute()) {

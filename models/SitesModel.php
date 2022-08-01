@@ -3,8 +3,7 @@
 namespace CMW\Model\Votes;
 
 use CMW\Entity\Votes\VotesSitesEntity;
-use CMW\Model\Manager;
-
+use CMW\Manager\Database\DatabaseManager;
 
 /**
  * Class @SitesModel
@@ -12,7 +11,7 @@ use CMW\Model\Manager;
  * @author Teyir
  * @version 1.0
  */
-class SitesModel extends Manager
+class SitesModel extends DatabaseManager
 {
 
 
@@ -29,7 +28,7 @@ class SitesModel extends Manager
 
         $sql = "INSERT INTO cmw_votes_sites (votes_sites_title, votes_sites_time, votes_sites_id_unique, 
                              votes_sites_url, votes_sites_rewards_id) VALUES (:title, :time, :id_unique, :url, :rewards_id)";
-        $db = Manager::dbConnect();
+        $db = DatabaseManager::dbConnect();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
@@ -44,7 +43,7 @@ class SitesModel extends Manager
     public function getSites(): array
     {
         $sql = "SELECT * FROM cmw_votes_sites";
-        $db = Manager::dbConnect();
+        $db = DatabaseManager::dbConnect();
 
         $res = $db->prepare($sql);
 
@@ -69,7 +68,7 @@ class SitesModel extends Manager
 
         $sql = "SELECT * FROM cmw_votes_sites WHERE votes_sites_id=:id";
 
-        $db = Manager::dbConnect();
+        $db = DatabaseManager::dbConnect();
         $res = $db->prepare($sql);
 
 
@@ -108,7 +107,7 @@ class SitesModel extends Manager
                            votes_sites_id_unique=:id_unique, votes_sites_url=:url, votes_sites_rewards_id=:rewards_id 
                        WHERE votes_sites_id=:id";
 
-        $db = Manager::dbConnect();
+        $db = DatabaseManager::dbConnect();
         $req = $db->prepare($sql);
         if ($req->execute($info)) {
             return $this->getSiteById($siteId);
@@ -122,7 +121,7 @@ class SitesModel extends Manager
     {
         $sql = "DELETE FROM cmw_votes_sites WHERE votes_sites_id=:id";
 
-        $db = Manager::dbConnect();
+        $db = DatabaseManager::dbConnect();
         $req = $db->prepare($sql);
         $req->execute(array("id" => $id));
     }

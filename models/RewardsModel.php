@@ -3,7 +3,7 @@
 namespace CMW\Model\Votes;
 
 use CMW\Entity\Votes\VotesRewardsEntity;
-use CMW\Model\Manager;
+use CMW\Manager\Database\DatabaseManager;
 
 /**
  * Class @RewardsModel
@@ -11,7 +11,7 @@ use CMW\Model\Manager;
  * @author Teyir
  * @version 1.0
  */
-class RewardsModel extends Manager
+class RewardsModel extends DatabaseManager
 {
 
     public function addReward(string $title, string $action): ?VotesRewardsEntity
@@ -23,7 +23,7 @@ class RewardsModel extends Manager
 
         $sql = "INSERT INTO cmw_votes_rewards (votes_rewards_title, votes_rewards_action) VALUES (:title, :action)";
 
-        $db = Manager::dbConnect();
+        $db = DatabaseManager::dbConnect();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
@@ -41,7 +41,7 @@ class RewardsModel extends Manager
 
         $sql = "SELECT * FROM cmw_votes_rewards WHERE votes_rewards_rewards_id=:rewards_id";
 
-        $db = Manager::dbConnect();
+        $db = DatabaseManager::dbConnect();
         $res = $db->prepare($sql);
 
         if (!$res->execute(array("rewards_id" => $id))) {
@@ -66,7 +66,7 @@ class RewardsModel extends Manager
 
         $sql = "DELETE FROM cmw_votes_rewards WHERE votes_rewards_rewards_id=:rewards_id";
 
-        $db = Manager::dbConnect();
+        $db = DatabaseManager::dbConnect();
         $req = $db->prepare($sql);
         $req->execute($var);
     }
@@ -82,7 +82,7 @@ class RewardsModel extends Manager
         $sql = "UPDATE cmw_votes_rewards SET votes_rewards_title=:title, votes_rewards_action=:action 
                          WHERE votes_rewards_rewards_id=:rewards_id";
 
-        $db = Manager::dbConnect();
+        $db = DatabaseManager::dbConnect();
         $req = $db->prepare($sql);
         if ($req->execute($var)) {
             return $this->getRwardById($rewardsId);
@@ -105,7 +105,7 @@ class RewardsModel extends Manager
                         ON cmw_votes_sites.votes_sites_rewards_id = cmw_votes_rewards.votes_rewards_rewards_id 
                     WHERE cmw_votes_sites.votes_sites_id =:id LIMIT 1;";
 
-        $db = manager::dbConnect();
+        $db = DatabaseManager::dbConnect();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
@@ -142,7 +142,7 @@ class RewardsModel extends Manager
             $sql = "INSERT INTO cmw_votes_votepoints (votes_votepoints_id_user, votes_votepoints_amount) 
                         VALUES (:id_user, :amount)";
 
-            $db = manager::dbConnect();
+            $db = DatabaseManager::dbConnect();
             $req = $db->prepare($sql);
             $req->execute($var);
 
@@ -155,7 +155,7 @@ class RewardsModel extends Manager
             $sql = "UPDATE cmw_votes_votepoints SET votes_votepoints_amount = votes_votepoints_amount+:amount
                             WHERE votes_votepoints_id_user=:id_user";
 
-            $db = manager::dbConnect();
+            $db = DatabaseManager::dbConnect();
             $req = $db->prepare($sql);
             $req->execute($var);
         }
@@ -170,7 +170,7 @@ class RewardsModel extends Manager
 
         $sql = "SELECT votes_votepoints_id_user FROM cmw_votes_votepoints WHERE votes_votepoints_id_user=:id_user";
 
-        $db = manager::dbConnect();
+        $db = DatabaseManager::dbConnect();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
@@ -201,7 +201,7 @@ class RewardsModel extends Manager
             $sql = "INSERT INTO cmw_votes_votepoints (votes_votepoints_id_user, votes_votepoints_amount) 
                         VALUES (:id_user, :amount)";
 
-            $db = manager::dbConnect();
+            $db = DatabaseManager::dbConnect();
             $req = $db->prepare($sql);
             $req->execute($var);
 
@@ -214,7 +214,7 @@ class RewardsModel extends Manager
             $sql = "UPDATE cmw_votes_votepoints SET votes_votepoints_amount = votes_votepoints_amount+:amount 
                             WHERE votes_votepoints_id_user=:id_user";
 
-            $db = manager::dbConnect();
+            $db = DatabaseManager::dbConnect();
             $req = $db->prepare($sql);
             $req->execute($var);
 
@@ -236,7 +236,7 @@ class RewardsModel extends Manager
         $sql = "INSERT INTO cmw_votes_logs_rewards (votes_logs_rewards_user_id, votes_logs_rewards_reward_id) 
                     VALUES (:user_id, :reward_id)";
 
-        $db = manager::dbConnect();
+        $db = DatabaseManager::dbConnect();
         $req = $db->prepare($sql);
         $req->execute($var);
     }
@@ -246,7 +246,7 @@ class RewardsModel extends Manager
     public function getRewards(): array
     {
         $sql = "SELECT * FROM cmw_votes_rewards";
-        $db = Manager::dbConnect();
+        $db = DatabaseManager::dbConnect();
 
         $res = $db->prepare($sql);
 

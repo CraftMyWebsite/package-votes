@@ -4,7 +4,7 @@ namespace cmw\Model\Votes;
 
 
 use CMW\Entity\Votes\VotesConfigEntity;
-use CMW\Model\Manager;
+use CMW\Manager\Database\DatabaseManager;
 
 
 /**
@@ -13,7 +13,7 @@ use CMW\Model\Manager;
  * @author Teyir
  * @version 1.0
  */
-class ConfigModel extends Manager
+class ConfigModel extends DatabaseManager
 {
     //Config
 
@@ -25,7 +25,7 @@ class ConfigModel extends Manager
 
         $sql = "SELECT * FROM cmw_votes_config LIMIT 1";
 
-        $db = Manager::dbConnect();
+        $db = DatabaseDatabaseManager::dbConnect();
         $res = $db->prepare($sql);
 
 
@@ -57,7 +57,7 @@ class ConfigModel extends Manager
                             votes_config_auto_top_reward_active=:auto_top_reward_active, 
                             votes_config_auto_top_reward=:auto_top_reward";
 
-        $db = Manager::dbConnect();
+        $db = DatabaseDatabaseManager::dbConnect();
         $req = $db->prepare($sql);
         if ($req->execute($info)) {
             return $this->getConfig();
