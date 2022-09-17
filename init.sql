@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS `cmw_votes_sites`
 CREATE TABLE IF NOT EXISTS `cmw_votes_votes`
 (
     `votes_id`      int(10) UNSIGNED NOT NULL,
-    `votes_id_user` int(11)          NOT NULL,
+    `votes_id_user` int(11)          NULL,
     `votes_ip`      varchar(39)      NOT NULL,
     `votes_id_site` int(10) UNSIGNED NOT NULL,
     `votes_date`    timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `cmw_votes_rewards`
 CREATE TABLE IF NOT EXISTS `cmw_votes_logs_rewards`
 (
     `votes_logs_rewards_id`        int(10) UNSIGNED NOT NULL,
-    `votes_logs_rewards_user_id`   int(11)          NOT NULL,
+    `votes_logs_rewards_user_id`   int(11)          NULL,
     `votes_logs_rewards_reward_id` int(11)                   DEFAULT NULL,
     `votes_logs_rewards_date`      timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE = InnoDB
@@ -82,9 +82,9 @@ ALTER TABLE `cmw_votes_votes`
 
 ALTER TABLE `cmw_votes_votes`
     ADD CONSTRAINT `cmw_votes_votes_ibfk_1` FOREIGN KEY (`votes_id_user`)
-        REFERENCES `cmw_users` (`user_id`),
+        REFERENCES `cmw_users` (`user_id`) ON DELETE SET NULL ON UPDATE SET NULL,
     ADD CONSTRAINT `cmw_votes_votes_ibfk_2` FOREIGN KEY (`votes_id_site`)
-        REFERENCES `cmw_votes_sites` (`votes_sites_id`);
+        REFERENCES `cmw_votes_sites` (`votes_sites_id`) ON DELETE SET NULL ON UPDATE SET NULL;
 COMMIT;
 
 ALTER TABLE `cmw_votes_logs_rewards`
@@ -99,7 +99,7 @@ ALTER TABLE `cmw_votes_logs_rewards`
     ADD CONSTRAINT `cmw_votes_logs_rewards_ibfk_1` FOREIGN KEY (`votes_logs_rewards_reward_id`)
         REFERENCES `cmw_votes_rewards` (`votes_rewards_rewards_id`) ON DELETE SET NULL ON UPDATE SET NULL,
     ADD CONSTRAINT `cmw_votes_logs_rewards_ibfk_2` FOREIGN KEY (`votes_logs_rewards_user_id`)
-        REFERENCES `cmw_users` (`user_id`);
+        REFERENCES `cmw_users` (`user_id`) ON DELETE SET NULL ON UPDATE SET NULL;
 COMMIT;
 
 ALTER TABLE `cmw_votes_votepoints`
