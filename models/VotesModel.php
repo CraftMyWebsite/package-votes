@@ -45,7 +45,7 @@ class VotesModel extends DatabaseManager
         return [];
     }
 
-    public function hasVoted()
+    public function hasVoted(): string
     {
         //Check if the player has already vote for the website id
         $var = array(
@@ -139,34 +139,31 @@ class VotesModel extends DatabaseManager
 
     //Return true if the player can vote
 
-    public function check($url)
+    /**
+     * @throws \JsonException
+     */
+    public function check($url): bool
     {
 
         //List of all websites:
         if (strpos($url, 'serveur-prive.net')) {
             $result = @file_get_contents("https://serveur-prive.net/api/vote/json/$this->idUnique/$this->ipPlayer");
-            if ($result && ($result = json_decode($result, true))) {
-                if ($result === false || intval($result['status']) == 1) {
-                    return true;
-                }
+            if ($result && ($result = json_decode($result, true, 512, JSON_THROW_ON_ERROR)) && (int)$result['status'] === 1) {
+                return true;
             }
         } elseif (strpos($url, 'serveur-minecraft-vote.fr')) {
             $result = @file_get_contents("https://serveur-minecraft-vote.fr/api/v1/servers/$this->idUnique/vote/$this->ipPlayer");
-            if ($result && ($result = json_decode($result, true))) {
-                if ($result['canVote'] === false) {
-                    return true;
-                }
+            if ($result && ($result = json_decode($result, true, 512, JSON_THROW_ON_ERROR)) && $result['canVote'] === false) {
+                return true;
             }
         } elseif (strpos($url, 'serveurs-mc.net')) {
             $result = @file_get_contents("https://serveurs-mc.net/api/hasVote/$this->idUnique/$this->ipPlayer/10");
-            if ($result && ($result = json_decode($result, true))) {
-                if ($result['hasVote'] === false) {
-                    return true;
-                }
+            if ($result && ($result = json_decode($result, true, 512, JSON_THROW_ON_ERROR)) && $result['hasVote'] === false) {
+                return true;
             }
         } elseif (strpos($url, 'top-serveurs.net')) {
             $result = @file_get_contents("https://api.top-serveurs.net/v1/votes/check-ip?server_token=$this->idUnique&ip=$this->ipPlayer");
-            if ($result && ($result = json_decode($result, true))) {
+            if ($result && ($result = json_decode($result, true, 512, JSON_THROW_ON_ERROR))) {
                 return true;
             }
         } elseif (strpos($url, 'serveursminecraft.org')) {
@@ -176,16 +173,16 @@ class VotesModel extends DatabaseManager
             }
         } elseif (strpos($url, 'liste-serveurs-minecraft.org')) {
             $result = @file_get_contents("https://api.liste-serveurs-minecraft.org/vote/vote_verification.php?server_id=$this->idUnique&ip=$this->ipPlayer");
-            if ($result == 1) {
+            if ($result === 1) {
                 return true;
             }
         } elseif (strpos($url, 'serveur-minecraft.com')) {
             $result = @file_get_contents("https://serveur-minecraft.com/api/1/vote/$this->idUnique/$this->ipPlayer");
-            if ($result == 0) {
+            if ($result === 0) {
                 return true;
             }
         }
-
+        return false;
     }
 
 }

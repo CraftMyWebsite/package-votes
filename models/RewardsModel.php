@@ -4,6 +4,8 @@ namespace CMW\Model\Votes;
 
 use CMW\Entity\Votes\VotesRewardsEntity;
 use CMW\Manager\Database\DatabaseManager;
+use Exception;
+use JsonException;
 
 /**
  * Class @RewardsModel
@@ -28,7 +30,7 @@ class RewardsModel extends DatabaseManager
 
         if ($req->execute($var)) {
             $id = $db->lastInsertId();
-            return $this->getRwardById($id);
+            return $this->getRewardById($id);
         }
 
         return null;
@@ -36,7 +38,7 @@ class RewardsModel extends DatabaseManager
 
     //Get a reward
 
-    public function getRwardById(int $id): ?VotesRewardsEntity
+    public function getRewardById(int $id): ?VotesRewardsEntity
     {
 
         $sql = "SELECT * FROM cmw_votes_rewards WHERE votes_rewards_rewards_id=:rewards_id";
@@ -85,13 +87,13 @@ class RewardsModel extends DatabaseManager
         $db = self::getInstance();
         $req = $db->prepare($sql);
         if ($req->execute($var)) {
-            return $this->getRwardById($rewardsId);
+            return $this->getRewardById($rewardsId);
         }
 
         return null;
     }
 
-    public function selectReward(int $userId, int $idSite)
+    public function selectReward(int $userId, int $idSite): void
     {
 
         //Select the reward action, rewards_id and id site with the site id
@@ -112,53 +114,50 @@ class RewardsModel extends DatabaseManager
             $result = $req->fetch();
             $rewardsId = $result['rewards_id'];
             $action = $result['action'];
+
+
+            //Detect type
+            try {
+                switch (json_decode($result['action'], false, 512, JSON_THROW_ON_ERROR)->type) {
+
+                    case "votepoints":
+                        $this->giveRewardVotePoints($userId, json_decode($result['action'], false, 512, JSON_THROW_ON_ERROR)->amount);
+                        break;
+
+                    case "votepoints-random":
+                        $this->giveRewardVotePointsRandom($userId, json_decode($result['action'], false, 512, JSON_THROW_ON_ERROR)->amount->min,
+                            json_decode($result['action'], false, 512, JSON_THROW_ON_ERROR)->amount->min);
+                        break;
+
+                }
+            } catch (JsonException $e) {
+            }
         }
 
-
-        //Detect type
-        switch (json_decode($result['action'])->type) {
-
-            case "votepoints":
-                $this->giveRewardVotePoints($userId, json_decode($result['action'])->amount);
-                break;
-
-            case "votepoints-random":
-                $this->giveRewardVotePointsRandom($userId, json_decode($result['action'])->amount->min, json_decode($result['action'])->amount->min);
-                break;
-
-        }
 
     }
 
     public function giveRewardVotePoints(int $userId, int $amount): void
     {
-        //If the player has never get a reward
+        //If the player has never got a reward
+        $var = array(
+            "id_user" => $userId,
+            "amount" => $amount
+        );
         if ($this->detectFirstVotePointsReward($userId)) {
-            $var = array(
-                "id_user" => $userId,
-                "amount" => $amount
-            );
 
             $sql = "INSERT INTO cmw_votes_votepoints (votes_votepoints_id_user, votes_votepoints_amount) 
                         VALUES (:id_user, :amount)";
 
-            $db = self::getInstance();
-            $req = $db->prepare($sql);
-            $req->execute($var);
-
-        } else { //If the player has already get a reward
-            $var = array(
-                "id_user" => $userId,
-                "amount" => $amount
-            );
+        } else { //If the player has already got a reward
 
             $sql = "UPDATE cmw_votes_votepoints SET votes_votepoints_amount = votes_votepoints_amount+:amount
                             WHERE votes_votepoints_id_user=:id_user";
 
-            $db = self::getInstance();
-            $req = $db->prepare($sql);
-            $req->execute($var);
         }
+        $db = self::getInstance();
+        $req = $db->prepare($sql);
+        $req->execute($var);
 
     }
 
@@ -176,11 +175,7 @@ class RewardsModel extends DatabaseManager
         if ($req->execute($var)) {
             $lines = $req->fetchAll();
 
-            if (count($lines) <= 0) {
-                return true;
-            } else {
-                return false;
-            }
+            return count($lines) <= 0;
 
         }
 
@@ -189,14 +184,18 @@ class RewardsModel extends DatabaseManager
 
     public function giveRewardVotePointsRandom(int $userId, int $min, int $max): void
     {
-        $amount = rand($min, $max);
+        try {
+            $amount = random_int($min, $max);
+        } catch (Exception $e) {
+            $amount = $max;
+        }
 
-        //If the player has never get a reward
+        //If the player has never got a reward
+        $var = array(
+            "id_user" => $userId,
+            "amount" => $amount
+        );
         if ($this->detectFirstVotePointsReward($userId)) {
-            $var = array(
-                "id_user" => $userId,
-                "amount" => $amount
-            );
 
             $sql = "INSERT INTO cmw_votes_votepoints (votes_votepoints_id_user, votes_votepoints_amount) 
                         VALUES (:id_user, :amount)";
@@ -205,11 +204,7 @@ class RewardsModel extends DatabaseManager
             $req = $db->prepare($sql);
             $req->execute($var);
 
-        } else { //If the player has already get a reward
-            $var = array(
-                "id_user" => $userId,
-                "amount" => $amount
-            );
+        } else { //If the player has already got a reward
 
             $sql = "UPDATE cmw_votes_votepoints SET votes_votepoints_amount = votes_votepoints_amount+:amount 
                             WHERE votes_votepoints_id_user=:id_user";
@@ -242,7 +237,6 @@ class RewardsModel extends DatabaseManager
     }
 
 
-
     public function getRewards(): array
     {
         $sql = "SELECT * FROM cmw_votes_rewards";
@@ -257,7 +251,7 @@ class RewardsModel extends DatabaseManager
         $toReturn = array();
 
         while ($reward = $res->fetch()) {
-            $toReturn[] = $this->getRwardById($reward["votes_rewards_rewards_id"]);
+            $toReturn[] = $this->getRewardById($reward["votes_rewards_rewards_id"]);
         }
 
         return $toReturn;

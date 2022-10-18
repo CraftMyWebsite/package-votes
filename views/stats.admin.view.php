@@ -1,6 +1,11 @@
 <?php
-$title = VOTES_DASHBOARD_TITLE_STATS;
-$description = VOTES_DASHBOARD_DESC;
+
+use CMW\Entity\Votes\VotesSitesEntity;
+use CMW\Manager\Lang\LangManager;
+use CMW\Model\Votes\StatsModel;
+
+$title = LangManager::translate("votes.dashboard.title.stats");
+$description = LangManager::translate("votes.dashboard.desc");
 
 
 /* @var $stats */
@@ -8,54 +13,41 @@ $description = VOTES_DASHBOARD_DESC;
 /* @var $month */
 /* @var $week */
 /* @var $day */
-/* @var $listSites */
+/* @var VotesSitesEntity[] $listSites */
 /* @var $numberOfSites */
 
-$styles = '<link rel="stylesheet" href="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/datatables-bs4/css/dataTables.bootstrap4.min.css">
-<link rel="stylesheet" href="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/datatables-responsive/css/responsive.bootstrap4.min.css">';
-
-
-$scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/datatables/jquery.dataTables.min.js"></script>
-<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/datatables-responsive/js/dataTables.responsive.min.js"></script>
-<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-<script>
+$scripts = '
+    <script>
     $(function () {
         $("#users_table").DataTable({
             "responsive": true, 
             "lengthChange": false, 
             "autoWidth": false,
             language: {
-                processing:     "' . CORE_DATATABLES_LIST_PROCESSING . '",
-                search:         "' . CORE_DATATABLES_LIST_SEARCH . '",
-                lengthMenu:     "' . CORE_DATATABLES_LIST_LENGTHMENU . '",
-                info:           "' . CORE_DATATABLES_LIST_INFO . '",
-                infoEmpty:      "' . CORE_DATATABLES_LIST_INFOEMPTY . '",
-                infoFiltered:   "' . CORE_DATATABLES_LIST_INFOFILTERED . '",
-                infoPostFix:    "' . CORE_DATATABLES_LIST_INFOPOSTFIX . '",
-                loadingRecords: "' . CORE_DATATABLES_LIST_LOADINGRECORDS . '",
-                zeroRecords:    "' . CORE_DATATABLES_LIST_ZERORECORDS . '",
-                emptyTable:     "' . CORE_DATATABLES_LIST_EMPTYTABLE . '",
+            processing:     "' . LangManager::translate("core.datatables.list.processing") . '",
+                search:         "' . LangManager::translate("core.datatables.list.search") . '",
+                lengthMenu:    "' . LangManager::translate("core.datatables.list.lenghtmenu") . '",
+                info:           "' . LangManager::translate("core.datatables.list.info") . '",
+                infoEmpty:      "' . LangManager::translate("core.datatables.list.info_empty") . '",
+                infoFiltered:   "' . LangManager::translate("core.datatables.list.info_filtered") . '",
+                infoPostFix:    "' . LangManager::translate("core.datatables.list.info_postfix") . '",
+                loadingRecords: "' . LangManager::translate("core.datatables.list.loadingrecords") . '",
+                zeroRecords:    "' . LangManager::translate("core.datatables.list.zerorecords") . '",
+                emptyTable:     "' . LangManager::translate("core.datatables.list.emptytable") . '",
                 paginate: {
-                    first:      "' . CORE_DATATABLES_LIST_FIRST . '",
-                    previous:   "' . CORE_DATATABLES_LIST_PREVIOUS . '",
-                    next:       "' . CORE_DATATABLES_LIST_NEXT . '",
-                    last:       "' . CORE_DATATABLES_LIST_LAST . '"
+                first:      "' . LangManager::translate("core.datatables.list.first") . '",
+                    previous:   "' . LangManager::translate("core.datatables.list.previous") . '",
+                    next:       "' . LangManager::translate("core.datatables.list.next") . '",
+                    last:       "' . LangManager::translate("core.datatables.list.last") . '"
                 },
                 aria: {
-                    sortAscending:  "' . CORE_DATATABLES_LIST_SORTASCENDING . '",
-                    sortDescending: "' . CORE_DATATABLES_LIST_SORTDESCENDING . '"
+                sortAscending:  "' . LangManager::translate("core.datatables.list.sort.ascending") . '",
+                    sortDescending: "' . LangManager::translate("core.datatables.list.sort.descending") . '"
                 }
             },
         });
     });
 </script>'; ?>
-<!-- Chart.js (lib) -->
-<script src="<?= getenv("PATH_SUBFOLDER") ?>admin/resources/vendors/chart.js/Chart.min.js"></script>
-
-<!-- Main.js -->
-<script rel="script" src="<?= getenv("PATH_SUBFOLDER") ?>app/package/votes/views/ressources/js/main.js"></script>
 
 <div class="container-fluid">
     <div class="row">
@@ -64,9 +56,9 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors
         <div class="col-lg-3 col-6">
             <div class="small-box bg-success">
                 <div class="inner">
-                    <h3><?= number_format(count($all)); ?></h3>
+                    <h3><?= number_format(count($all)) ?></h3>
 
-                    <p><?= VOTES_DASHBOARD_STATS_TOTALS ?></p>
+                    <p><?= LangManager::translate("votes.dashboard.stats.totals") ?></p>
                 </div>
                 <div class="icon">
                     <i class="fas fa-vote-yea"></i>
@@ -78,9 +70,9 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors
         <div class="col-lg-3 col-6">
             <div class="small-box bg-success">
                 <div class="inner">
-                    <h3><?= number_format(count($month)); ?></h3>
+                    <h3><?= number_format(count($month)) ?></h3>
 
-                    <p><?= VOTES_DASHBOARD_STATS_MONTHS ?></p>
+                    <p><?= LangManager::translate("votes.dashboard.stats.month") ?></p>
                 </div>
                 <div class="icon">
                     <i class="fas fa-vote-yea"></i>
@@ -92,9 +84,9 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors
         <div class="col-lg-3 col-6">
             <div class="small-box bg-success">
                 <div class="inner">
-                    <h3><?= number_format(count($week)); ?></h3>
+                    <h3><?= number_format(count($week)) ?></h3>
 
-                    <p><?= VOTES_DASHBOARD_STATS_WEEK ?></p>
+                    <p><?= LangManager::translate("votes.dashboard.stats.week") ?></p>
                 </div>
                 <div class="icon">
                     <i class="fas fa-vote-yea"></i>
@@ -106,9 +98,9 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors
         <div class="col-lg-3 col-6">
             <div class="small-box bg-success">
                 <div class="inner">
-                    <h3><?= number_format(count($day)); ?></h3>
+                    <h3><?= number_format(count($day)) ?></h3>
 
-                    <p><?= VOTES_DASHBOARD_STATS_DAY ?></p>
+                    <p><?= LangManager::translate("votes.dashboard.stats.day") ?></p>
                 </div>
                 <div class="icon">
                     <i class="fas fa-vote-yea"></i>
@@ -339,8 +331,8 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors
 
 
     //Chart global
-    var ctxGlobal = document.getElementById('chartGlobal').getContext('2d');
-    var chartGlobal = new Chart(ctxGlobal, {
+    const ctxGlobal = document.getElementById('chartGlobal').getContext('2d');
+    const chartGlobal = new Chart(ctxGlobal, {
         type: 'line',
         data: {
             labels: [
@@ -376,21 +368,21 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors
 
 
     //Chart Site totals
-    var ctxSiteTotals = document.getElementById('chartSiteTotals').getContext('2d');
-    var chartSiteTotals = new Chart(ctxSiteTotals, {
+    const ctxSiteTotals = document.getElementById('chartSiteTotals').getContext('2d');
+    const chartSiteTotals = new Chart(ctxSiteTotals, {
         type: 'doughnut',
         data: {
             //website name
             labels: [
                 <?php foreach ($listSites as $site):
-                echo json_encode($site['title']) . ",";
+                echo json_encode($site->getTitle(), JSON_THROW_ON_ERROR) . ",";
             endforeach;?>
             ],
             datasets: [{
                 //Number of votes
                 data: [
                     <?php foreach ($listSites as $site):
-                    echo json_encode($stats->statsVotesSitesTotaux($site['title'])) . ",";
+                    echo json_encode($stats->statsVotesSitesTotaux($site->getTitle()), JSON_THROW_ON_ERROR) . ",";
                 endforeach;?>
                 ],
                 //Color (random)
@@ -408,21 +400,21 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors
     });
 
     //Chart Site month
-    var ctxSiteMonth = document.getElementById('chartSiteMonth').getContext('2d');
-    var chartSiteMonth = new Chart(ctxSiteMonth, {
+    const ctxSiteMonth = document.getElementById('chartSiteMonth').getContext('2d');
+    const chartSiteMonth = new Chart(ctxSiteMonth, {
         type: 'doughnut',
         data: {
             //website name
             labels: [
                 <?php foreach ($listSites as $site):
-                echo json_encode($site['title']) . ",";
+                echo json_encode($site->getTitle(), JSON_THROW_ON_ERROR) . ",";
             endforeach;?>
             ],
             datasets: [{
                 //Number of votes
                 data: [
                     <?php foreach ($listSites as $site):
-                    echo json_encode($stats->statsVotesSitesMonth($site['title'])) . ",";
+                    echo json_encode($stats->statsVotesSitesMonth($site->getTitle()), JSON_THROW_ON_ERROR) . ",";
                 endforeach;?>
                 ],
                 //Color (random)

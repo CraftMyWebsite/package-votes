@@ -56,6 +56,4 @@ class VotesConfigEntity
         return $this->autoTopReward;
     }
 
-
-
 }

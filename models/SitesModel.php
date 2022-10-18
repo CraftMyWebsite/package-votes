@@ -78,7 +78,7 @@ class SitesModel extends DatabaseManager
 
         $res = $res->fetch();
 
-        $rewards = (new RewardsModel())->getRwardById($res["votes_sites_rewards_id"]);
+        $rewards = (new RewardsModel())->getRewardById($res["votes_sites_rewards_id"]);
 
         return new VotesSitesEntity(
             $res['votes_sites_id'],

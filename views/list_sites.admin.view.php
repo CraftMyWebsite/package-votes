@@ -1,6 +1,9 @@
 <?php
-$title = VOTES_DASHBOARD_TITLE_LISTE_SITES;
-$description = VOTES_DASHBOARD_DESC;
+
+use CMW\Manager\Lang\LangManager;
+
+$title = LangManager::translate("votes.dashboard.title.list_sites");
+$description = LangManager::translate("votes.dashboard.desc");
 
 /** @var \CMW\Entity\Votes\VotesRewardsEntity[] $rewards */
 /** @var \CMW\Entity\Votes\VotesSitesEntity[] $sites */
@@ -15,7 +18,7 @@ $description = VOTES_DASHBOARD_DESC;
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title"><?= VOTES_DASHBOARD_LISTE_SITE_TITLE ?></h3>
+                        <h3 class="card-title"><?= LangManager::translate("votes.dashboard.title.list_sites") ?></h3>
                     </div>
 
                     <div class="card-body">
@@ -46,7 +49,7 @@ $description = VOTES_DASHBOARD_DESC;
                                                                         class="fas fa-heading"></i></span>
                                                     </div>
                                                     <input type="text" name="title" class="form-control"
-                                                           placeholder="<?= VOTES_DASHBOARD_ADD_SITE_PLACEHOLDER_TITLE ?>"
+                                                           placeholder="<?= LangManager::translate("votes.dashboard.add_site.placeholder.title") ?>"
                                                            value="<?= $site->getTitle() ?>"
                                                            required>
                                                 </div>
@@ -56,7 +59,7 @@ $description = VOTES_DASHBOARD_DESC;
                                                                         class="fas fa-hourglass-start"></i></span>
                                                     </div>
                                                     <input type="number" name="time" class="form-control"
-                                                           placeholder="<?= VOTES_DASHBOARD_ADD_SITE_PLACEHOLDER_TIME ?>"
+                                                           placeholder="<?= LangManager::translate("votes.dashboard.add_site.placeholder.tim") ?>"
                                                            value="<?= $site->getTime() ?>"
                                                            required>
                                                 </div>
@@ -66,7 +69,7 @@ $description = VOTES_DASHBOARD_DESC;
                                                                         class="fas fa-link"></i></span>
                                                     </div>
                                                     <input type="url" name="url" id="url" class="form-control"
-                                                           placeholder="<?= VOTES_DASHBOARD_ADD_SITE_PLACEHOLDER_URL ?>"
+                                                           placeholder="<?= LangManager::translate("votes.dashboard.add_site.placeholder.url") ?>"
                                                            value="<?= $site->getUrl() ?>"
                                                            required>
                                                 </div>
@@ -77,20 +80,20 @@ $description = VOTES_DASHBOARD_DESC;
                                                     </div>
                                                     <input type="text" name="idUnique" id="idUnique"
                                                            class="form-control"
-                                                           placeholder="<?= VOTES_DASHBOARD_ADD_SITE_PLACEHOLDER_ID_UNIQUE ?>"
+                                                           placeholder="<?= LangManager::translate("votes.dashboard.add_site.placeholder.id_unique") ?>"
                                                            value="<?= $site->getIdUnique() ?>"
                                                            required>
                                                     <div class="input-group-prepend">
                                                         <button type="button" onclick="testId();"
-                                                                class="btn btn-success"><?= VOTES_DASHBOARD_ADD_SITE_BTN_TESTID ?></button>
+                                                                class="btn btn-success"><?= LangManager::translate("votes.dashboard.add_site.btn.testid") ?></button>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label><?= VOTES_DASHBOARD_ADD_SITE_PLACEHOLDER_REWARDS ?></label>
+                                                    <label><?= LangManager::translate("votes.dashboard.add_site.placeholder.rewards") ?></label>
                                                     <select name="reward" class="form-control" required>
                                                         <!-- If the reward was delete we set a default placeholder -->
                                                         <?php if ($site->getRewards() === NULL): ?>
-                                                            <option selected><?= VOTES_DASHBOARD_LIST_NOREWARD ?></option>
+                                                            <option selected><?= LangManager::translate("votes.dashboard.list_sites.noreward") ?></option>
                                                         <?php endif; ?>
 
                                                         <!-- Get all rewards -->
@@ -102,7 +105,8 @@ $description = VOTES_DASHBOARD_DESC;
                                                 </div>
 
 
-                                                <input type="submit" value="<?= VOTES_DASHBOARD_BTN_SAVE ?>"
+                                                <input type="submit"
+                                                       value="<?= LangManager::translate("core.btn.save") ?>"
                                                        class="btn btn-primary float-right">
 
                                                 <button type="button" class="btn btn-danger" data-toggle="modal"
@@ -120,7 +124,7 @@ $description = VOTES_DASHBOARD_DESC;
                                                         <div class="modal-content">
                                                             <div class="modal-header">
                                                                 <h5 class="modal-title" id="sitesCompLabel">
-                                                                    <?= VOTES_DASHBOARD_LIST_DELSITE_MODAL_TITLE ?>
+                                                                    <?= LangManager::translate("votes.dashboard.list_sites.del_site.modal.title") ?>
                                                                     <strong><?= $site->getTitle() ?></strong>
                                                                 </h5>
                                                                 <button type="button" class="close"
@@ -130,16 +134,16 @@ $description = VOTES_DASHBOARD_DESC;
                                                             </div>
                                                             <!-- Button for delete the website -->
                                                             <div class="modal-body">
-                                                                <?= VOTES_DASHBOARD_LIST_DELSITE_MODAL_BODY ?>
+                                                                <?= LangManager::translate("votes.dashboard.list_sites.del_site.modal.body") ?>
                                                             </div>
 
                                                             <div class="modal-footer">
                                                                 <a href="delete/<?= $site->getSiteId() ?>"
                                                                    class="btn btn-danger">
-                                                                    <?= VOTES_DASHBOARD_LIST_DELSITE_MODAL_BTN_DEL ?>
+                                                                    <?= LangManager::translate("corre.btn.delete_forever") ?>
                                                                 </a>
                                                                 <button type="button" class="btn btn-secondary"
-                                                                        data-dismiss="modal"><?= VOTES_DASHBOARD_BTN_CLOSE ?></button>
+                                                                        data-dismiss="modal"><?= LangManager::translate("core.btn.close") ?></button>
                                                             </div>
                                                         </div>
                                                     </div>

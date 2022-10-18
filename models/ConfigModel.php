@@ -25,7 +25,7 @@ class ConfigModel extends DatabaseManager
 
         $sql = "SELECT * FROM cmw_votes_config LIMIT 1";
 
-        $db = Databaseself::getInstance();
+        $db = self::getInstance();
         $res = $db->prepare($sql);
 
 
@@ -57,7 +57,7 @@ class ConfigModel extends DatabaseManager
                             votes_config_auto_top_reward_active=:auto_top_reward_active, 
                             votes_config_auto_top_reward=:auto_top_reward";
 
-        $db = Databaseself::getInstance();
+        $db = self::getInstance();
         $req = $db->prepare($sql);
         if ($req->execute($info)) {
             return $this->getConfig();

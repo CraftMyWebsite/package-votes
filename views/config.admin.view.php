@@ -1,7 +1,9 @@
 <?php
 
-$title = VOTES_DASHBOARD_TITLE_CONFIG;
-$description = VOTES_DASHBOARD_DESC;
+use CMW\Manager\Lang\LangManager;
+
+$title = LangManager::translate("votes.dashboard.title.config");
+$description = LangManager::translate("votes.dashboard.desc");
 
 /** @var \CMW\Entity\Votes\VotesConfigEntity $config */
 ?>
@@ -14,7 +16,7 @@ $description = VOTES_DASHBOARD_DESC;
                 <form action="" method="post">
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title"><?= VOTES_DASHBOARD_CONFIG_CARD_TITLE ?> :</h3>
+                            <h3 class="card-title"><?= LangManager::translate("votes.dashboard.title.config") ?> :</h3>
                         </div>
                         <div class="card-body">
                             <div class="input-group mb-3">
@@ -23,20 +25,22 @@ $description = VOTES_DASHBOARD_DESC;
                                 </div>
                                 <!-- Top players show -->
                                 <input type="number" name="topShow" class="form-control"
-                                       placeholder="<?= VOTES_DASHBOARD_ADD_PLACEHOLDER_TOPSHOW ?>"
+                                       placeholder="<?= LangManager::translate("votes.dashboard.config.placeholder.top_show") ?>"
                                        value="<?= $config->getTopShow() ?>" required>
                             </div>
 
                             <!-- Reset -->
                             <div class="form-group">
-                                <label><?= VOTES_DASHBOARD_CONFIG_PLACEHOLDER_RESET ?></label>
+                                <label><?= LangManager::translate("votes.dashboard.config.placeholder.reset") ?></label>
                                 <select name="reset" class="form-control" required>
                                     <option value="<?= $config->getReset() ?>" selected>
-                                        <?= ($config->getReset() == 0) ? VOTES_DASHBOARD_CONFIG_RESET_0 : VOTES_DASHBOARD_CONFIG_RESET_1; ?>
+                                        <?= ($config->getReset() === 0) ? LangManager::translate("votes.dashboard.config.reset.0") :
+                                            LangManager::translate("votes.dashboard.config.reset.1") ?>
                                     </option>
 
-                                    <option value="<?= ($config->getReset() == 1) ? 0 : 1 ?>">
-                                        <?= ($config->getReset() == 1) ? VOTES_DASHBOARD_CONFIG_RESET_0 : VOTES_DASHBOARD_CONFIG_RESET_1; ?></option>
+                                    <option value="<?= ($config->getReset() === 1) ? 0 : 1 ?>">
+                                        <?= ($config->getReset() === 1) ? LangManager::translate("votes.dashboard.config.reset.0") :
+                                            LangManager::translate("votes.dashboard.config.reset.1") ?></option>
                                 </select>
                             </div>
                         </div>
@@ -72,7 +76,7 @@ $description = VOTES_DASHBOARD_DESC;
 
 
                             <button type="submit" class="btn btn-primary float-right">
-                                <?= VOTES_DASHBOARD_BTN_SAVE ?>
+                                <?= LangManager::translate("core.btn.save") ?>
                             </button>
                         </div>
                     </div>

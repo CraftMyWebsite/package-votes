@@ -1,6 +1,9 @@
 <?php
-$title = VOTES_DASHBOARD_TITLE_REWARDS;
-$description = VOTES_DASHBOARD_DESC;
+
+use CMW\Manager\Lang\LangManager;
+
+$title = LangManager::translate("votes.dashboard.title.rewards");
+$description = LangManager::translate("votes.dashboard.desc");
 
 /* @var \CMW\Entity\Votes\VotesRewardsEntity[] $rewards */
 ?>
@@ -14,12 +17,12 @@ $description = VOTES_DASHBOARD_DESC;
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title"><?= VOTES_DASHBOARD_ADD_REWARD_TITLE ?></h3>
+                        <h3 class="card-title"><?= LangManager::translate("votes.dashboard.title.rewards") ?></h3>
                     </div>
                     <div class="card-body">
                         <form action="rewards/add" method="post">
                             <div class="form-group">
-                                <label><?= VOTES_DASHBOARD_ADD_SITE_PLACEHOLDER_REWARDS ?></label>
+                                <label><?= LangManager::translate("votes.dashboard.rewards.add.title") ?></label>
                             </div>
 
                             <div class="input-group mb-3">
@@ -27,23 +30,26 @@ $description = VOTES_DASHBOARD_DESC;
                                     <span class="input-group-text"><i class="fas fa-heading"></i></span>
                                 </div>
                                 <input type="text" name="title" class="form-control"
-                                       placeholder="<?= VOTES_DASHBOARD_ADD_REWARD_PLACEHOLDER_TITLE ?>"
+                                       placeholder="<?= LangManager::translate("votes.dashboard.rewards.add.placeholder.title") ?>"
                                        required>
                             </div>
 
-                            <label><?= VOTES_DASHBOARD_ADD_REWARD_PLACEHOLDER_TYPE ?></label>
+                            <label><?= LangManager::translate("votes.dashboard.rewards.add.placeholder.type") ?></label>
                             <select id="reward_type" name="reward_type" class="form-control" required>
                                 <option value="none"
-                                        selected><?= VOTES_DASHBOARD_ADD_REWARD_PLACEHOLDER_TYPE_SELECT ?></option>
-                                <option value="votepoints"><?= VOTES_VOTEPOINTS_NAME ?></option>
-                                <option value="votepoints-random"><?= VOTES_VOTEPOINTS_NAME ?> <?= VOTES_VOTEPOINTS_RANDOM ?></option>
+                                        selected><?= LangManager::translate("votes.dashboard.rewards.add.placeholder.type_select") ?></option>
+                                <option value="votepoints"><?= LangManager::translate("votes.dashboard.rewards.votepoints.name") ?></option>
+                                <option value="votepoints-random">
+                                    <?= LangManager::translate("votes.dashboard.rewards.votepoints.name") ?>
+                                    <?= LangManager::translate("votes.dashboard.rewards.votepoints.random") ?>
+                                </option>
                             </select>
 
                             <!-- JS container -->
                             <div id="reward-content-wrapper" class="mt-3"></div>
 
 
-                            <input type="submit" value="<?= VOTES_DASHBOARD_BTN_SAVE ?>"
+                            <input type="submit" value="<?= LangManager::translate("core.btn.save") ?>"
                                    class="btn btn-primary float-right" id="reward-type-btn-save" disabled>
                         </form>
                     </div>
@@ -55,7 +61,7 @@ $description = VOTES_DASHBOARD_DESC;
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title"><?= VOTES_DASHBOARD_LISTE_REWARD_TITLE ?></h3>
+                        <h3 class="card-title"><?= LangManager::translate("votes.dashboard.rewards.list.title") ?></h3>
                     </div>
 
                     <div class="card-body">
@@ -90,27 +96,28 @@ $description = VOTES_DASHBOARD_DESC;
                                                                     class="fas fa-heading"></i></span>
                                                     </div>
                                                     <input type="text" name="title" class="form-control"
-                                                           placeholder="<?= VOTES_DASHBOARD_ADD_REWARD_PLACEHOLDER_TITLE ?>"
+                                                           placeholder="<?= LangManager::translate("votes.dashboard.rewards.add.placeholder.title") ?>"
                                                            value="<?= $reward->getTitle() ?>"
                                                            required>
                                                 </div>
 
                                                 <div class="form-group">
-                                                    <label><?= VOTES_DASHBOARD_ADD_SITE_PLACEHOLDER_REWARDS ?></label>
+                                                    <label><?= LangManager::translate("votes.dashboard.add_site.placeholder.rewards") ?></label>
                                                     <select name="reward_type" class="form-control"
                                                             onchange="updateReward(this, <?= $reward->getRewardsId() ?>)"
                                                             required>
 
-                                                        <option value="none" <?= json_decode($reward->getAction())->type === NULL ? "selected" : "" ?>>
-                                                            <?= VOTES_DASHBOARD_ADD_REWARD_PLACEHOLDER_TYPE_SELECT ?>
+                                                        <option value="none" <?= json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->type === NULL ? "selected" : "" ?>>
+                                                            <?= LangManager::translate("votes.dashboard.rewards.add.placeholder.type_select") ?>
                                                         </option>
 
-                                                        <option value="votepoints" <?= json_decode($reward->getAction())->type === "votepoints" ? "selected" : "" ?>>
-                                                            <?= VOTES_VOTEPOINTS_NAME ?>
+                                                        <option value="votepoints" <?= json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->type === "votepoints" ? "selected" : "" ?>>
+                                                            <?= LangManager::translate("votes.dashboard.rewards.votepoints.name") ?>
                                                         </option>
 
                                                         <option value="votepoints-random" <?= json_decode($reward->getAction())->type === "votepoints-random" ? "selected" : "" ?>>
-                                                            <?= VOTES_VOTEPOINTS_NAME ?> <?= VOTES_VOTEPOINTS_RANDOM ?>
+                                                            <?= LangManager::translate("votes.dashboard.rewards.votepoints.name") ?>
+                                                            <?= LangManager::translate("votes.dashboard.rewards.votepoints.random") ?>
                                                         </option>
 
                                                     </select>
@@ -119,37 +126,38 @@ $description = VOTES_DASHBOARD_DESC;
                                                 <!-- JS container (auto generate with php, and update with reward.js) -->
                                                 <div id="reward-content-wrapper-update-<?= $reward->getRewardsId() ?>"
                                                      class="mt-3">
-                                                    <?php if (json_decode($reward->getAction())->type === "votepoints"): ?>
+                                                    <?php if (json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->type === "votepoints"): ?>
                                                         <div class="input-group mb-3">
                                                             <div class="input-group-prepend">
                                                                 <span class="input-group-text"><i
                                                                             class="fas fa-coins"></i></span>
                                                             </div>
 
-                                                            <input value="<?= json_decode($reward->getAction())->amount ?>"
-                                                                   placeholder="Montant" type="number" name="amount"
+                                                            <input value="<?= json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->amount ?>"
+                                                                   placeholder="<?= LangManager::translate("votes.dashboard.rewards.add.placeholder.amount") ?>>"
+                                                                   type="number" name="amount"
                                                                    class="form-control" required>
 
                                                         </div>
 
-                                                    <?php elseif (json_decode($reward->getAction())->type === "votepoints-random"): ?>
+                                                    <?php elseif (json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->type === "votepoints-random"): ?>
 
                                                         <div id="reward-content-wrapper" class="mt-3">
                                                             <div class="row">
                                                                 <div class="col-sm-6">
                                                                     <div class="form-group">
-                                                                        <label>Montant minimum</label>
-                                                                        <input placeholder="Montant minimum"
-                                                                               value="<?= json_decode($reward['action'])->amount->min ?>"
+                                                                        <label><?= LangManager::translate("votes.dashboard.rewards.add.placeholder.amount_minimum") ?></label>
+                                                                        <input placeholder="<?= LangManager::translate("votes.dashboard.rewards.add.placeholder.amount_minimum") ?>"
+                                                                               value="<?= json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->amount->min ?>"
                                                                                type="number" name="amount-min"
                                                                                class="form-control" required>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-sm-6">
                                                                     <div class="form-group">
-                                                                        <label>Montant maximum</label>
-                                                                        <input placeholder="Montant maximum"
-                                                                               value="<?= json_decode($reward['action'])->amount->max ?>"
+                                                                        <label><?= LangManager::translate("votes.dashboard.rewards.add.placeholder.amount_maximum") ?></label>
+                                                                        <input placeholder="<?= LangManager::translate("votes.dashboard.rewards.add.placeholder.amount_maximum") ?>"
+                                                                               value="<?= json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->amount->max ?>"
                                                                                type="number" name="amount-max"
                                                                                class="form-control" required>
                                                                     </div>
@@ -161,7 +169,8 @@ $description = VOTES_DASHBOARD_DESC;
                                                 </div>
 
 
-                                                <input type="submit" value="<?= VOTES_DASHBOARD_BTN_SAVE ?>"
+                                                <input type="submit"
+                                                       value="<?= LangManager::translate("core.btn.save") ?>"
                                                        class="btn btn-primary float-right">
 
                                                 <button type="button" class="btn btn-danger" data-toggle="modal"
@@ -179,7 +188,7 @@ $description = VOTES_DASHBOARD_DESC;
                                                         <div class="modal-content">
                                                             <div class="modal-header">
                                                                 <h5 class="modal-title" id="rewardCompLabel">
-                                                                    <?= VOTES_DASHBOARD_LIST_DELREWARD_MODAL_TITLE ?>
+                                                                    <?= LangManager::translate("votes.dashboard.rewards.del.title") ?>
                                                                     <strong><?= $reward->getTitle() ?></strong>
                                                                 </h5>
                                                                 <button type="button" class="close" data-dismiss="modal"
@@ -189,16 +198,16 @@ $description = VOTES_DASHBOARD_DESC;
                                                             </div>
                                                             <!-- Button for delete the website -->
                                                             <div class="modal-body">
-                                                                <?= VOTES_DASHBOARD_LIST_DELREWARD_MODAL_BODY ?>
+                                                                <?= LangManager::translate("votes.dashboard.rewards.del.body") ?>
                                                             </div>
 
                                                             <div class="modal-footer">
                                                                 <a href="rewards/delete/<?= $reward->getRewardsId() ?>"
                                                                    class="btn btn-danger">
-                                                                    <?= VOTES_DASHBOARD_LIST_DELREWARD_MODAL_BTN_DEL ?>
+                                                                    <?= LangManager::translate("core.btn.delete_forever") ?>
                                                                 </a>
                                                                 <button type="button" class="btn btn-secondary"
-                                                                        data-dismiss="modal"><?= VOTES_DASHBOARD_BTN_CLOSE ?></button>
+                                                                        data-dismiss="modal"><?= LangManager::translate("core.btn.close") ?></button>
                                                             </div>
                                                         </div>
                                                     </div>

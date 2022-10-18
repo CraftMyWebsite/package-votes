@@ -1,80 +1,89 @@
 <?php
 
-/* Panel d'administration */
-const VOTES_DASHBOARD_TITLE_CONFIG = "Votes - Configuration";
-const VOTES_DASHBOARD_TITLE_STATS = "Votes -Stats de votes";
-const VOTES_DASHBOARD_TITLE_ADD = "Votes - Ajouter un site";
-const VOTES_DASHBOARD_TITLE_LISTE_SITES = "Votes - Liste des sites";
-const VOTES_DASHBOARD_DESC = "Gérez vos sites de votes / récompenses sur cette page";
+return [
+    "dashboard" => [
+        "title" => [
+            "config" => "Votes - Configuration",
+            "stats" => "Votes - Stats de votes",
+            "add_site" => "Votes - Ajouter un site",
+            "list_sites" => "Votes - Liste des sites",
+            "rewards" => "Votes - Récompenses",
+        ],
 
-const VOTES_DASHBOARD_BTN_SAVE = "Enregistrer";
-const VOTES_DASHBOARD_BTN_CLOSE = "Fermer";
+        "desc" => "Gérez votre plugin de votes.",
 
+        "add_site" => [
+            "card_title" => "Ajouter un site de votes",
+            "placeholder" => [
+                "title" => "Titre du site de votes",
+                "time" => "Temps entre chaques votes en minutes (exemple: 90)",
+                "id_unique" => "Id unique de votre site (exemple: 2154)",
+                "url" => "Liens vers la page de votes",
+                "rewards" => "Récompenses",
+            ],
+            "btn" => [
+                "sitescomp" => "Afficher les sites de votes compatibles",
+                "testid" => "Tester l'Id",
+            ],
+            "sitescomp" => [
+                "modal_title" => "Liste des sites de votes compatibles",
+                "websites_title" => "Sites de vote Minecraft",
+                "request" => "Demande d'ajouts de nouveaux sites"
+            ],
+        ],
 
-/* Formulaire ajouter un site*/
+        "list_sites" => [
+            "title" => "Cliquez sur le site que vous souhaitez éditer",
+            "del_site" => [
+                "modal" => [
+                    "title" => "Suppression du site",
+                    "body" => "Êtes-vous certains de vouloir supprimer ce site ?"
+                ],
+                "noreward" => "Vous ne possédez aucune récompense"
+            ]
+        ],
 
-const VOTES_DASHBOARD_ADD_SITE_CARD_TITLE = "Ajouter un site de votes";
-const VOTES_DASHBOARD_ADD_SITE_PLACEHOLDER_TITLE = "Titre du site de votes";
-const VOTES_DASHBOARD_ADD_SITE_PLACEHOLDER_TIME = "Temps entre chaques votes en minutes (exemple: 90)";
-const VOTES_DASHBOARD_ADD_SITE_PLACEHOLDER_ID_UNIQUE = "Id unique de votre site (exemple: 2154)";
-const VOTES_DASHBOARD_ADD_SITE_PLACEHOLDER_URL = "Liens vers la page de votes";
-const VOTES_DASHBOARD_ADD_SITE_PLACEHOLDER_REWARDS = "Récompenses";
-const VOTES_DASHBOARD_ADD_SITE_BTN_SITESCOMP = "Afficher les sites de votes compatibles";
-const VOTES_DASHBOARD_ADD_SITE_BTN_TESTID = "Tester l'Id";
-const VOTES_DASHBOARD_ADD_SITE_SITESCOMP_MODAL_TITLE = "Liste des sites de votes compatibles";
+        "config" => [
+            "reset" => [
+                "0" => "Pas de reset de votes",
+                "1" => "Mensuel",
+            ],
+            "placeholder" => [
+                "reset" => "Sélection du mode de reset des modes",
+                "top_show" => "Sélection du nombre de joueurs à afficher au classement sur votre site",
+            ],
+        ],
 
+        "stats" => [
+            "totals" => "Votes totaux",
+            "month" => "Votes du mois en cours",
+            "week" => "Votes de là semaine en cours",
+            "day" => "Votes d'aujourd'hui",
+        ],
 
-/* Liste des sites */
-
-const VOTES_DASHBOARD_LISTE_SITE_TITLE = "Cliquez sur le site que vous souhaitez éditer";
-
-const VOTES_DASHBOARD_LIST_DELSITE_MODAL_BODY = "Êtes-vous certains de vouloir supprimer ce site ?";
-const VOTES_DASHBOARD_LIST_DELSITE_MODAL_BTN_DEL = "Supprimer définitivement";
-const VOTES_DASHBOARD_LIST_DELSITE_MODAL_TITLE = "Suppression du site ";
-
-const VOTES_DASHBOARD_LIST_NOREWARD = "Vous ne possédez aucune récompense";
-
-/* Configuration */
-const VOTES_DASHBOARD_CONFIG_CARD_TITLE = "Configuration du package de votes";
-
-const VOTES_DASHBOARD_CONFIG_RESET_0 = "Pas de reset des votes";
-const VOTES_DASHBOARD_CONFIG_RESET_1 = "Mensuel";
-
-const VOTES_DASHBOARD_CONFIG_PLACEHOLDER_RESET = "Sélection du mode de reset des votes";
-const VOTES_DASHBOARD_ADD_PLACEHOLDER_TOPSHOW = "Sélection du nombre de joueurs à afficher au classement sur votre site";
-
-
-/* Récompenses */
-const VOTES_DASHBOARD_TITLE_REWARDS = "Votes - Récompenses";
-
-
-/* Toasts */
-const VOTES_TOAST_TITLE_SUCCESS = "Information";
-const VOTES_TOAST_TITLE_ERROR = "Erreur";
-const VOTES_TOAST_TITLE_WARNING = "Attention";
-
-const VOTES_TOAST_EDIT_SUCCESS = "Modification effectuée";
-const VOTES_TOAST_ADD_SUCCESS = "Ajouts effectué";
-const VOTES_TOAST_DELETE_SUCCESS = "Suppression effectuée";
-const VOTES_TOAST_ERROR_INTERNAL = "Erreur interne";
-
-/* Liste des mois */
-const VOTES_MONTHS = ["Janvier","Fevrier","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Decembre"];
-
-/* Statistiques */
-const VOTES_DASHBOARD_STATS_TOTALS = "Votes totaux";
-const VOTES_DASHBOARD_STATS_MONTHS = "Votes du mois en cours";
-const VOTES_DASHBOARD_STATS_WEEK = "Votes de là semaine en cours";
-const VOTES_DASHBOARD_STATS_DAY = "Votes d'aujourd'hui";
-
-/* Rewards */
-const VOTES_VOTEPOINTS_NAME =  "Votepoints";
-const VOTES_VOTEPOINTS_RANDOM =  " aléatoires";
-const VOTES_DASHBOARD_ADD_REWARD_TITLE = "Ajoutez une nouvelle récompense";
-const VOTES_DASHBOARD_ADD_REWARD_PLACEHOLDER_TITLE = "Nom de la récompense";
-const VOTES_DASHBOARD_ADD_REWARD_PLACEHOLDER_TYPE = "Type de récompense";
-const VOTES_DASHBOARD_ADD_REWARD_PLACEHOLDER_TYPE_SELECT = "Choisissez une récompense";
-const VOTES_DASHBOARD_LISTE_REWARD_TITLE = "Cliquez sur la récompense que vous souhaitez éditer";
-const VOTES_DASHBOARD_LIST_DELREWARD_MODAL_BODY = "Êtes-vous certains de vouloir supprimer cette récompense ?";
-const VOTES_DASHBOARD_LIST_DELREWARD_MODAL_BTN_DEL = "Supprimer définitivement";
-const VOTES_DASHBOARD_LIST_DELREWARD_MODAL_TITLE = "Suppression de la récompense ";
+        "rewards" => [
+            "votepoints" => [
+                "name" => "Votepoints",
+                "random" => " aléatoires",
+            ],
+            "add" => [
+                "title" => "Ajouter une nouvelle récompense",
+                "placeholder" => [
+                    "title" => "Nom de la récompense",
+                    "type" => "Type de la récompense",
+                    "type_select" => "Choisissez une récompense",
+                    "amount" => "Montant",
+                    "amount_minimum" => "Montant minimum",
+                    "amount_maximum" => "Montant maximum",
+                ],
+            ],
+            "list" => [
+                "title" => "Cliquez sur la récompense que vous souhaitez éditer",
+            ],
+            "del" => [
+                "body" => "Êtes-vous certains de vouloir supprimer cette récompense ?",
+                "title" => "Suppression de la récompense"
+            ],
+        ],
+    ],
+];

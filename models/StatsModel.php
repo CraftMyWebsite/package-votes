@@ -107,7 +107,7 @@ class StatsModel extends DatabaseManager
             return count($lines);
         }
 
-        return "";
+        return 0;
 
     }
 
@@ -138,7 +138,7 @@ class StatsModel extends DatabaseManager
             return count($lines);
         }
 
-        return "";
+        return 0;
 
     }
 
@@ -207,7 +207,7 @@ class StatsModel extends DatabaseManager
     public function getActualTopNoLimit(): array
     {
 
-        $sql = "SELECT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_pseudo as pseudo, cmw_users.user_email 
+        $sql = "SELECT COUNT(cmw_votes_votes.votes_id) as votes, ANY_VALUE(cmw_users.user_pseudo) as pseudo, ANY_VALUE(cmw_users.user_email) 
                     as email FROM cmw_votes_votes 
                     JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user 
                     WHERE MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE()) GROUP BY cmw_users.user_pseudo 
@@ -226,7 +226,7 @@ class StatsModel extends DatabaseManager
     public function getGlobalTopNoLimit(): array
     {
 
-        $sql = "SELECT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_pseudo as pseudo, cmw_users.user_email 
+        $sql = "SELECT COUNT(cmw_votes_votes.votes_id) as votes, ANY_VALUE(cmw_users.user_pseudo) as pseudo, ANY_VALUE(cmw_users.user_email) 
                     as email FROM cmw_votes_votes 
                     JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user 
                     GROUP BY cmw_users.user_pseudo 
@@ -245,7 +245,7 @@ class StatsModel extends DatabaseManager
     public function getPreviousMonthTop(): array
     {
 
-        $sql = "SELECT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_pseudo as pseudo, cmw_users.user_email 
+        $sql = "SELECT COUNT(cmw_votes_votes.votes_id) as votes, ANY_VALUE(cmw_users.user_pseudo) as pseudo, ANY_VALUE(cmw_users.user_email) 
                     as email FROM cmw_votes_votes 
                     JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user 
                     WHERE MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH) 
@@ -261,6 +261,4 @@ class StatsModel extends DatabaseManager
 
         return [];
     }
-
-
 }

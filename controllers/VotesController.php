@@ -3,7 +3,6 @@
 namespace CMW\Controller\Votes;
 
 use CMW\Controller\Core\CoreController;
-use CMW\Controller\Menus\menusController;
 use CMW\Controller\users\usersController;
 use CMW\Model\users\usersModel;
 use CMW\Model\votes\configModel;
@@ -14,6 +13,7 @@ use CMW\Model\Votes\VotesModel;
 use CMW\Router\Link;
 use CMW\Utils\Utils;
 use CMW\Utils\View;
+use JsonException;
 
 
 /**
@@ -73,9 +73,9 @@ class VotesController extends CoreController
 
         $this->configModel->updateConfig($topShow, $reset, $autoTopRewardActive, $autoTopReward);
 
-        $_SESSION['toaster'][0]['title'] = VOTES_TOAST_TITLE_SUCCESS;
-        $_SESSION['toaster'][0]['type'] = "bg-success";
-        $_SESSION['toaster'][0]['body'] = VOTES_TOAST_EDIT_SUCCESS;
+//        $_SESSION['toaster'][0]['title'] = VOTES_TOAST_TITLE_SUCCESS;
+//        $_SESSION['toaster'][0]['type'] = "bg-success";
+//        $_SESSION['toaster'][0]['body'] = VOTES_TOAST_EDIT_SUCCESS;
 
         header('location: ../votes/config/');
     }
@@ -111,9 +111,9 @@ class VotesController extends CoreController
 
         $this->sitesModel->addSite($title, $time, $idUnique, $url, $rewardsId);
 
-        $_SESSION['toaster'][0]['title'] = VOTES_TOAST_TITLE_SUCCESS;
-        $_SESSION['toaster'][0]['type'] = "bg-success";
-        $_SESSION['toaster'][0]['body'] = VOTES_TOAST_ADD_SUCCESS;
+//        $_SESSION['toaster'][0]['title'] = VOTES_TOAST_TITLE_SUCCESS;
+//        $_SESSION['toaster'][0]['type'] = "bg-success";
+//        $_SESSION['toaster'][0]['body'] = VOTES_TOAST_ADD_SUCCESS;
 
         header('location: ../site/add');
     }
@@ -155,9 +155,9 @@ class VotesController extends CoreController
         $rewardsId = filter_input(INPUT_POST, 'reward');
         $this->sitesModel->updateSite($siteId, $title, $time, $idUnique, $url, $rewardsId);
 
-        $_SESSION['toaster'][0]['title'] = VOTES_TOAST_TITLE_SUCCESS;
-        $_SESSION['toaster'][0]['type'] = "bg-success";
-        $_SESSION['toaster'][0]['body'] = VOTES_TOAST_EDIT_SUCCESS;
+//        $_SESSION['toaster'][0]['title'] = VOTES_TOAST_TITLE_SUCCESS;
+//        $_SESSION['toaster'][0]['type'] = "bg-success";
+//        $_SESSION['toaster'][0]['body'] = VOTES_TOAST_EDIT_SUCCESS;
 
         header('location: ../site/list/');
     }
@@ -169,9 +169,9 @@ class VotesController extends CoreController
 
         $this->sitesModel->deleteSite($id);
 
-        $_SESSION['toaster'][0]['title'] = VOTES_TOAST_TITLE_SUCCESS;
-        $_SESSION['toaster'][0]['type'] = "bg-success";
-        $_SESSION['toaster'][0]['body'] = VOTES_TOAST_DELETE_SUCCESS;
+//        $_SESSION['toaster'][0]['title'] = VOTES_TOAST_TITLE_SUCCESS;
+//        $_SESSION['toaster'][0]['type'] = "bg-success";
+//        $_SESSION['toaster'][0]['body'] = VOTES_TOAST_DELETE_SUCCESS;
 
         header('location: ../list/');
     }
@@ -203,20 +203,20 @@ class VotesController extends CoreController
         //Define the reward action
         switch ($rewardType) {
             case "votepoints":
-                $action = json_encode(array("type" => "votepoints", "amount" => filter_input(INPUT_POST, "amount")));
+                $action = json_encode(array("type" => "votepoints", "amount" => filter_input(INPUT_POST, "amount")), JSON_THROW_ON_ERROR);
                 break;
 
             case "votepoints-random":
                 $action = json_encode(array("type" => "votepoints-random",
                     "amount" => array(
                         "min" => filter_input(INPUT_POST, "amount-min"),
-                        "max" => filter_input(INPUT_POST, "amount-max"))));
+                        "max" => filter_input(INPUT_POST, "amount-max"))), JSON_THROW_ON_ERROR);
                 break;
 
             case "none"://Error, redirect
-                $_SESSION['toaster'][0]['title'] = VOTES_TOAST_TITLE_ERROR;
-                $_SESSION['toaster'][0]['type'] = "bg-danger";
-                $_SESSION['toaster'][0]['body'] = VOTES_TOAST_ERROR_INTERNAL;
+//                $_SESSION['toaster'][0]['title'] = VOTES_TOAST_TITLE_ERROR;
+//                $_SESSION['toaster'][0]['type'] = "bg-danger";
+//                $_SESSION['toaster'][0]['body'] = VOTES_TOAST_ERROR_INTERNAL;
                 header("location: ../rewards");
                 break;
         }
@@ -224,9 +224,9 @@ class VotesController extends CoreController
         //Add reward
         $this->rewardsModel->addReward($title, $action);
 
-        $_SESSION['toaster'][0]['title'] = VOTES_TOAST_TITLE_SUCCESS;
-        $_SESSION['toaster'][0]['type'] = "bg-success";
-        $_SESSION['toaster'][0]['body'] = VOTES_TOAST_ADD_SUCCESS;
+//        $_SESSION['toaster'][0]['title'] = VOTES_TOAST_TITLE_SUCCESS;
+//        $_SESSION['toaster'][0]['type'] = "bg-success";
+//        $_SESSION['toaster'][0]['body'] = VOTES_TOAST_ADD_SUCCESS;
 
         header("location: ../rewards");
     }
@@ -238,9 +238,9 @@ class VotesController extends CoreController
 
         $this->rewardsModel->deleteReward($id);
 
-        $_SESSION['toaster'][0]['title'] = VOTES_TOAST_TITLE_SUCCESS;
-        $_SESSION['toaster'][0]['type'] = "bg-success";
-        $_SESSION['toaster'][0]['body'] = VOTES_TOAST_DELETE_SUCCESS;
+//        $_SESSION['toaster'][0]['title'] = VOTES_TOAST_TITLE_SUCCESS;
+//        $_SESSION['toaster'][0]['type'] = "bg-success";
+//        $_SESSION['toaster'][0]['body'] = VOTES_TOAST_DELETE_SUCCESS;
 
         header('location: ../rewards');
     }
@@ -259,20 +259,20 @@ class VotesController extends CoreController
         //Define the reward action
         switch ($rewardType) {
             case "votepoints":
-                $action = json_encode(array("type" => "votepoints", "amount" => filter_input(INPUT_POST, "amount")));
+                $action = json_encode(array("type" => "votepoints", "amount" => filter_input(INPUT_POST, "amount")), JSON_THROW_ON_ERROR);
                 break;
 
             case "votepoints-random":
                 $action = json_encode(array("type" => "votepoints-random",
                     "amount" => array(
                         "min" => filter_input(INPUT_POST, "amount-min"),
-                        "max" => filter_input(INPUT_POST, "amount-max"))));
+                        "max" => filter_input(INPUT_POST, "amount-max"))), JSON_THROW_ON_ERROR);
                 break;
 
             case "none"://Error, redirect
-                $_SESSION['toaster'][0]['title'] = VOTES_TOAST_TITLE_ERROR;
-                $_SESSION['toaster'][0]['type'] = "bg-danger";
-                $_SESSION['toaster'][0]['body'] = VOTES_TOAST_ERROR_INTERNAL;
+//                $_SESSION['toaster'][0]['title'] = VOTES_TOAST_TITLE_ERROR;
+//                $_SESSION['toaster'][0]['type'] = "bg-danger";
+//                $_SESSION['toaster'][0]['body'] = VOTES_TOAST_ERROR_INTERNAL;
                 header("location: ../votes/rewards");
                 break;
         }
@@ -280,9 +280,9 @@ class VotesController extends CoreController
 
         $this->rewardsModel->updateReward($rewardsId, $title, $action);
 
-        $_SESSION['toaster'][0]['title'] = VOTES_TOAST_TITLE_SUCCESS;
-        $_SESSION['toaster'][0]['type'] = "bg-success";
-        $_SESSION['toaster'][0]['body'] = VOTES_TOAST_EDIT_SUCCESS;
+//        $_SESSION['toaster'][0]['title'] = VOTES_TOAST_TITLE_SUCCESS;
+//        $_SESSION['toaster'][0]['type'] = "bg-success";
+//        $_SESSION['toaster'][0]['body'] = VOTES_TOAST_EDIT_SUCCESS;
 
         header('location: rewards');
     }
@@ -292,9 +292,12 @@ class VotesController extends CoreController
     {
         /* Error section */
         if (empty(filter_input(INPUT_POST, "id"))) {
-            echo json_encode(array("response" => "ERROR-EMPTY_ID"));
+            try {
+                echo json_encode(array("response" => "ERROR-EMPTY_ID"), JSON_THROW_ON_ERROR);
+            } catch (JsonException $e) {
+            }
         } else {
-            echo $this->rewardsModel->getRwardById(filter_input(INPUT_POST, "id"))->getAction();
+            echo $this->rewardsModel->getRewardById(filter_input(INPUT_POST, "id"))?->getAction();
         }
 
     }
@@ -304,6 +307,9 @@ class VotesController extends CoreController
     #[Link("/stats", Link::GET, [], "/cmw-admin/votes")]
     public function statsVotes()
     {
+
+        //TODO REWORK THIS PART
+        //Index -> Entities and more...
 
         $stats = new statsModel();
 
@@ -322,6 +328,15 @@ class VotesController extends CoreController
 
 
         View::createAdminView('votes', 'stats')
+            ->addScriptBefore("admin/resources/vendors/bootstrap/js/bootstrap.bundle.min.js",
+                "admin/resources/vendors/datatables/jquery.dataTables.min.js",
+                "admin/resources/vendors/datatables-bs4/js/dataTables.bootstrap4.min.js",
+                "admin/resources/vendors/datatables-responsive/js/dataTables.responsive.min.js",
+                "admin/resources/vendors/datatables-responsive/js/responsive.bootstrap4.min.js",
+                "admin/resources/vendors/chart.js/Chart.min.js",
+                "app/package/votes/views/ressources/js/main.js")
+            ->addStyle("admin/resources/vendors/datatables-bs4/css/dataTables.bootstrap4.min.css",
+                "admin/resources/vendors/datatables-responsive/css/responsive.bootstrap4.min.css")
             ->addVariableList(["stats" => $stats, "all" => $all, "month" => $month, "week" => $week, "day" => $day,
                 "listSites" => $listSites, "numberOfSites" => $numberOfSites, "actualTop" => $actualTop,
                 "globalTop" => $globalTop, "previousTop" => $previousTop])
@@ -361,13 +376,19 @@ class VotesController extends CoreController
 
     }
 
+    /**
+     * @throws \JsonException
+     */
     #[Link('/vote/verify', Link::POST)]
     public function votesPublicVerify()
     {
 
         /* Error section */
         if (empty(filter_input(INPUT_POST, "url"))) {
-            echo json_encode(array("response" => "ERROR-URL"));
+            try {
+                echo json_encode(array("response" => "ERROR-URL"), JSON_THROW_ON_ERROR);
+            } catch (JsonException $e) {
+            }
         } else {
 
 
@@ -400,7 +421,10 @@ class VotesController extends CoreController
                     //Get reward
                     $reward->selectReward();
 
-                    echo json_encode(array("response" => "GOOD-NEW_VOTE"));
+                    try {
+                        echo json_encode(array("response" => "GOOD-NEW_VOTE"), JSON_THROW_ON_ERROR);
+                    } catch (JsonException $e) {
+                    }
                 } else {
                     //If the player can get the reward
                     if ($vote->hasVoted() === "GOOD") {
@@ -410,20 +434,20 @@ class VotesController extends CoreController
                         //Get reward
                         $reward->selectReward();
 
-                        echo json_encode(array("response" => "GOOD"));
+                        echo json_encode(array("response" => "GOOD"), JSON_THROW_ON_ERROR);
 
                         //If the player has already vote
                     } else if ($vote->hasVoted() === "ALREADY_VOTE") {
 
-                        echo json_encode(array("response" => "ALREADY_VOTE"));
+                        echo json_encode(array("response" => "ALREADY_VOTE"), JSON_THROW_ON_ERROR);
 
                     } else {
-                        echo json_encode(array("response" => $vote->hasVoted()));
+                        echo json_encode(array("response" => $vote->hasVoted()), JSON_THROW_ON_ERROR);
                     }
                 }
 
             } else {//retry
-                echo json_encode(array("response" => "NOT_CONFIRMED"));
+                echo json_encode(array("response" => "NOT_CONFIRMED"), JSON_THROW_ON_ERROR);
             }
 
         }
