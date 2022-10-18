@@ -242,7 +242,7 @@ class VotesController extends CoreController
 //        $_SESSION['toaster'][0]['type'] = "bg-success";
 //        $_SESSION['toaster'][0]['body'] = VOTES_TOAST_DELETE_SUCCESS;
 
-        header('location: ../rewards');
+        header('location: ../../rewards');
     }
 
     #[Link("/rewards", Link::POST, [], "/cmw-admin/votes")]

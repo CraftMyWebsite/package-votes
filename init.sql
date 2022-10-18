@@ -70,7 +70,7 @@ ALTER TABLE `cmw_votes_sites`
 
 ALTER TABLE `cmw_votes_sites`
     ADD CONSTRAINT `fk_cmw_votes_rewards` FOREIGN KEY (`votes_sites_rewards_id`)
-        REFERENCES `cmw_votes_rewards` (`votes_rewards_rewards_id`);
+        REFERENCES `cmw_votes_rewards` (`votes_rewards_rewards_id`) ON DELETE SET NULL ON UPDATE CASCADE ;
 
 ALTER TABLE `cmw_votes_votes`
     ADD PRIMARY KEY (`votes_id`),
