@@ -38,8 +38,11 @@ class RewardsModel extends DatabaseManager
 
     //Get a reward
 
-    public function getRewardById(int $id): ?VotesRewardsEntity
+    public function getRewardById(?int $id): ?VotesRewardsEntity
     {
+        if($id === null){
+            return null;
+        }
 
         $sql = "SELECT * FROM cmw_votes_rewards WHERE votes_rewards_rewards_id=:rewards_id";
 

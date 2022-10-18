@@ -98,7 +98,7 @@ $description = LangManager::translate("votes.dashboard.desc");
 
                                                         <!-- Get all rewards -->
                                                         <?php foreach ($rewards as $reward) : ?>
-                                                            <option value="<?= $reward->getRewardsId() ?>" <?= ($site->getRewards()->getRewardsId() === $reward->getRewardsId() ? "selected" : "") ?>><?= $reward->getTitle() ?></option>
+                                                            <option value="<?= $reward?->getRewardsId() ?>" <?= ($site?->getRewards()?->getRewardsId() === $reward?->getRewardsId() ? "selected" : "") ?>><?= $reward->getTitle() ?></option>
                                                         <?php endforeach; ?>
                                                     </select>
 
@@ -140,7 +140,7 @@ $description = LangManager::translate("votes.dashboard.desc");
                                                             <div class="modal-footer">
                                                                 <a href="delete/<?= $site->getSiteId() ?>"
                                                                    class="btn btn-danger">
-                                                                    <?= LangManager::translate("corre.btn.delete_forever") ?>
+                                                                    <?= LangManager::translate("core.btn.delete_forever") ?>
                                                                 </a>
                                                                 <button type="button" class="btn btn-secondary"
                                                                         data-dismiss="modal"><?= LangManager::translate("core.btn.close") ?></button>

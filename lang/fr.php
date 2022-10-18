@@ -39,8 +39,8 @@ return [
                     "title" => "Suppression du site",
                     "body" => "Êtes-vous certains de vouloir supprimer ce site ?"
                 ],
-                "noreward" => "Vous ne possédez aucune récompense"
-            ]
+            ],
+            "noreward" => "Vous ne possédez aucune récompense"
         ],
 
         "config" => [
