@@ -18,14 +18,14 @@ $description = LangManager::translate("votes.dashboard.desc");
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title"><?= LangManager::translate("votes.dashboard.title.list_sites") ?></h3>
+                        <h3 class="card-title"><?= LangManager::translate("votes.dashboard.list_sites.title") ?></h3>
                     </div>
 
                     <div class="card-body">
 
                         <div id="accordion">
 
-                            <?php foreach ($sites as $site) : ?>
+                            <?php $i = 1; foreach ($sites as $site) : ?>
                                 <div class="card card-primary">
                                     <div class="card-header">
                                         <h4 class="card-title w-100">
@@ -68,7 +68,7 @@ $description = LangManager::translate("votes.dashboard.desc");
                                                             <span class="input-group-text"><i
                                                                         class="fas fa-link"></i></span>
                                                     </div>
-                                                    <input type="url" name="url" id="url" class="form-control"
+                                                    <input type="url" name="url" id="url-<?= $i ?>" class="form-control"
                                                            placeholder="<?= LangManager::translate("votes.dashboard.add_site.placeholder.url") ?>"
                                                            value="<?= $site->getUrl() ?>"
                                                            required>
@@ -78,13 +78,13 @@ $description = LangManager::translate("votes.dashboard.desc");
                                                             <span class="input-group-text"><i
                                                                         class="fas fa-fingerprint"></i></span>
                                                     </div>
-                                                    <input type="text" name="idUnique" id="idUnique"
+                                                    <input type="text" name="idUnique" id="idUnique-<?= $i ?>"
                                                            class="form-control"
                                                            placeholder="<?= LangManager::translate("votes.dashboard.add_site.placeholder.id_unique") ?>"
                                                            value="<?= $site->getIdUnique() ?>"
                                                            required>
                                                     <div class="input-group-prepend">
-                                                        <button type="button" onclick="testId();"
+                                                        <button type="button" onclick="testId(<?= $i ?>);"
                                                                 class="btn btn-success"><?= LangManager::translate("votes.dashboard.add_site.btn.testid") ?></button>
                                                     </div>
                                                 </div>
@@ -154,7 +154,7 @@ $description = LangManager::translate("votes.dashboard.desc");
                                         </div>
                                     </div>
                                 </div>
-                            <?php endforeach; ?>
+                            <?php ++$i; endforeach; ?>
 
                         </div>
                     </div>

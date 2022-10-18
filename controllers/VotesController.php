@@ -127,7 +127,7 @@ class VotesController extends CoreController
 
         View::createAdminView('votes', 'list_sites')
             ->addVariableList(["sites" => $sites, "rewards" => $rewards])
-            ->addScriptBefore("app/package/votes/views/resources/js/testSitesId.js", "admin/resources/vendors/sweetalert2/sweetalert2.all.js")
+            ->addScriptAfter("admin/resources/vendors/sweetalert2/sweetalert2.all.js", "app/package/votes/views/resources/js/testSitesId.js")
             ->addStyle("admin/resources/vendors/sweetalert2/sweetalert2.css")
             ->view();
     }
