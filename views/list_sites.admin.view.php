@@ -59,7 +59,7 @@ $description = LangManager::translate("votes.dashboard.desc");
                                                                         class="fas fa-hourglass-start"></i></span>
                                                     </div>
                                                     <input type="number" name="time" class="form-control"
-                                                           placeholder="<?= LangManager::translate("votes.dashboard.add_site.placeholder.tim") ?>"
+                                                           placeholder="<?= LangManager::translate("votes.dashboard.add_site.placeholder.time") ?>"
                                                            value="<?= $site->getTime() ?>"
                                                            required>
                                                 </div>

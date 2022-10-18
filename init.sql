@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `cmw_votes_logs_rewards`
 (
     `votes_logs_rewards_id`        int(10) UNSIGNED NOT NULL,
     `votes_logs_rewards_user_id`   int(11)          NULL,
-    `votes_logs_rewards_reward_id` int(11)                   DEFAULT NULL,
+    `votes_logs_rewards_reward_id` int(11)          NULL      DEFAULT NULL,
     `votes_logs_rewards_date`      timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;

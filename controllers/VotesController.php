@@ -4,7 +4,7 @@ namespace CMW\Controller\Votes;
 
 use CMW\Controller\Core\CoreController;
 use CMW\Controller\users\usersController;
-use CMW\Model\users\usersModel;
+use CMW\Model\Users\UsersModel;
 use CMW\Model\votes\configModel;
 use CMW\Model\votes\RewardsModel;
 use CMW\Model\votes\sitesModel;
@@ -47,7 +47,7 @@ class VotesController extends CoreController
 
     #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/votes")]
     #[Link("/config", Link::GET, [], "/cmw-admin/votes")]
-    public function votesConfig()
+    public function votesConfig(): void
     {
         $config = $this->configModel->getConfig();
 
@@ -57,7 +57,7 @@ class VotesController extends CoreController
     }
 
     #[Link("/config", Link::POST, [], "/cmw-admin/votes")]
-    public function votesConfigPost()
+    public function votesConfigPost(): void
     {
         //Keep this perm control just for the post function
         usersController::isAdminLogged();
@@ -84,7 +84,7 @@ class VotesController extends CoreController
     /* ///////////////////// SITES /////////////////////*/
 
     #[Link("/site/add", Link::GET, [], "/cmw-admin/votes")]
-    public function addSiteAdmin()
+    public function addSiteAdmin(): void
     {
 
         $rewards = $this->rewardsModel->getRewards();
@@ -98,7 +98,7 @@ class VotesController extends CoreController
     }
 
     #[Link("/site/add", Link::POST, [], "/cmw-admin/votes")]
-    public function addSiteAdminPost()
+    public function addSiteAdminPost(): void
     {
         usersController::isAdminLogged();
 
@@ -120,7 +120,7 @@ class VotesController extends CoreController
 
 
     #[Link("/site/list", Link::GET, [], "/cmw-admin/votes")]
-    public function listSites()
+    public function listSites(): void
     {
         $sites = $this->sitesModel->getSites();
         $rewards = $this->rewardsModel->getRewards();
@@ -133,7 +133,7 @@ class VotesController extends CoreController
     }
 
     #[Link("/site/list", Link::GET, [], "/cmw-admin/votes")]
-    public function votesSitesEdit()
+    public function votesSitesEdit(): void
     {
         $votes = $this->sitesModel->getSiteById(filter_input(INPUT_POST, 'siteId'));
 
@@ -143,7 +143,7 @@ class VotesController extends CoreController
     }
 
     #[Link("/site/list", Link::POST, [], "/cmw-admin/votes")]
-    public function votesSitesEditPost()
+    public function votesSitesEditPost(): void
     {
         usersController::isAdminLogged();
 
@@ -163,7 +163,7 @@ class VotesController extends CoreController
     }
 
     #[Link("/site/delete/:id", Link::GET, ['id' => '[0-9]+'], "/cmw-admin/votes")]
-    public function deleteSitePostAdmin(int $id)
+    public function deleteSitePostAdmin(int $id): void
     {
         usersController::isAdminLogged();
 
@@ -180,7 +180,7 @@ class VotesController extends CoreController
     /* ///////////////////// REWARDS /////////////////////*/
 
     #[Link("/rewards", Link::GET, [], "/cmw-admin/votes")]
-    public function votesRewards()
+    public function votesRewards(): void
     {
 
         $rewards = $this->rewardsModel->getRewards();
@@ -192,7 +192,7 @@ class VotesController extends CoreController
     }
 
     #[Link("/rewards/add", Link::POST, [], "/cmw-admin/votes")]
-    public function addRewardPost()
+    public function addRewardPost(): void
     {
         usersController::isAdminLogged();
 
@@ -232,7 +232,7 @@ class VotesController extends CoreController
     }
 
     #[Link("/rewards/delete/:id", Link::GET, ['id' => '[0-9]+'], "/cmw-admin/votes")]
-    public function deleteRewardPostAdmin(int $id)
+    public function deleteRewardPostAdmin(int $id): void
     {
         usersController::isAdminLogged();
 
@@ -246,7 +246,7 @@ class VotesController extends CoreController
     }
 
     #[Link("/rewards", Link::POST, [], "/cmw-admin/votes")]
-    public function editRewardPost()
+    public function editRewardPost(): void
     {
         usersController::isAdminLogged();
 
@@ -288,7 +288,7 @@ class VotesController extends CoreController
     }
 
     //Return the reward with a specific ID
-    public function getReward()
+    public function getReward(): void
     {
         /* Error section */
         if (empty(filter_input(INPUT_POST, "id"))) {
@@ -305,7 +305,7 @@ class VotesController extends CoreController
     /* ///////////////////// STATS /////////////////////*/
 
     #[Link("/stats", Link::GET, [], "/cmw-admin/votes")]
-    public function statsVotes()
+    public function statsVotes(): void
     {
 
         //TODO REWORK THIS PART
@@ -349,19 +349,11 @@ class VotesController extends CoreController
     /* ///////////////////// PUBLIC VOTE SECTION ////////////////////*/
     /* //////////////////////////////////////////////////////////////*/
 
-    /**
-     * @throws \CMW\Router\RouterException
-     */
+
     #[Link('/vote', Link::GET)]
-    public function votesPublic()
+    public function votesPublic(): void
     {
-        $vote = new VotesModel();
-
-
         $sites = $this->sitesModel->getSites();
-
-        $_SESSION['votes']['token'] = Utils::genId(15);
-
 
         $topCurrent = $this->statsModel->getActualTop();
         $topGlobal = $this->statsModel->getGlobalTop();
@@ -369,90 +361,63 @@ class VotesController extends CoreController
         //Include the public view file ("public/themes/$themePath/views/votes/main.view.php")
         $view = new View('votes', 'main');
 
-        $view->addVariableList(["votes" => $vote, "sites" => $sites,
+        $view->addVariableList(["sites" => $sites,
             "topCurrent" => $topCurrent, "topGlobal" => $topGlobal]);
+        $view->addScriptAfter("app/package/votes/views/resources/js/public.js");
         $view->view();
-
-
     }
 
-    /**
-     * @throws \JsonException
-     */
-    #[Link('/vote/verify', Link::POST)]
-    public function votesPublicVerify()
+    #[Link('/vote/send/:id', Link::GET, ["id" => "[0-9]+"])]
+    public function votesWebsitePublic(int $id): void
     {
+        try {
+            //First, check if the player can vote.
+            if ($this->votesModel->isVoteSend($this->sitesModel->getSiteById($id)?->getUrl(), $this->sitesModel->getSiteById($id)?->getIdUnique(), Utils::getClientIp())) {
 
-        /* Error section */
-        if (empty(filter_input(INPUT_POST, "url"))) {
-            try {
-                echo json_encode(array("response" => "ERROR-URL"), JSON_THROW_ON_ERROR);
-            } catch (JsonException $e) {
-            }
-        } else {
+                //Check if the player has a vote stored
+                if ($this->votesModel->playerHasAVoteStored(UsersModel::getCurrentUser()?->getId(), $id)) {
 
+                    //Check if we can validate this vote
+                    if ($this->votesModel->validateThisVote(UsersModel::getCurrentUser()?->getId(), $id)) {
+                        $this->votesModel->storeVote(UsersModel::getCurrentUser()?->getId(), $id);
+                        $this->rewardsModel->selectReward(UsersModel::getCurrentUser()?->getId(), $id);
 
-            $vote = new VotesModel();
-            $user = new usersModel();
-            $reward = new RewardsModel();
-
-
-            $url = filter_input(INPUT_POST, "url");
-
-            $site = $vote->getSite($url);
-            $vote->idUnique = $site['id_unique'];
-            $vote->idSite = $site['id'];
-
-            $reward->idSite = $vote->idSite;
-
-            $vote->getClientIp();
-
-            //Get user id
-            $userId = (new UsersModel())->getUserById($_SESSION['cmsUserId']);
-
-
-            if ($vote->check($url) === true) {
-
-                if ($vote->hasVoted() === "NEW_VOTE") {
-
-                    //Store the vote
-                    $vote->storeVote();
-
-                    //Get reward
-                    $reward->selectReward();
-
-                    try {
-                        echo json_encode(array("response" => "GOOD-NEW_VOTE"), JSON_THROW_ON_ERROR);
-                    } catch (JsonException $e) {
-                    }
-                } else {
-                    //If the player can get the reward
-                    if ($vote->hasVoted() === "GOOD") {
-                        //Store the vote
-                        $vote->storeVote();
-
-                        //Get reward
-                        $reward->selectReward();
-
-                        echo json_encode(array("response" => "GOOD"), JSON_THROW_ON_ERROR);
-
-                        //If the player has already vote
-                    } else if ($vote->hasVoted() === "ALREADY_VOTE") {
-
-                        echo json_encode(array("response" => "ALREADY_VOTE"), JSON_THROW_ON_ERROR);
-
+                        $this->returnData("send", true);
                     } else {
-                        echo json_encode(array("response" => $vote->hasVoted()), JSON_THROW_ON_ERROR);
+                        $this->returnData("already_vote", true);
                     }
+
+                } else { //The player don't have any vote for this website.
+                    $this->votesModel->storeVote(UsersModel::getCurrentUser()?->getId(), $id);
+                    $this->rewardsModel->selectReward(UsersModel::getCurrentUser()?->getId(), $id);
+
+                    $this->returnData("send", true);
                 }
 
-            } else {//retry
-                echo json_encode(array("response" => "NOT_CONFIRMED"), JSON_THROW_ON_ERROR);
+            } else {// The player has already voted.
+                $this->returnData("not_send");
             }
-
+        } catch (JsonException $e) {
+            echo $e;
         }
-
     }
 
+    private function returnData(string $toReturn, bool $isFinal = false): void
+    {
+        try {
+            print(json_encode($toReturn, JSON_THROW_ON_ERROR));
+
+            if ($isFinal) {
+                die();
+            }
+        } catch (JsonException $e) {
+        }
+    }
+
+    #[Link('/vote/geturl/:id', Link::GET, ["id" => "[0-9]+"])]
+    public function votesGetWebsiteUrlPublic(int $id): void
+    {
+        print $this->sitesModel->getSiteById($id)?->getUrl();
+    }
 
 }

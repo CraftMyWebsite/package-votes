@@ -115,22 +115,26 @@ class RewardsModel extends DatabaseManager
 
         if ($req->execute($var)) {
             $result = $req->fetch();
-            $rewardsId = $result['rewards_id'];
-            $action = $result['action'];
+            $rewardsId = $result['votes_sites_rewards_id'];
+            $action = $result['votes_rewards_action'];
 
 
             //Detect type
             try {
-                switch (json_decode($result['action'], false, 512, JSON_THROW_ON_ERROR)->type) {
+                switch (json_decode($action, false, 512, JSON_THROW_ON_ERROR)->type) {
 
                     case "votepoints":
-                        $this->giveRewardVotePoints($userId, json_decode($result['action'], false, 512, JSON_THROW_ON_ERROR)->amount);
+                        $this->giveRewardVotePoints($userId, json_decode($action, false, 512, JSON_THROW_ON_ERROR)->amount);
+                        $this->setLog($userId, $rewardsId);
                         break;
 
+
                     case "votepoints-random":
-                        $this->giveRewardVotePointsRandom($userId, json_decode($result['action'], false, 512, JSON_THROW_ON_ERROR)->amount->min,
-                            json_decode($result['action'], false, 512, JSON_THROW_ON_ERROR)->amount->min);
+                        $this->giveRewardVotePointsRandom($userId, json_decode($action, false, 512, JSON_THROW_ON_ERROR)->amount->min,
+                            json_decode($action, false, 512, JSON_THROW_ON_ERROR)->amount->min);
+                        $this->setLog($userId, $rewardsId);
                         break;
+
 
                 }
             } catch (JsonException $e) {
@@ -215,11 +219,7 @@ class RewardsModel extends DatabaseManager
             $db = self::getInstance();
             $req = $db->prepare($sql);
             $req->execute($var);
-
-            $rewardsId = $db->lastInsertId();
-            $this->setLog($userId, $rewardsId);
         }
-
     }
 
     //Reward → votepoints random

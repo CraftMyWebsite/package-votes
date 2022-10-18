@@ -2,6 +2,8 @@
 
 namespace CMW\Entity\Votes;
 
+use CMW\Utils\Utils;
+
 class VotesSitesEntity
 {
     private int $siteId;
@@ -61,7 +63,19 @@ class VotesSitesEntity
      */
     public function getTime(): int
     {
-        return $this->time;
+        return $this->time ?? 0;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTimeFormatted(): string
+    {
+        $t = $this->time;
+        $h = floor($t / 60) ? floor($t / 60) . 'h ' : '';
+        $m = $t % 60 ? $t % 60 . 'm' : '';
+
+        return $h && $m ? $h . $m : $h . $m;
     }
 
     /**
@@ -86,6 +100,11 @@ class VotesSitesEntity
     public function getDateCreate(): string
     {
         return $this->dateCreate;
+    }
+
+    public function getSendLink(): string
+    {
+        return Utils::getEnv()->getValue("PATH_SUBFOLDER") . "vote/send/" . $this->siteId;
     }
 
 }

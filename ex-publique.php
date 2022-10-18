@@ -3,40 +3,29 @@
 $title = "Voter";
 $description = "Votez pour votre serveur préféré !";
 
-/* @var $sites */
-
+/* @var \CMW\Entity\Votes\VotesSitesEntity[] $sites */
 ?>
-<pre>
-    Première page de test, pour le moment il faut jquery pour fonctionner.
-</pre>
 
-    <div class="container">
-        <div class="row"
-        <div class="col">
-            <?php foreach ($sites as $site): ?>
 
-                <div class="card mr-3">
-                    <div class="card-header">
-                        <p><?= $site['title'] ?></p>
-                    </div>
-                    <div class="card-body">
-                        <p>Temps de vote : <strong><?= $site['time'] ?></strong> minutes</p>
-                    </div>
-                    <div class="card-footer text-center">
-                        <input type="hidden" id="idSite" value="<?= $site['id'] ?>" hidden>
-                        <input type="hidden" id="urlSite" value="<?= $site['url'] ?>" hidden>
-                        <input type="hidden" id="token" value="<?=  $_SESSION['votes']['token'] ?>" hidden>
-
-                        <button type="button" rel="noopener noreferrer" class="btn btn-success"
-                                name="btnVote" value="<?= $site['url'] ?>">Voter</button>
+<div class="container">
+    <div class="row"
+    <div class="col">
+        <?php foreach ($sites as $site): ?>
+            <div class="package">
+                <div class="package__info">
+                    <h3><?= $site->getTitle() ?></h3>
+                    <div class="package__tags">
+                        <span class="tag tag--danger"><i
+                                    class="fas fa-stopwatch"></i><?= $site->getTimeFormatted() ?></span>
                     </div>
                 </div>
-
-
-
-            <?php endforeach; ?>
-        </div>
+                <div class="package__buttons package__buttons--outBasket">
+                    <a onclick="sendVote('<?= $site->getSiteId() ?>')"
+                       type="button" rel="noopener noreferrer"
+                       class="btn btn--primary cursorAura">Voter
+                    </a>
+                </div>
+            </div>
+        <?php endforeach; ?>
     </div>
-    </div>
-
-    <script src="app/package/votes/views/ressources/js/public.js"></script>
+</div>
