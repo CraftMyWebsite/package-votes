@@ -1,6 +1,7 @@
 <?php
 
 use CMW\Manager\Lang\LangManager;
+use CMW\Utils\SecurityService;
 
 $title = LangManager::translate("votes.dashboard.title.rewards");
 $description = LangManager::translate("votes.dashboard.desc");
@@ -21,6 +22,7 @@ $description = LangManager::translate("votes.dashboard.desc");
                     </div>
                     <div class="card-body">
                         <form action="rewards/add" method="post">
+                            <?php (new SecurityService())->insertHiddenToken() ?>
                             <div class="form-group">
                                 <label><?= LangManager::translate("votes.dashboard.rewards.add.title") ?></label>
                             </div>
@@ -82,7 +84,7 @@ $description = LangManager::translate("votes.dashboard.desc");
                                          data-parent="#accordion" style="">
                                         <div class="card-body">
                                             <form action="" method="post">
-
+                                                <?php (new SecurityService())->insertHiddenToken() ?>
                                                 <!-- Faire une requête ajax pour récupérer l'action -->
                                                 <input type="hidden" value="<?= "'" . $reward->getAction() . "'" ?>">
 

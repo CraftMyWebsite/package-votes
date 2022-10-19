@@ -1,6 +1,7 @@
 <?php
 
 use CMW\Manager\Lang\LangManager;
+use CMW\Utils\SecurityService;
 
 $title = LangManager::translate("votes.dashboard.title.list_sites");
 $description = LangManager::translate("votes.dashboard.desc");
@@ -39,7 +40,7 @@ $description = LangManager::translate("votes.dashboard.desc");
                                          data-parent="#accordion" style="">
                                         <div class="card-body">
                                             <form action="" method="post">
-
+                                                <?php (new SecurityService())->insertHiddenToken() ?>
                                                 <input type="text" name="siteId" value="<?= $site->getSiteId() ?>"
                                                        hidden>
 
