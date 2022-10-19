@@ -3,12 +3,12 @@
 namespace CMW\Controller\Votes;
 
 use CMW\Controller\Core\CoreController;
-use CMW\Controller\users\usersController;
+use CMW\Controller\Users\UsersController;
 use CMW\Model\Users\UsersModel;
-use CMW\Model\votes\configModel;
-use CMW\Model\votes\RewardsModel;
-use CMW\Model\votes\sitesModel;
-use CMW\Model\Votes\statsModel;
+use CMW\Model\Votes\ConfigModel;
+use CMW\Model\Votes\RewardsModel;
+use CMW\Model\Votes\SitesModel;
+use CMW\Model\Votes\StatsModel;
 use CMW\Model\Votes\VotesModel;
 use CMW\Router\Link;
 use CMW\Utils\Utils;
@@ -36,10 +36,10 @@ class VotesController extends CoreController
     public function __construct($themePath = null,)
     {
         parent::__construct($themePath);
-        $this->configModel = new configModel();
+        $this->configModel = new ConfigModel();
         $this->rewardsModel = new RewardsModel();
-        $this->sitesModel = new sitesModel();
-        $this->statsModel = new statsModel();
+        $this->sitesModel = new SitesModel();
+        $this->statsModel = new StatsModel();
         $this->votesModel = new VotesModel();
     }
 
