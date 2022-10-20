@@ -70,6 +70,9 @@ class VotesModel extends DatabaseManager
         $targetDate = strtotime(date('Y-m-d H:i:s', strtotime('+' . $site?->getTime() . ' minutes')));
         $storeDate = strtotime($this->getPlayerLastStoredVote($idUser, $idSite)['votes_date']);
 
+        echo $storeDate . "<br>";
+        echo $targetDate;
+
         return $targetDate <= $storeDate;
     }
 
@@ -117,12 +120,12 @@ class VotesModel extends DatabaseManager
             }
         } elseif (strpos($url, 'liste-serveurs-minecraft.org')) {
             $result = @file_get_contents("https://api.liste-serveurs-minecraft.org/vote/vote_verification.php?server_id=$idUnique&ip=$ipPlayer");
-            if ($result === 1) {
+            if ($result == 1) {
                 return true;
             }
         } elseif (strpos($url, 'serveur-minecraft.com')) {
             $result = @file_get_contents("https://serveur-minecraft.com/api/1/vote/$idUnique/$ipPlayer");
-            if ($result === 0) {
+            if ($result == 0) {
                 return true;
             }
         }
