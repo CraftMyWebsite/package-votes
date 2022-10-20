@@ -82,7 +82,7 @@ ALTER TABLE `cmw_votes_votes`
 
 ALTER TABLE `cmw_votes_votes`
     ADD CONSTRAINT `cmw_votes_votes_ibfk_1` FOREIGN KEY (`votes_id_user`)
-        REFERENCES `cmw_users` (`user_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+        REFERENCES `cmw_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
     ADD CONSTRAINT `cmw_votes_votes_ibfk_2` FOREIGN KEY (`votes_id_site`)
         REFERENCES `cmw_votes_sites` (`votes_sites_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 COMMIT;
