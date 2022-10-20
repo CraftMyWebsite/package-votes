@@ -67,11 +67,8 @@ class VotesModel extends DatabaseManager
     public function validateThisVote(int $idUser, int $idSite): bool
     {
         $site = (new SitesModel())->getSiteById($idSite);
-        $targetDate = strtotime(date('Y-m-d H:i:s', strtotime('+' . $site?->getTime() . ' minutes')));
         $storeDate = strtotime($this->getPlayerLastStoredVote($idUser, $idSite)['votes_date']);
-
-        echo $storeDate . "<br>";
-        echo $targetDate;
+        $targetDate = strtotime($this->getPlayerLastStoredVote($idUser, $idSite)['votes_date'] . ' + ' . $site?->getTime() . ' minutes');
 
         return $targetDate <= $storeDate;
     }
