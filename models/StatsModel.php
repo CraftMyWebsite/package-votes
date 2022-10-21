@@ -166,9 +166,9 @@ class StatsModel extends DatabaseManager
     public function getActualTop(): array
     {
 
-        $sql = "SELECT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_pseudo as pseudo FROM cmw_votes_votes 
+        $sql = "SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_pseudo as pseudo FROM cmw_votes_votes 
                     JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user 
-                    WHERE MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE()) GROUP BY cmw_users.user_pseudo 
+                    WHERE MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE())
                     ORDER BY COUNT(cmw_votes_votes.votes_id) DESC LIMIT 10";
 
         $db = self::getInstance();
@@ -189,8 +189,8 @@ class StatsModel extends DatabaseManager
     public function getGlobalTop(): array
     {
 
-        $sql = "SELECT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_pseudo as pseudo FROM cmw_votes_votes 
-                    JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user GROUP BY cmw_users.user_pseudo 
+        $sql = "SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_pseudo as pseudo FROM cmw_votes_votes 
+                    JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user 
                     ORDER BY COUNT(cmw_votes_votes.votes_id) DESC LIMIT 10";
 
         $db = self::getInstance();
@@ -210,7 +210,7 @@ class StatsModel extends DatabaseManager
         $sql = "SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_pseudo as pseudo, cmw_users.user_email
                 as email FROM cmw_votes_votes
                 JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user
-                WHERE MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE()) GROUP BY cmw_users.user_pseudo
+                WHERE MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE())
                 ORDER BY COUNT(cmw_votes_votes.votes_id) DESC";
 
         $db = self::getInstance();
@@ -229,7 +229,6 @@ class StatsModel extends DatabaseManager
         $sql = "SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_pseudo as pseudo, cmw_users.user_email
                     as email FROM cmw_votes_votes 
                     JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user 
-                    GROUP BY cmw_users.user_pseudo 
                     ORDER BY COUNT(cmw_votes_votes.votes_id) DESC";
 
         $db = self::getInstance();
@@ -249,7 +248,6 @@ class StatsModel extends DatabaseManager
                     as email FROM cmw_votes_votes 
                     JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user 
                     WHERE MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH) 
-                    GROUP BY cmw_users.user_pseudo 
                     ORDER BY COUNT(cmw_votes_votes.votes_id) DESC";
 
         $db = self::getInstance();

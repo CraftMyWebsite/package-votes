@@ -19,7 +19,7 @@ $description = LangManager::translate("votes.dashboard.desc");
 $scripts = '
     <script>
     $(function () {
-        $("#users_table").DataTable({
+        $("table[id^='."datatable-".']").DataTable({
             "responsive": true, 
             "lengthChange": false, 
             "autoWidth": false,
@@ -212,7 +212,7 @@ $scripts = '
             <h3 class="card-title">Top voteurs mois en cours</h3>
         </div>
         <div class="card-body">
-            <table id="users_table" class="table table-bordered table-striped">
+            <table id="datatable-1" class="table table-bordered table-striped">
                 <thead>
                 <tr>
                     <th>Pseudo</th>
@@ -248,7 +248,7 @@ $scripts = '
             <h3 class="card-title">Top voteurs totaux</h3>
         </div>
         <div class="card-body">
-            <table id="users_table" class="table table-bordered table-striped">
+            <table id="datatable-2" class="table table-bordered table-striped">
                 <thead>
                 <tr>
                     <th>Pseudo</th>
@@ -284,7 +284,7 @@ $scripts = '
             <h3 class="card-title">Classement du mois précédent</h3>
         </div>
         <div class="card-body">
-            <table id="users_table" class="table table-bordered table-striped">
+            <table id="datatable-3" class="table table-bordered table-striped">
                 <thead>
                 <tr>
                     <th>Pseudo</th>

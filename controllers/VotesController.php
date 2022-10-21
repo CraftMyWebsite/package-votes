@@ -49,6 +49,8 @@ class VotesController extends CoreController
     #[Link("/config", Link::GET, [], "/cmw-admin/votes")]
     public function votesConfig(): void
     {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.configuration");
+
         $config = $this->configModel->getConfig();
 
         View::createAdminView('votes', 'config')
@@ -59,8 +61,7 @@ class VotesController extends CoreController
     #[Link("/config", Link::POST, [], "/cmw-admin/votes")]
     public function votesConfigPost(): void
     {
-        //Keep this perm control just for the post function
-        usersController::isAdminLogged();
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.configuration");
 
         $topShow = filter_input(INPUT_POST, 'topShow');
         $reset = filter_input(INPUT_POST, 'reset');
@@ -86,9 +87,9 @@ class VotesController extends CoreController
     #[Link("/site/add", Link::GET, [], "/cmw-admin/votes")]
     public function addSiteAdmin(): void
     {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.add");
 
         $rewards = $this->rewardsModel->getRewards();
-
 
         View::createAdminView('votes', 'add_site')
             ->addVariableList(["rewards" => $rewards])
@@ -100,8 +101,7 @@ class VotesController extends CoreController
     #[Link("/site/add", Link::POST, [], "/cmw-admin/votes")]
     public function addSiteAdminPost(): void
     {
-        usersController::isAdminLogged();
-
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.add");
 
         $title = filter_input(INPUT_POST, 'title');
         $time = filter_input(INPUT_POST, 'time');
@@ -122,6 +122,8 @@ class VotesController extends CoreController
     #[Link("/site/list", Link::GET, [], "/cmw-admin/votes")]
     public function listSites(): void
     {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.list");
+
         $sites = $this->sitesModel->getSites();
         $rewards = $this->rewardsModel->getRewards();
 
@@ -135,6 +137,8 @@ class VotesController extends CoreController
     #[Link("/site/list", Link::GET, [], "/cmw-admin/votes")]
     public function votesSitesEdit(): void
     {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.edit");
+
         $votes = $this->sitesModel->getSiteById(filter_input(INPUT_POST, 'siteId'));
 
         View::createAdminView('votes', 'list_sites')
@@ -145,7 +149,7 @@ class VotesController extends CoreController
     #[Link("/site/list", Link::POST, [], "/cmw-admin/votes")]
     public function votesSitesEditPost(): void
     {
-        usersController::isAdminLogged();
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.edit");
 
         $siteId = filter_input(INPUT_POST, 'siteId');
         $title = filter_input(INPUT_POST, 'title');
@@ -165,7 +169,7 @@ class VotesController extends CoreController
     #[Link("/site/delete/:id", Link::GET, ['id' => '[0-9]+'], "/cmw-admin/votes")]
     public function deleteSitePostAdmin(int $id): void
     {
-        usersController::isAdminLogged();
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.delete");
 
         $this->sitesModel->deleteSite($id);
 
@@ -182,6 +186,8 @@ class VotesController extends CoreController
     #[Link("/rewards", Link::GET, [], "/cmw-admin/votes")]
     public function votesRewards(): void
     {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.rewards.edit");
+
 
         $rewards = $this->rewardsModel->getRewards();
 
@@ -194,8 +200,7 @@ class VotesController extends CoreController
     #[Link("/rewards/add", Link::POST, [], "/cmw-admin/votes")]
     public function addRewardPost(): void
     {
-        usersController::isAdminLogged();
-
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.rewards.add");
 
         $rewardType = filter_input(INPUT_POST, "reward_type");
         $title = filter_input(INPUT_POST, "title");
@@ -234,7 +239,7 @@ class VotesController extends CoreController
     #[Link("/rewards/delete/:id", Link::GET, ['id' => '[0-9]+'], "/cmw-admin/votes")]
     public function deleteRewardPostAdmin(int $id): void
     {
-        usersController::isAdminLogged();
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.rewards.delete");
 
         $this->rewardsModel->deleteReward($id);
 
@@ -248,8 +253,7 @@ class VotesController extends CoreController
     #[Link("/rewards", Link::POST, [], "/cmw-admin/votes")]
     public function editRewardPost(): void
     {
-        usersController::isAdminLogged();
-
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.rewards.edit");
 
         $rewardsId = filter_input(INPUT_POST, "reward_id");
         $rewardType = filter_input(INPUT_POST, "reward_type");
@@ -307,6 +311,7 @@ class VotesController extends CoreController
     #[Link("/stats", Link::GET, [], "/cmw-admin/votes")]
     public function statsVotes(): void
     {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.stats");
 
         //TODO REWORK THIS PART
         //Index -> Entities and more...
@@ -334,7 +339,7 @@ class VotesController extends CoreController
                 "admin/resources/vendors/datatables-responsive/js/dataTables.responsive.min.js",
                 "admin/resources/vendors/datatables-responsive/js/responsive.bootstrap4.min.js",
                 "admin/resources/vendors/chart.js/Chart.min.js",
-                "app/package/votes/views/ressources/js/main.js")
+                "app/package/votes/views/resources/js/main.js")
             ->addStyle("admin/resources/vendors/datatables-bs4/css/dataTables.bootstrap4.min.css",
                 "admin/resources/vendors/datatables-responsive/css/responsive.bootstrap4.min.css")
             ->addVariableList(["stats" => $stats, "all" => $all, "month" => $month, "week" => $week, "day" => $day,
