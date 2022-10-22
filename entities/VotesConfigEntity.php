@@ -9,19 +9,22 @@ class VotesConfigEntity
     private int $reset;
     private int $autoTopRewardActive;
     private ?string $autoTopReward;
+    private bool $enableApi;
 
     /**
      * @param int $topShow
      * @param int $reset
      * @param int $autoTopRewardActive
      * @param string|null $autoTopReward
+     * @param bool $enableApi
      */
-    public function __construct(int $topShow, int $reset, int $autoTopRewardActive, ?string $autoTopReward)
+    public function __construct(int $topShow, int $reset, int $autoTopRewardActive, ?string $autoTopReward, bool $enableApi)
     {
         $this->topShow = $topShow;
         $this->reset = $reset;
         $this->autoTopRewardActive = $autoTopRewardActive;
         $this->autoTopReward = $autoTopReward;
+        $this->enableApi = $enableApi;
     }
 
     /**
@@ -54,6 +57,14 @@ class VotesConfigEntity
     public function getAutoTopReward(): ?string
     {
         return $this->autoTopReward;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEnableApi(): bool
+    {
+        return $this->enableApi;
     }
 
 }

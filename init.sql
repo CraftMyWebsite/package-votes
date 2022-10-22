@@ -25,10 +25,11 @@ CREATE TABLE IF NOT EXISTS `cmw_votes_votes`
 
 CREATE TABLE IF NOT EXISTS `cmw_votes_config`
 (
-    `votes_config_top_show`               INT(10) NOT NULL DEFAULT '10',
-    `votes_config_reset`                  INT(1)  NOT NULL DEFAULT '1' COMMENT '1 = reset tous les mois\r\n0 = pas de reset mensuel',
-    `votes_config_auto_top_reward_active` INT(1)  NULL     DEFAULT '0' COMMENT '0 = pas de récompenses automatiques\r\n1 = récompenses automatiques activés',
-    `votes_config_auto_top_reward`        TEXT    NULL COMMENT 'Récompenses automatiques pour les x premiers (JSON)'
+    `votes_config_top_show`               INT(10)    NOT NULL DEFAULT '10',
+    `votes_config_reset`                  INT(1)     NOT NULL DEFAULT '1' COMMENT '1 = reset tous les mois\r\n0 = pas de reset mensuel',
+    `votes_config_auto_top_reward_active` INT(1)     NULL     DEFAULT '0' COMMENT '0 = pas de récompenses automatiques\r\n1 = récompenses automatiques activés',
+    `votes_config_auto_top_reward`        TEXT       NULL COMMENT 'Récompenses automatiques pour les x premiers (JSON)',
+    `votes_config_enable_api`             TINYINT(1) NOT NULL
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
@@ -93,13 +94,13 @@ ALTER TABLE `cmw_votes_logs_rewards`
     ADD KEY `user_id` (`votes_logs_rewards_user_id`);
 
 ALTER TABLE `cmw_votes_logs_rewards`
-    MODIFY `votes_logs_rewards_id` int(11)  NOT NULL AUTO_INCREMENT;
+    MODIFY `votes_logs_rewards_id` int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `cmw_votes_logs_rewards`
     ADD CONSTRAINT `cmw_votes_logs_rewards_ibfk_1` FOREIGN KEY (`votes_logs_rewards_reward_id`)
         REFERENCES `cmw_votes_rewards` (`votes_rewards_rewards_id`) ON DELETE SET NULL ON UPDATE CASCADE,
     ADD CONSTRAINT `cmw_votes_logs_rewards_ibfk_2` FOREIGN KEY (`votes_logs_rewards_user_id`)
-        REFERENCES `cmw_users` (`user_id`) ON DELETE SET NULL ON UPDATE CASCADE ;
+        REFERENCES `cmw_users` (`user_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 COMMIT;
 
 ALTER TABLE `cmw_votes_votepoints`
@@ -117,6 +118,6 @@ COMMIT;
 
 #Generate default config
 INSERT INTO `cmw_votes_config` (`votes_config_top_show`, `votes_config_reset`, `votes_config_auto_top_reward_active`,
-                                `votes_config_auto_top_reward`)
-VALUES ('10', '1', '0', NULL);
+                                `votes_config_auto_top_reward`, `votes_config_enable_api`)
+VALUES ('10', '1', '0', NULL, 1);
 

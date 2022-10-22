@@ -48,9 +48,14 @@ return [
                 "0" => "Pas de reset de votes",
                 "1" => "Mensuel",
             ],
+            "enable_api" => [
+                "0" => "Désactiver l'api locale",
+                "1" => "Activer l'api locale"
+            ],
             "placeholder" => [
                 "reset" => "Sélection du mode de reset des modes",
                 "top_show" => "Sélection du nombre de joueurs à afficher au classement sur votre site",
+                "enable_api" => "Activer l'api du site"
             ],
         ],
 
@@ -65,6 +70,13 @@ return [
             "votepoints" => [
                 "name" => "Votepoints",
                 "random" => " aléatoires",
+            ],
+            "minecraft" => [
+                "commands" => "Commandes Minecraft",
+                "servers" => "Serveurs",
+                "placeholder" => [
+                    "commands" => "Commande(s), séparez vos commandes avec '|'"
+                ]
             ],
             "add" => [
                 "title" => "Ajouter une nouvelle récompense",

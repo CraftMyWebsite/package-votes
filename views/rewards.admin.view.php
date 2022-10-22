@@ -7,6 +7,7 @@ $title = LangManager::translate("votes.dashboard.title.rewards");
 $description = LangManager::translate("votes.dashboard.desc");
 
 /* @var \CMW\Entity\Votes\VotesRewardsEntity[] $rewards */
+/* @var \CMW\Entity\Minecraft\MinecraftServerEntity[] $minecraftServers */
 ?>
 
 <div class="content">
@@ -44,6 +45,9 @@ $description = LangManager::translate("votes.dashboard.desc");
                                 <option value="votepoints-random">
                                     <?= LangManager::translate("votes.dashboard.rewards.votepoints.name") ?>
                                     <?= LangManager::translate("votes.dashboard.rewards.votepoints.random") ?>
+                                </option>
+                                <option value="minecraft-commands">
+                                    <?= LangManager::translate("votes.dashboard.rewards.minecraft.commands") ?>
                                 </option>
                             </select>
 
@@ -117,9 +121,13 @@ $description = LangManager::translate("votes.dashboard.desc");
                                                             <?= LangManager::translate("votes.dashboard.rewards.votepoints.name") ?>
                                                         </option>
 
-                                                        <option value="votepoints-random" <?= json_decode($reward->getAction())->type === "votepoints-random" ? "selected" : "" ?>>
+                                                        <option value="votepoints-random" <?= json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->type === "votepoints-random" ? "selected" : "" ?>>
                                                             <?= LangManager::translate("votes.dashboard.rewards.votepoints.name") ?>
                                                             <?= LangManager::translate("votes.dashboard.rewards.votepoints.random") ?>
+                                                        </option>
+
+                                                        <option value="minecraft-commands" <?= json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->type === "minecraft-commands" ? "selected" : "" ?>>
+                                                            <?= LangManager::translate("votes.dashboard.rewards.minecraft.commands") ?>
                                                         </option>
 
                                                     </select>
@@ -166,7 +174,39 @@ $description = LangManager::translate("votes.dashboard.desc");
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                    <?php elseif (json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->type === "minecraft-commands"): ?>
+                                                        <div id="reward-content-wrapper" class="mt-3">
+                                                            <div class="row">
+                                                                <div class="col-sm-6">
+                                                                    <div class="form-group">
+                                                                        <label><?= LangManager::translate("votes.dashboard.rewards.minecraft.commands") ?></label>
+                                                                        <input value="<?= json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->commands ?>"
+                                                                               placeholder="<?= LangManager::translate("votes.dashboard.rewards.minecraft.placeholder.commands") ?>"
+                                                                               type="text" name="minecraft-commands"
+                                                                               class="form-control" required>
+                                                                    </div>
+                                                                </div>
 
+                                                                <div class="col-sm-6">
+                                                                    <div class="form-group">
+                                                                        <label><?= LangManager::translate("votes.dashboard.rewards.minecraft.servers") ?></label>
+                                                                        <select name="minecraft-servers[]"
+                                                                                class="form-control" required multiple>
+
+                                                                            <?php foreach ($minecraftServers as $minecraftServer): ?>
+                                                                                <option value="<?= $minecraftServer->getServerId() ?>"
+                                                                                    <?php foreach (json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->servers as $srvId) {
+                                                                                        echo ((int)$srvId === $minecraftServer->getServerId()) ? "selected" : "";
+                                                                                    } ?>
+                                                                                ><?= $minecraftServer->getServerName() ?>
+                                                                                </option>
+                                                                            <?php endforeach; ?>
+
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     <?php endif; ?>
                                                 </div>
 

@@ -16,6 +16,10 @@ $(document).on('change','#reward_type',function(){
             cleanRewardType();
             createVotePointsRandom();
             break;
+        case "minecraft-commands":
+            cleanRewardType();
+            createMinecraftCommand();
+            break;
         case "none"://If we don't select reward type
             cleanRewardType();
             btnsave.setAttribute("disabled", true);//Change save button status
@@ -54,6 +58,10 @@ function updateReward(e, id){
                 case "votepoints-random":
                     cleanRewardType(section);
                     createVotePointsRandom(action.amount.min, action.amount.max, section);
+                    break;
+                case "minecraft-commands":
+                    cleanRewardType(section);
+                    createMinecraftCommand(action.commands, action.servers, section);
                     break;
                 case "none"://If we don't select reward type
                     cleanRewardType(section);
@@ -111,7 +119,7 @@ function createVotePoints(amount, parent = null){
     input.setAttribute("type", "number")
     input.setAttribute("name", "amount");
     input.setAttribute("class", "form-control");
-    input.setAttribute("required", true);
+    input.setAttribute("required", "true");
 
 
     parent.append(div_wrapper);
@@ -153,7 +161,7 @@ function createVotePointsRandom(min, max, parent = null){
     input_min.setAttribute("type", "number")
     input_min.setAttribute("name", "amount-min");
     input_min.setAttribute("class", "form-control");
-    input_min.setAttribute("required", true);
+    input_min.setAttribute("required", "true");
 
     //Max amount section
     let div_wrapper_max = document.createElement("div");
@@ -171,7 +179,7 @@ function createVotePointsRandom(min, max, parent = null){
     input_max.setAttribute("type", "number")
     input_max.setAttribute("name", "amount-max");
     input_max.setAttribute("class", "form-control");
-    input_max.setAttribute("required", true);
+    input_max.setAttribute("required", "true");
 
 
     parent.append(div_wrapper);
@@ -185,4 +193,85 @@ function createVotePointsRandom(min, max, parent = null){
     div_form_group_max.append(label_max);
     div_form_group_max.append(input_max);
 
+}
+
+function createMinecraftCommand(commands, servers, parent = null){
+
+    if (commands === undefined || servers === undefined){
+        commands = "";
+        servers = [];
+    }
+
+    if (parent === null){
+        parent = document.getElementById("reward-content-wrapper");
+    }
+
+
+    let div_wrapper = document.createElement("div");
+    div_wrapper.setAttribute("class", "row");
+
+    //Min amount section
+    let div_wrapper_commands = document.createElement("div");
+    div_wrapper_commands.setAttribute("class", "col-sm-6");
+
+    let div_form_group_commands = document.createElement("div");
+    div_form_group_commands.setAttribute("class", "form-group");
+
+    let label_commands = document.createElement("label");
+    label_commands.innerText = "Command(s)";
+
+    let input_commands = document.createElement("input");
+    input_commands.setAttribute("value", commands);
+    input_commands.setAttribute("placeholder", "Command(s), séparez vos commandes avec '|'")
+    input_commands.setAttribute("type", "text")
+    input_commands.setAttribute("name", "minecraft-commands");
+    input_commands.setAttribute("class", "form-control");
+    input_commands.setAttribute("required", "true");
+
+    //Max amount section
+    let div_wrapper_server = document.createElement("div");
+    div_wrapper_server.setAttribute("class", "col-sm-6");
+
+    let div_form_group_server = document.createElement("div");
+    div_form_group_server.setAttribute("class", "form-group");
+
+    let label_server = document.createElement("label");
+    label_server.innerText = "Serveur";
+
+    let select_server = document.createElement("select");
+    select_server.setAttribute("name", "minecraft-servers[]");
+    select_server.setAttribute("class", "form-control");
+    select_server.setAttribute("required", "true");
+    select_server.setAttribute("multiple", "true");
+
+
+    parent.append(div_wrapper);
+    div_wrapper.append(div_wrapper_commands);
+    div_wrapper_commands.append(div_form_group_commands);
+    div_form_group_commands.append(label_commands);
+    div_form_group_commands.append(input_commands);
+
+    div_wrapper.append(div_wrapper_server);
+    div_wrapper_server.append(div_form_group_server);
+    div_form_group_server.append(label_server);
+    div_form_group_server.append(select_server);
+
+    getServers(select_server, servers).then(r => r);
+}
+
+const getServers = async (select_server, servers) => {
+    let url = await fetch(`../minecraft/servers/list/`)
+    let jsonData = await url.json();
+
+    for (const [serverId, serverName] of Object.entries(jsonData)) {
+        let option = document.createElement("option");
+        option.setAttribute("value", `${serverId}`);
+        option.innerText = `${serverName}`;
+
+        for (const srvId of servers) {
+            srvId === serverId ? option.setAttribute("selected",  `true`) : "" ;
+        }
+
+        select_server.append(option);
+    }
 }

@@ -45,6 +45,18 @@ $description = LangManager::translate("votes.dashboard.desc");
                                             LangManager::translate("votes.dashboard.config.reset.1") ?></option>
                                 </select>
                             </div>
+
+                            <div class="form-group">
+                                <label><?= LangManager::translate("votes.dashboard.config.placeholder.enable_api") ?></label>
+                                <select name="api" class="form-control" required>
+                                    <option value="1" <?= $config->isEnableApi() ? "selected" : "" ?>>
+                                        <?= LangManager::translate("votes.dashboard.config.enable_api.1") ?>
+                                    </option>
+
+                                    <option value="0" <?= !$config->isEnableApi() ? "selected" : "" ?>>
+                                        <?= LangManager::translate("votes.dashboard.config.enable_api.0") ?></option>
+                                </select>
+                            </div>
                         </div>
 
                         <input type="number" name="autoTopRewardActive" value="1" hidden>

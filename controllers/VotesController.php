@@ -4,6 +4,8 @@ namespace CMW\Controller\Votes;
 
 use CMW\Controller\Core\CoreController;
 use CMW\Controller\Users\UsersController;
+use CMW\Manager\Api\APIManager;
+use CMW\Model\Minecraft\MinecraftModel;
 use CMW\Model\Users\UsersModel;
 use CMW\Model\Votes\ConfigModel;
 use CMW\Model\Votes\RewardsModel;
@@ -67,12 +69,13 @@ class VotesController extends CoreController
         $reset = filter_input(INPUT_POST, 'reset');
         $autoTopRewardActive = filter_input(INPUT_POST, 'autoTopRewardActive');
         $autoTopReward = filter_input(INPUT_POST, 'autoTopReward');
+        $enableApi = filter_input(INPUT_POST, 'api');
 
 
         //Faire la config pour les rewards
 
 
-        $this->configModel->updateConfig($topShow, $reset, $autoTopRewardActive, $autoTopReward);
+        $this->configModel->updateConfig($topShow, $reset, $autoTopRewardActive, $autoTopReward, $enableApi);
 
 //        $_SESSION['toaster'][0]['title'] = VOTES_TOAST_TITLE_SUCCESS;
 //        $_SESSION['toaster'][0]['type'] = "bg-success";
@@ -191,8 +194,10 @@ class VotesController extends CoreController
 
         $rewards = $this->rewardsModel->getRewards();
 
+        $minecraftServers = (new MinecraftModel())->getServers();
+
         View::createAdminView('votes', 'rewards')
-            ->addVariableList(["rewards" => $rewards])
+            ->addVariableList(["rewards" => $rewards, "minecraftServers" => $minecraftServers])
             ->addScriptBefore("app/package/votes/views/resources/js/reward.js")
             ->view();
     }
@@ -205,6 +210,7 @@ class VotesController extends CoreController
         $rewardType = filter_input(INPUT_POST, "reward_type");
         $title = filter_input(INPUT_POST, "title");
 
+        $action = "";
         //Define the reward action
         switch ($rewardType) {
             case "votepoints":
@@ -216,6 +222,11 @@ class VotesController extends CoreController
                     "amount" => array(
                         "min" => filter_input(INPUT_POST, "amount-min"),
                         "max" => filter_input(INPUT_POST, "amount-max"))), JSON_THROW_ON_ERROR);
+                break;
+            case "minecraft-commands":
+                $action = json_encode(array("type" => "minecraft-commands",
+                    "commands" => filter_input(INPUT_POST, "minecraft-commands"),
+                    "servers" => $_POST['minecraft-servers']), JSON_THROW_ON_ERROR);
                 break;
 
             case "none"://Error, redirect
@@ -259,7 +270,7 @@ class VotesController extends CoreController
         $rewardType = filter_input(INPUT_POST, "reward_type");
         $title = filter_input(INPUT_POST, "title");
 
-
+        $action = "";
         //Define the reward action
         switch ($rewardType) {
             case "votepoints":
@@ -271,6 +282,11 @@ class VotesController extends CoreController
                     "amount" => array(
                         "min" => filter_input(INPUT_POST, "amount-min"),
                         "max" => filter_input(INPUT_POST, "amount-max"))), JSON_THROW_ON_ERROR);
+                break;
+            case "minecraft-commands":
+                $action = json_encode(array("type" => "minecraft-commands",
+                    "commands" => filter_input(INPUT_POST, "minecraft-commands"),
+                    "servers" => $_POST['minecraft-servers']), JSON_THROW_ON_ERROR);
                 break;
 
             case "none"://Error, redirect
@@ -292,6 +308,7 @@ class VotesController extends CoreController
     }
 
     //Return the reward with a specific ID
+    #[Link("/rewards/get", Link::POST, [], "/cmw-admin/votes", secure: false)]
     public function getReward(): void
     {
         /* Error section */
@@ -387,6 +404,12 @@ class VotesController extends CoreController
                         $this->votesModel->storeVote(UsersModel::getCurrentUser()?->getId(), $id);
                         $this->rewardsModel->selectReward(UsersModel::getCurrentUser()?->getId(), $id);
 
+                        if ($this->configModel->getConfig()?->isEnableApi() &&
+                            json_decode($this->rewardsModel->getRewardById($id)?->getAction(), false, 512,
+                                JSON_THROW_ON_ERROR)->type === "minecraft-commands") {
+                            $this->sendRewardsToCmwLink($id);
+                        }
+
                         $this->returnData("send", true);
                     } else {
                         $this->returnData("already_vote", true);
@@ -395,6 +418,12 @@ class VotesController extends CoreController
                 } else { //The player don't have any vote for this website.
                     $this->votesModel->storeVote(UsersModel::getCurrentUser()?->getId(), $id);
                     $this->rewardsModel->selectReward(UsersModel::getCurrentUser()?->getId(), $id);
+
+                    if ($this->configModel->getConfig()?->isEnableApi() &&
+                        json_decode($this->rewardsModel->getRewardById($id)?->getAction(), false, 512,
+                            JSON_THROW_ON_ERROR)->type === "minecraft-commands") {
+                        $this->sendRewardsToCmwLink($id);
+                    }
 
                     $this->returnData("send", true);
                 }
@@ -405,6 +434,17 @@ class VotesController extends CoreController
         } catch (JsonException $e) {
             echo $e;
         }
+    }
+
+    public function sendRewardsToCmwLink(string $rewardId): void
+    {
+        foreach (json_decode($this->rewardsModel->getRewardById($rewardId)?->getAction(), false, 512, JSON_THROW_ON_ERROR)->servers as $serverId) {
+            $server = (new MinecraftModel())->getServerById($serverId);
+            $currentUser = UsersModel::getCurrentUser()?->getUsername();
+            $cmd = base64_encode(json_decode($this->rewardsModel->getRewardById($rewardId)?->getAction(), false, 512, JSON_THROW_ON_ERROR)->commands);
+            echo APIManager::getRequest("http://{$server?->getServerIp()}:{$server?->getServerCMWLPort()}/votes/send/reward/$currentUser/$cmd");
+        }
+
     }
 
     private function returnData(string $toReturn, bool $isFinal = false): void
