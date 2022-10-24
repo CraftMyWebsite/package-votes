@@ -438,10 +438,15 @@ class VotesController extends CoreController
 
     public function sendRewardsToCmwLink(string $rewardId): void
     {
+        //TODO: Replace placeholder {PLAYERNAME} with the player pseudo.
         foreach (json_decode($this->rewardsModel->getRewardById($rewardId)?->getAction(), false, 512, JSON_THROW_ON_ERROR)->servers as $serverId) {
             $server = (new MinecraftModel())->getServerById($serverId);
             $currentUser = UsersModel::getCurrentUser()?->getUsername();
-            $cmd = base64_encode(json_decode($this->rewardsModel->getRewardById($rewardId)?->getAction(), false, 512, JSON_THROW_ON_ERROR)->commands);
+
+            $cmd = json_decode($this->rewardsModel->getRewardById($rewardId)?->getAction(), false, 512, JSON_THROW_ON_ERROR)->commands;
+            $cmd = str_replace("{player}", $currentUser, $cmd);
+            $cmd = base64_encode($cmd);
+
             echo APIManager::getRequest("http://{$server?->getServerIp()}:{$server?->getServerCMWLPort()}/votes/send/reward/$currentUser/$cmd");
         }
 

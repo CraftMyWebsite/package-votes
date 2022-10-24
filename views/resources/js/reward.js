@@ -238,6 +238,9 @@ function createMinecraftCommand(commands, servers, parent = null){
     let label_server = document.createElement("label");
     label_server.innerText = "Serveur";
 
+    let placeholder = document.createElement("p");
+    placeholder.innerText = "Vous pouvez utiliser le placeholder {player} pour obtenir le pseudo du joueur qui recevra la récompense."
+
     let select_server = document.createElement("select");
     select_server.setAttribute("name", "minecraft-servers[]");
     select_server.setAttribute("class", "form-control");
@@ -255,6 +258,8 @@ function createMinecraftCommand(commands, servers, parent = null){
     div_wrapper_server.append(div_form_group_server);
     div_form_group_server.append(label_server);
     div_form_group_server.append(select_server);
+
+    parent.append(placeholder);
 
     getServers(select_server, servers).then(r => r);
 }
