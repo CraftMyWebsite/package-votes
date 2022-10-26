@@ -7,10 +7,10 @@ use CMW\Controller\Users\UsersController;
 use CMW\Manager\Api\APIManager;
 use CMW\Model\Minecraft\MinecraftModel;
 use CMW\Model\Users\UsersModel;
-use CMW\Model\Votes\ConfigModel;
-use CMW\Model\Votes\RewardsModel;
-use CMW\Model\Votes\SitesModel;
-use CMW\Model\Votes\StatsModel;
+use CMW\Model\Votes\VotesConfigModel;
+use CMW\Model\Votes\VotesRewardsModel;
+use CMW\Model\Votes\VotesSitesModel;
+use CMW\Model\Votes\VotesStatsModel;
 use CMW\Model\Votes\VotesModel;
 use CMW\Router\Link;
 use CMW\Utils\Utils;
@@ -28,20 +28,20 @@ class VotesController extends CoreController
 {
 
     public static string $themePath;
-    private ConfigModel $configModel;
-    private RewardsModel $rewardsModel;
-    private SitesModel $sitesModel;
-    private StatsModel $statsModel;
+    private VotesConfigModel $configModel;
+    private VotesRewardsModel $rewardsModel;
+    private VotesSitesModel $sitesModel;
+    private VotesStatsModel $statsModel;
     private VotesModel $votesModel;
 
 
     public function __construct($themePath = null,)
     {
         parent::__construct($themePath);
-        $this->configModel = new ConfigModel();
-        $this->rewardsModel = new RewardsModel();
-        $this->sitesModel = new SitesModel();
-        $this->statsModel = new StatsModel();
+        $this->configModel = new VotesConfigModel();
+        $this->rewardsModel = new VotesRewardsModel();
+        $this->sitesModel = new VotesSitesModel();
+        $this->statsModel = new VotesStatsModel();
         $this->votesModel = new VotesModel();
     }
 
@@ -333,7 +333,7 @@ class VotesController extends CoreController
         //TODO REWORK THIS PART
         //Index -> Entities and more...
 
-        $stats = new statsModel();
+        $stats = new VotesStatsModel();
 
         $all = $stats->statsVotes("all");
         $month = $stats->statsVotes("month");

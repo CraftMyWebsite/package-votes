@@ -6,12 +6,12 @@ use CMW\Manager\Database\DatabaseManager;
 
 
 /**
- * Class @statsModel
+ * Class @VotesStatsModel
  * @package votes
  * @author Teyir
  * @version 1.0
  */
-class StatsModel extends DatabaseManager
+class VotesStatsModel extends DatabaseManager
 {
 
     public int $votePoints;
@@ -178,7 +178,7 @@ class StatsModel extends DatabaseManager
                     ORDER BY COUNT(cmw_votes_votes.votes_id) DESC ";
         }
 
-        $sql .= "LIMIT " . (new ConfigModel())->getConfig()?->getTopShow();
+        $sql .= "LIMIT " . (new VotesConfigModel())->getConfig()?->getTopShow();
 
         $db = self::getInstance();
         $req = $db->prepare($sql);
@@ -207,7 +207,7 @@ class StatsModel extends DatabaseManager
                     JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user GROUP BY cmw_users.user_pseudo 
                     ORDER BY COUNT(cmw_votes_votes.votes_id) DESC ";
         }
-        $sql .= "LIMIT " . (new ConfigModel())->getConfig()?->getTopShow();
+        $sql .= "LIMIT " . (new VotesConfigModel())->getConfig()?->getTopShow();
 
         $db = self::getInstance();
         $req = $db->prepare($sql);

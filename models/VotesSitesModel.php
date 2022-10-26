@@ -6,12 +6,12 @@ use CMW\Entity\Votes\VotesSitesEntity;
 use CMW\Manager\Database\DatabaseManager;
 
 /**
- * Class @SitesModel
+ * Class @VotesSitesModel
  * @package votes
  * @author Teyir
  * @version 1.0
  */
-class SitesModel extends DatabaseManager
+class VotesSitesModel extends DatabaseManager
 {
 
 
@@ -78,7 +78,7 @@ class SitesModel extends DatabaseManager
 
         $res = $res->fetch();
 
-        $rewards = (new RewardsModel())->getRewardById($res["votes_sites_rewards_id"]);
+        $rewards = (new VotesRewardsModel())->getRewardById($res["votes_sites_rewards_id"]);
 
         return new VotesSitesEntity(
             $res['votes_sites_id'],

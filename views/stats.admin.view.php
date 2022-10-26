@@ -2,7 +2,7 @@
 
 use CMW\Entity\Votes\VotesSitesEntity;
 use CMW\Manager\Lang\LangManager;
-use CMW\Model\Votes\StatsModel;
+use CMW\Model\Votes\VotesStatsModel;
 
 $title = LangManager::translate("votes.dashboard.title.stats");
 $description = LangManager::translate("votes.dashboard.desc");
@@ -221,7 +221,7 @@ $scripts = '
                 </tr>
                 </thead>
                 <tbody>
-                <?php /** @var statsModel[] $actualTop */
+                <?php /** @var VotesStatsModel[] $actualTop */
                 foreach ($actualTop as $player) : ?>
                     <tr>
                         <td><?= $player['pseudo'] ?></td>
@@ -257,7 +257,7 @@ $scripts = '
                 </tr>
                 </thead>
                 <tbody>
-                <?php /** @var statsModel[] $globalTop */
+                <?php /** @var VotesStatsModel[] $globalTop */
                 foreach ($globalTop as $player) : ?>
                     <tr>
                         <td><?= $player['pseudo'] ?></td>
@@ -293,7 +293,7 @@ $scripts = '
                 </tr>
                 </thead>
                 <tbody>
-                <?php /** @var statsModel[] $previousTop */
+                <?php /** @var VotesStatsModel[] $previousTop */
                 foreach ($previousTop as $player) : ?>
                     <tr>
                         <td><?= $player['pseudo'] ?></td>

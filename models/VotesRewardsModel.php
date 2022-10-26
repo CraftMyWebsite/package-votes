@@ -8,12 +8,12 @@ use Exception;
 use JsonException;
 
 /**
- * Class @RewardsModel
+ * Class @VotesRewardsModel
  * @package votes
  * @author Teyir
  * @version 1.0
  */
-class RewardsModel extends DatabaseManager
+class VotesRewardsModel extends DatabaseManager
 {
 
     public function addReward(string $title, string $action): ?VotesRewardsEntity

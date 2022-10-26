@@ -6,7 +6,7 @@ use CMW\Controller\Core\CoreController;
 use CMW\Manager\Api\APIManager;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Model\Users\UsersModel;
-use CMW\Model\Votes\StatsModel;
+use CMW\Model\Votes\VotesStatsModel;
 use CMW\Model\Votes\VotesModel;
 use CMW\Router\Link;
 use CMW\Utils\Utils;
@@ -27,7 +27,7 @@ class VotesApiController extends CoreController
     #[Link("/getVotePoints/:pseudo", Link::GET, ["pseudo" => self::usernameRegex], scope: "/api/votes")]
     public function getVotePoints(string $pseudo): void
     {
-        $votePoints = (new StatsModel())->getPlayerVotepoints($pseudo);
+        $votePoints = (new VotesStatsModel())->getPlayerVotepoints($pseudo);
 
         $toReturn = APIManager::createResponse(data: ["votepoints" => $votePoints]);
         print($toReturn);
@@ -36,7 +36,7 @@ class VotesApiController extends CoreController
     #[Link("/getPlayerCurrentVotes/:pseudo", Link::GET, ["pseudo" => self::usernameRegex], scope: "/api/votes")]
     public function getPlayerCurrentVotes(string $pseudo): void
     {
-        $votes = (new StatsModel())->getPlayerCurrentVotes($pseudo);
+        $votes = (new VotesStatsModel())->getPlayerCurrentVotes($pseudo);
 
         $toReturn = APIManager::createResponse(data: ["votes" => $votes]);
         print($toReturn);
@@ -45,7 +45,7 @@ class VotesApiController extends CoreController
     #[Link("/getPlayerTotalVotes/:pseudo", Link::GET, ["pseudo" => self::usernameRegex], scope: "/api/votes")]
     public function getPlayerTotalVotes(string $pseudo): void
     {
-        $votes = (new StatsModel())->getPlayerTotalVotes($pseudo);
+        $votes = (new VotesStatsModel())->getPlayerTotalVotes($pseudo);
 
         $toReturn = APIManager::createResponse(data: ["votes" => $votes]);
         print($toReturn);
@@ -59,7 +59,7 @@ class VotesApiController extends CoreController
     #[Link("/getVotes/:type", Link::GET, ["type" => ".*?"], scope: "/api/votes")]
     public function getVotes(#[ExpectedValues(["all", "month", "week", "day", "hour", "minute"])] string $type): void
     {
-        $votes = count((new StatsModel())->statsVotes($type));
+        $votes = count((new VotesStatsModel())->statsVotes($type));
 
         $toReturn = APIManager::createResponse(data: ["votes" => $votes]);
         print($toReturn);
@@ -69,7 +69,7 @@ class VotesApiController extends CoreController
     #[Link("/getActualTop", Link::GET, scope: "/api/votes")]
     public function getActualTop(): void
     {
-        $votes = (new StatsModel())->getActualTop();
+        $votes = (new VotesStatsModel())->getActualTop();
 
         $toReturn = APIManager::createResponse(data: $votes);
         print($toReturn);
@@ -78,7 +78,7 @@ class VotesApiController extends CoreController
     #[Link("/getTopGlobal", Link::GET, scope: "/api/votes")]
     public function getTopGlobal(): void
     {
-        $votes = (new StatsModel())->getGlobalTop();
+        $votes = (new VotesStatsModel())->getGlobalTop();
 
         $toReturn = APIManager::createResponse(data: $votes);
         print($toReturn);

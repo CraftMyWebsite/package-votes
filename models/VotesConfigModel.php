@@ -8,12 +8,12 @@ use CMW\Manager\Database\DatabaseManager;
 
 
 /**
- * Class @ConfigModel
+ * Class @VotesConfigModel
  * @package votes
  * @author Teyir
  * @version 1.0
  */
-class ConfigModel extends DatabaseManager
+class VotesConfigModel extends DatabaseManager
 {
     //Config
 
