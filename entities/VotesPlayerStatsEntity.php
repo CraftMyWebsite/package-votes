@@ -5,16 +5,16 @@ namespace CMW\Entity\Votes;
 class VotesPlayerStatsEntity
 {
 
-    private int $votes;
-    private string $pseudo;
-    private string $email;
+    private ?int $votes;
+    private ?string $pseudo;
+    private ?string $email;
 
     /**
-     * @param int $votes
-     * @param string $pseudo
-     * @param string $email
+     * @param int|null $votes
+     * @param string|null $pseudo
+     * @param string|null $email
      */
-    public function __construct(int $votes, string $pseudo, string $email)
+    public function __construct(?int $votes, ?string $pseudo, ?string $email)
     {
         $this->votes = $votes;
         $this->pseudo = $pseudo;
@@ -22,25 +22,25 @@ class VotesPlayerStatsEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getVotes(): int
+    public function getVotes(): ?int
     {
         return $this->votes;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getPseudo(): string
+    public function getPseudo(): ?string
     {
         return $this->pseudo;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
