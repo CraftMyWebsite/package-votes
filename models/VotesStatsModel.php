@@ -4,6 +4,7 @@ namespace CMW\Model\Votes;
 
 use CMW\Entity\Votes\VotesPlayerStatsEntity;
 use CMW\Manager\Database\DatabaseManager;
+use CMW\Model\Users\UsersModel;
 
 
 /**
@@ -167,15 +168,13 @@ class VotesStatsModel extends DatabaseManager
     public function getActualTop(): array
     {
 
-        if(self::isMariadb()) {
-            $sql = "SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_pseudo as pseudo, cmw_users.user_email
-                    as email  FROM cmw_votes_votes 
+        if (self::isMariadb()) {
+            $sql = "SELECT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_id as userId FROM cmw_votes_votes 
                     JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user 
-                    WHERE MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE())
+                    WHERE MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE()) GROUP BY cmw_users.user_pseudo 
                     ORDER BY COUNT(cmw_votes_votes.votes_id) DESC ";
         } else {
-            $sql = "SELECT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_pseudo as pseudo, cmw_users.user_email
-                    as email  FROM cmw_votes_votes 
+            $sql = "SELECT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_id as userId FROM cmw_votes_votes 
                     JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user 
                     WHERE MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE()) GROUP BY cmw_users.user_pseudo 
                     ORDER BY COUNT(cmw_votes_votes.votes_id) DESC ";
@@ -195,8 +194,7 @@ class VotesStatsModel extends DatabaseManager
         while ($stats = $res->fetch()) {
             $toReturn[] = new VotesPlayerStatsEntity(
                 $stats['votes'],
-                $stats['pseudo'],
-                $stats['email']
+                (new UsersModel())->getUserById($stats['userId'])
             );
         }
 
@@ -212,13 +210,11 @@ class VotesStatsModel extends DatabaseManager
     {
 
         if (self::isMariadb()) {
-            $sql = "SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_pseudo as pseudo, cmw_users.user_email
-                    as email  FROM cmw_votes_votes 
-                    JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user 
+            $sql = "SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_id as userId FROM cmw_votes_votes 
+                    JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user GROUP BY cmw_users.user_pseudo 
                     ORDER BY COUNT(cmw_votes_votes.votes_id) DESC ";
         } else {
-            $sql = "SELECT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_pseudo as pseudo, cmw_users.user_email
-                    as email  FROM cmw_votes_votes 
+            $sql = "SELECT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_id as userId FROM cmw_votes_votes 
                     JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user GROUP BY cmw_users.user_pseudo 
                     ORDER BY COUNT(cmw_votes_votes.votes_id) DESC ";
         }
@@ -236,8 +232,7 @@ class VotesStatsModel extends DatabaseManager
         while ($stats = $res->fetch()) {
             $toReturn[] = new VotesPlayerStatsEntity(
                 $stats['votes'],
-                $stats['pseudo'],
-                $stats['email']
+                (new UsersModel())->getUserById($stats['userId'])
             );
         }
 
@@ -252,14 +247,12 @@ class VotesStatsModel extends DatabaseManager
     {
 
         if (self::isMariadb()) {
-            $sql = "SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_pseudo as pseudo, cmw_users.user_email
-                as email FROM cmw_votes_votes
-                JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user
-                WHERE MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE())
-                ORDER BY COUNT(cmw_votes_votes.votes_id) DESC";
+            $sql = "SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_id as userId 
+                    FROM cmw_votes_votes JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user 
+                    WHERE MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE()) GROUP BY cmw_users.user_pseudo 
+                    ORDER BY COUNT(cmw_votes_votes.votes_id) DESC";
         } else {
-            $sql = "SELECT COUNT(cmw_votes_votes.votes_id) as votes, ANY_VALUE(cmw_users.user_pseudo) as pseudo, ANY_VALUE(cmw_users.user_email) 
-                    as email FROM cmw_votes_votes 
+            $sql = "SELECT COUNT(cmw_votes_votes.votes_id) as votes, ANY_VALUE(cmw_users.user_id) as userId FROM cmw_votes_votes 
                     JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user 
                     WHERE MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE()) GROUP BY cmw_users.user_pseudo 
                     ORDER BY COUNT(cmw_votes_votes.votes_id) DESC";
@@ -277,8 +270,7 @@ class VotesStatsModel extends DatabaseManager
         while ($stats = $res->fetch()) {
             $toReturn[] = new VotesPlayerStatsEntity(
                 $stats['votes'],
-                $stats['pseudo'],
-                $stats['email']
+                (new UsersModel())->getUserById($stats['userId'])
             );
         }
 
@@ -292,14 +284,12 @@ class VotesStatsModel extends DatabaseManager
     {
 
         if (self::isMariadb()) {
-            $sql = "SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_pseudo as pseudo, cmw_users.user_email
-                    as email FROM cmw_votes_votes 
-                    JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user 
-                    ORDER BY COUNT(cmw_votes_votes.votes_id) DESC";
+            $sql = "SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_id as userId
+                    FROM cmw_votes_votes JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user 
+                    GROUP BY cmw_users.user_pseudo ORDER BY COUNT(cmw_votes_votes.votes_id) DESC";
         } else {
-            $sql = "SELECT COUNT(cmw_votes_votes.votes_id) as votes, ANY_VALUE(cmw_users.user_pseudo) as pseudo, ANY_VALUE(cmw_users.user_email) 
-                    as email FROM cmw_votes_votes 
-                    JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user 
+            $sql = "SELECT COUNT(cmw_votes_votes.votes_id) as votes, ANY_VALUE(cmw_users.user_id) as userId 
+                    FROM cmw_votes_votes JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user 
                     GROUP BY cmw_users.user_pseudo 
                     ORDER BY COUNT(cmw_votes_votes.votes_id) DESC";
         }
@@ -316,8 +306,7 @@ class VotesStatsModel extends DatabaseManager
         while ($stats = $res->fetch()) {
             $toReturn[] = new VotesPlayerStatsEntity(
                 $stats['votes'],
-                $stats['pseudo'],
-                $stats['email']
+                (new UsersModel())->getUserById($stats['userId'])
             );
         }
 
@@ -331,14 +320,13 @@ class VotesStatsModel extends DatabaseManager
     {
 
         if (self::isMariadb()) {
-            $sql = "SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_pseudo as pseudo, cmw_users.user_email
-                    as email FROM cmw_votes_votes 
+            $sql = "SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_id as userId FROM cmw_votes_votes 
                     JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user 
-                    WHERE MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH) 
+                    WHERE MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH)  
+                    GROUP BY cmw_users.user_pseudo 
                     ORDER BY COUNT(cmw_votes_votes.votes_id) DESC";
         } else {
-            $sql = "SELECT COUNT(cmw_votes_votes.votes_id) as votes, ANY_VALUE(cmw_users.user_pseudo) as pseudo, ANY_VALUE(cmw_users.user_email) 
-                    as email FROM cmw_votes_votes 
+            $sql = "SELECT COUNT(cmw_votes_votes.votes_id) as votes, ANY_VALUE(cmw_users.user_id) as userId FROM cmw_votes_votes 
                     JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user 
                     WHERE MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH) 
                     GROUP BY cmw_users.user_pseudo 
@@ -356,8 +344,7 @@ class VotesStatsModel extends DatabaseManager
         while ($stats = $res->fetch()) {
             $toReturn[] = new VotesPlayerStatsEntity(
                 $stats['votes'],
-                $stats['pseudo'],
-                $stats['email']
+                (new UsersModel())->getUserById($stats['userId'])
             );
         }
 

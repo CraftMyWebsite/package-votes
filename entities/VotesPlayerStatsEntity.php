@@ -2,23 +2,22 @@
 
 namespace CMW\Entity\Votes;
 
+use CMW\Entity\Users\UserEntity;
+
 class VotesPlayerStatsEntity
 {
 
     private ?int $votes;
-    private ?string $pseudo;
-    private ?string $email;
+    private ?UserEntity $player;
 
     /**
      * @param int|null $votes
-     * @param string|null $pseudo
-     * @param string|null $email
+     * @param \CMW\Entity\Users\UserEntity|null $player
      */
-    public function __construct(?int $votes, ?string $pseudo, ?string $email)
+    public function __construct(?int $votes, ?UserEntity $player)
     {
         $this->votes = $votes;
-        $this->pseudo = $pseudo;
-        $this->email = $email;
+        $this->player = $player;
     }
 
     /**
@@ -30,19 +29,10 @@ class VotesPlayerStatsEntity
     }
 
     /**
-     * @return string|null
+     * @return \CMW\Entity\Users\UserEntity|null
      */
-    public function getPseudo(): ?string
+    public function getPlayer(): ?UserEntity
     {
-        return $this->pseudo;
+        return $this->player;
     }
-
-    /**
-     * @return string|null
-     */
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
 }

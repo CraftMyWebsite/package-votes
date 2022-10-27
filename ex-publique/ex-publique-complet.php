@@ -113,7 +113,7 @@ $description = "Votez pour le serveur et gagnez des récompenses uniques!";
 
                                     <tr>
                                         <td>#<?= $i ?></td>
-                                        <td><?= $top->getPseudo() ?></td>
+                                        <td><?= $top->getPlayer()->getUsername() ?></td>
                                         <td><?= $top->getVotes() ?></td>
                                     </tr>
 
@@ -149,7 +149,7 @@ $description = "Votez pour le serveur et gagnez des récompenses uniques!";
 
                                     <tr>
                                         <td>#<?= $i ?></td>
-                                        <td><?= $top->getPseudo() ?></td>
+                                        <td><?= $top->getPlayer()->getUsername() ?></td>
                                         <td><?= $top->getVotes() ?></td>
                                     </tr>
 
