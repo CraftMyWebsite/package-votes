@@ -364,6 +364,31 @@ class VotesStatsModel extends DatabaseManager
         return $toReturn;
     }
 
+    public function get3PreviousMonthsVotes(): array
+    {
+        $toReturn = array();
+
+        $sqlCurrent = "SELECT COUNT(votes_id) as votes FROM cmw_votes_votes WHERE MONTH(votes_date) = MONTH(CURRENT_DATE())";
+        $sqlPrevious = "SELECT COUNT(votes_id) as votes FROM cmw_votes_votes WHERE MONTH(votes_date) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH)";
+        $sql2MonthsAgo = "SELECT COUNT(votes_id) as votes FROM cmw_votes_votes WHERE MONTH(votes_date) = MONTH(CURRENT_DATE - INTERVAL 2 MONTH)";
+
+        $db = self::getInstance();
+
+        //2MonthsAgo
+        $req = $db->query($sql2MonthsAgo);
+        $toReturn[] = $req->fetch()['votes'];
+
+        //Previous
+        $req = $db->query($sqlPrevious);
+        $toReturn[] = $req->fetch()['votes'];
+
+        //Current
+        $req = $db->query($sqlCurrent);
+        $toReturn[] = $req->fetch()['votes'];
+
+        return $toReturn;
+    }
+
     public function getPlayerVotepoints(int|string $user): int
     {
         if (is_int($user)) {

@@ -2,7 +2,6 @@
 
 use CMW\Entity\Votes\VotesSitesEntity;
 use CMW\Manager\Lang\LangManager;
-use CMW\Model\Votes\VotesStatsModel;
 
 $title = LangManager::translate("votes.dashboard.title.stats");
 $description = LangManager::translate("votes.dashboard.desc");
@@ -15,11 +14,12 @@ $description = LangManager::translate("votes.dashboard.desc");
 /* @var $day */
 /* @var VotesSitesEntity[] $listSites */
 /* @var $numberOfSites */
+/* @var $previous3Months [] */
 
 $scripts = '
     <script>
     $(function () {
-        $("table[id^='."datatable-".']").DataTable({
+        $("table[id^=' . "datatable-" . ']").DataTable({
             "responsive": true, 
             "lengthChange": false, 
             "autoWidth": false,
@@ -116,7 +116,7 @@ $scripts = '
         <div class="col">
             <div class="card card-danger">
                 <div class="card-header">
-                    <h3 class="card-title">Stats globaux -- tests</h3>
+                    <h3 class="card-title"><?= LangManager::translate("votes.dashboard.stats.3pastsMonths") ?></h3>
 
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -146,7 +146,7 @@ $scripts = '
         <div class="col-md-6">
             <div class="card card-success">
                 <div class="card-header">
-                    <h3 class="card-title">Votes par site (totaux)</h3>
+                    <h3 class="card-title"><?= LangManager::translate("votes.dashboard.stats.sites_totals") ?></h3>
 
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -176,7 +176,7 @@ $scripts = '
         <div class="col-md-6">
             <div class="card card-success">
                 <div class="card-header">
-                    <h3 class="card-title">Votes par site (mois en cours)</h3>
+                    <h3 class="card-title"><?= LangManager::translate("votes.dashboard.stats.sites_current") ?></h3>
 
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -209,15 +209,15 @@ $scripts = '
 <div class="col-12">
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Top voteurs mois en cours</h3>
+            <h3 class="card-title"><?= LangManager::translate("votes.dashboard.stats.top_current") ?></h3>
         </div>
         <div class="card-body">
             <table id="datatable-1" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                    <th>Pseudo</th>
-                    <th>Votes</th>
-                    <th>E-mail</th>
+                    <th><?= LangManager::translate("users.users.pseudo") ?></th>
+                    <th><?= LangManager::translate("votes.votes") ?></th>
+                    <th><?= LangManager::translate("users.users.mail") ?></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -232,9 +232,9 @@ $scripts = '
                 </tbody>
                 <tfoot>
                 <tr>
-                    <th>Pseudo</th>
-                    <th>Votes</th>
-                    <th>E-mail</th>
+                    <th><?= LangManager::translate("users.users.pseudo") ?></th>
+                    <th><?= LangManager::translate("votes.votes") ?></th>
+                    <th><?= LangManager::translate("users.users.mail") ?></th>
                 </tr>
                 </tfoot>
             </table>
@@ -245,15 +245,15 @@ $scripts = '
 <div class="col-12">
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Top voteurs totaux</h3>
+            <h3 class="card-title"><?= LangManager::translate("votes.dashboard.stats.top_totals") ?></h3>
         </div>
         <div class="card-body">
             <table id="datatable-2" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                    <th>Pseudo</th>
-                    <th>Votes</th>
-                    <th>E-mail</th>
+                    <th><?= LangManager::translate("users.users.pseudo") ?></th>
+                    <th><?= LangManager::translate("votes.votes") ?></th>
+                    <th><?= LangManager::translate("users.users.mail") ?></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -268,9 +268,9 @@ $scripts = '
                 </tbody>
                 <tfoot>
                 <tr>
-                    <th>Pseudo</th>
-                    <th>Votes</th>
-                    <th>E-mail</th>
+                    <th><?= LangManager::translate("users.users.pseudo") ?></th>
+                    <th><?= LangManager::translate("votes.votes") ?></th>
+                    <th><?= LangManager::translate("users.users.mail") ?></th>
                 </tr>
                 </tfoot>
             </table>
@@ -281,15 +281,15 @@ $scripts = '
 <div class="col-12">
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Classement du mois précédent</h3>
+            <h3 class="card-title"><?= LangManager::translate("votes.dashboard.stats.top_pastMonth") ?></h3>
         </div>
         <div class="card-body">
             <table id="datatable-3" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                    <th>Pseudo</th>
-                    <th>Votes</th>
-                    <th>E-mail</th>
+                    <th><?= LangManager::translate("users.users.pseudo") ?></th>
+                    <th><?= LangManager::translate("votes.votes") ?></th>
+                    <th><?= LangManager::translate("users.users.mail") ?></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -304,9 +304,9 @@ $scripts = '
                 </tbody>
                 <tfoot>
                 <tr>
-                    <th>Pseudo</th>
-                    <th>Votes</th>
-                    <th>E-mail</th>
+                    <th><?= LangManager::translate("users.users.pseudo") ?></th>
+                    <th><?= LangManager::translate("votes.votes") ?></th>
+                    <th><?= LangManager::translate("users.users.mail") ?></th>
                 </tr>
                 </tfoot>
             </table>
@@ -314,39 +314,30 @@ $scripts = '
     </div>
 </div>
 
-<pre>
-        <strong>Statistiques prévus:</strong>
-
-        - Stats 'globaux' -> totaux, mois, semaine, jour ✔
-        - Stats chart du nombre de votes par sites (totaux, mois en cours) ✔
-        - Stats chart du nombre de votes par -> Mois (line chart)
-        - Liste des top voteurs -> Totaux, mois, semaine, jour
-
-    </pre>
-
-
-<!-- First chart test-->
 <script>
     //Get months
+    function getLast3Months() {
 
+        const monthNames = <?= LangManager::translate("core.months") ?>
+
+        const today = new Date();
+        let toReturn = [];
+
+        for (let i = 0; i < 3; i++) {
+            toReturn.push(monthNames[(today.getMonth() - i)]);
+        }
+        return toReturn.reverse();
+    }
 
     //Chart global
     const ctxGlobal = document.getElementById('chartGlobal').getContext('2d');
     const chartGlobal = new Chart(ctxGlobal, {
         type: 'line',
         data: {
-            labels: [
-                "Janvier",
-                "Fevrier",
-                "Mars",
-            ],
+            labels: getLast3Months(),
             datasets: [{
                 label: "Votes",
-                data: [
-                    "100",
-                    "120",
-                    "200",
-                ],
+                data: <?= json_encode($previous3Months, JSON_THROW_ON_ERROR) ?>,
                 backgroundColor: "#6B48FF",
                 borderColor: "#6B48FF",
 

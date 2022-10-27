@@ -8,10 +8,10 @@ use CMW\Manager\Api\APIManager;
 use CMW\Model\Minecraft\MinecraftModel;
 use CMW\Model\Users\UsersModel;
 use CMW\Model\Votes\VotesConfigModel;
+use CMW\Model\Votes\VotesModel;
 use CMW\Model\Votes\VotesRewardsModel;
 use CMW\Model\Votes\VotesSitesModel;
 use CMW\Model\Votes\VotesStatsModel;
-use CMW\Model\Votes\VotesModel;
 use CMW\Router\Link;
 use CMW\Utils\Utils;
 use CMW\Utils\View;
@@ -330,10 +330,7 @@ class VotesController extends CoreController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.stats");
 
-        //TODO REWORK THIS PART
-        //Index -> Entities and more...
-
-        $stats = new VotesStatsModel();
+        $stats = $this->statsModel;
 
         $all = $stats->statsVotes("all");
         $month = $stats->statsVotes("month");
@@ -348,6 +345,7 @@ class VotesController extends CoreController
         $globalTop = $stats->getGlobalTopNoLimit();
         $previousTop = $stats->getPreviousMonthTop();
 
+        $previous3Months = $stats->get3PreviousMonthsVotes();
 
         View::createAdminView('votes', 'stats')
             ->addScriptBefore("admin/resources/vendors/bootstrap/js/bootstrap.bundle.min.js",
@@ -361,7 +359,7 @@ class VotesController extends CoreController
                 "admin/resources/vendors/datatables-responsive/css/responsive.bootstrap4.min.css")
             ->addVariableList(["stats" => $stats, "all" => $all, "month" => $month, "week" => $week, "day" => $day,
                 "listSites" => $listSites, "numberOfSites" => $numberOfSites, "actualTop" => $actualTop,
-                "globalTop" => $globalTop, "previousTop" => $previousTop])
+                "globalTop" => $globalTop, "previousTop" => $previousTop, "previous3Months" => $previous3Months])
             ->view();
     }
 

@@ -1,6 +1,7 @@
 <?php
 
 return [
+    "votes" => "Votes",
     "dashboard" => [
         "title" => [
             "config" => "Votes - Configuration",
@@ -64,6 +65,12 @@ return [
             "month" => "Votes du mois en cours",
             "week" => "Votes de là semaine en cours",
             "day" => "Votes d'aujourd'hui",
+            "3pastsMonths" => "Votes des 3 derniers mois",
+            "sites_totals" => "Votes par site (totaux)",
+            "sites_current" => "Votes par site (mois en cours)",
+            "top_current" => "Top voteurs du mois en cours",
+            "top_totals" => "Top voteurs du totaux",
+            "top_pastMonth" => "Top voteurs du mois précédent",
         ],
 
         "rewards" => [
