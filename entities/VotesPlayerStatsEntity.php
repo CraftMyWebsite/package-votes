@@ -8,7 +8,7 @@ class VotesPlayerStatsEntity
 {
 
     private ?int $votes;
-    private ?UserEntity $player;
+    private ?UserEntity $user;
 
     /**
      * @param int|null $votes
@@ -17,7 +17,7 @@ class VotesPlayerStatsEntity
     public function __construct(?int $votes, ?UserEntity $player)
     {
         $this->votes = $votes;
-        $this->player = $player;
+        $this->user = $player;
     }
 
     /**
@@ -31,8 +31,8 @@ class VotesPlayerStatsEntity
     /**
      * @return \CMW\Entity\Users\UserEntity|null
      */
-    public function getPlayer(): ?UserEntity
+    public function getUser(): ?UserEntity
     {
-        return $this->player;
+        return $this->user;
     }
 }

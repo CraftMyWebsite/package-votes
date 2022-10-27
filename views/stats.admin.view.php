@@ -224,9 +224,9 @@ $scripts = '
                 <?php /** @var \CMW\Entity\Votes\VotesPlayerStatsEntity[] $actualTop */
                 foreach ($actualTop as $player) : ?>
                     <tr>
-                        <td><?= $player->getPlayer()->getUsername() ?></td>
+                        <td><?= $player->getUser()->getUsername() ?></td>
                         <td><?= $player->getVotes() ?></td>
-                        <td><?= $player->getPlayer()->getMail() ?></td>
+                        <td><?= $player->getUser()->getMail() ?></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
@@ -260,9 +260,9 @@ $scripts = '
                 <?php /** @var \CMW\Entity\Votes\VotesPlayerStatsEntity[] $globalTop */
                 foreach ($globalTop as $player) : ?>
                     <tr>
-                        <td><?= $player->getPlayer()->getUsername() ?></td>
+                        <td><?= $player->getUser()->getUsername() ?></td>
                         <td><?= $player->getVotes() ?></td>
-                        <td><?= $player->getPlayer()->getMail() ?></td>
+                        <td><?= $player->getUser()->getMail() ?></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
@@ -296,9 +296,9 @@ $scripts = '
                 <?php /** @var \CMW\Entity\Votes\VotesPlayerStatsEntity[] $previousTop */
                 foreach ($previousTop as $player) : ?>
                     <tr>
-                        <td><?= $player->getPlayer()->getUsername() ?></td>
+                        <td><?= $player->getUser()->getUsername() ?></td>
                         <td><?= $player->getVotes() ?></td>
-                        <td><?= $player->getPlayer()->getMail() ?></td>
+                        <td><?= $player->getUser()->getMail() ?></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
