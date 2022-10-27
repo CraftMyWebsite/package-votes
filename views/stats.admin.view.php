@@ -221,12 +221,12 @@ $scripts = '
                 </tr>
                 </thead>
                 <tbody>
-                <?php /** @var VotesStatsModel[] $actualTop */
+                <?php /** @var \CMW\Entity\Votes\VotesPlayerStatsEntity[] $actualTop */
                 foreach ($actualTop as $player) : ?>
                     <tr>
-                        <td><?= $player['pseudo'] ?></td>
-                        <td><?= $player['votes'] ?></td>
-                        <td><?= $player['email'] ?></td>
+                        <td><?= $player->getPseudo() ?></td>
+                        <td><?= $player->getVotes() ?></td>
+                        <td><?= $player->getEmail() ?></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
@@ -257,12 +257,12 @@ $scripts = '
                 </tr>
                 </thead>
                 <tbody>
-                <?php /** @var VotesStatsModel[] $globalTop */
+                <?php /** @var \CMW\Entity\Votes\VotesPlayerStatsEntity[] $globalTop */
                 foreach ($globalTop as $player) : ?>
                     <tr>
-                        <td><?= $player['pseudo'] ?></td>
-                        <td><?= $player['votes'] ?></td>
-                        <td><?= $player['email'] ?></td>
+                        <td><?= $player->getPseudo() ?></td>
+                        <td><?= $player->getVotes() ?></td>
+                        <td><?= $player->getEmail() ?></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
@@ -293,12 +293,12 @@ $scripts = '
                 </tr>
                 </thead>
                 <tbody>
-                <?php /** @var VotesStatsModel[] $previousTop */
+                <?php /** @var \CMW\Entity\Votes\VotesPlayerStatsEntity[] $previousTop */
                 foreach ($previousTop as $player) : ?>
                     <tr>
-                        <td><?= $player['pseudo'] ?></td>
-                        <td><?= $player['votes'] ?></td>
-                        <td><?= $player['email'] ?></td>
+                        <td><?= $player->getPseudo() ?></td>
+                        <td><?= $player->getVotes() ?></td>
+                        <td><?= $player->getEmail() ?></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>

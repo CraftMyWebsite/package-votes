@@ -2,6 +2,7 @@
 
 namespace CMW\Model\Votes;
 
+use CMW\Entity\Votes\VotesPlayerStatsEntity;
 use CMW\Manager\Database\DatabaseManager;
 
 
@@ -161,18 +162,20 @@ class VotesStatsModel extends DatabaseManager
     //Public function for the top votes (actual month)
 
     /**
-     * @return array (votes, pseudo)
+     * @return VotesPlayerStatsEntity[]
      */
     public function getActualTop(): array
     {
 
         if(self::isMariadb()) {
-            $sql = "SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_pseudo as pseudo FROM cmw_votes_votes 
+            $sql = "SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_pseudo as pseudo, cmw_users.user_email
+                    as email  FROM cmw_votes_votes 
                     JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user 
                     WHERE MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE())
                     ORDER BY COUNT(cmw_votes_votes.votes_id) DESC ";
         } else {
-            $sql = "SELECT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_pseudo as pseudo FROM cmw_votes_votes 
+            $sql = "SELECT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_pseudo as pseudo, cmw_users.user_email
+                    as email  FROM cmw_votes_votes 
                     JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user 
                     WHERE MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE()) GROUP BY cmw_users.user_pseudo 
                     ORDER BY COUNT(cmw_votes_votes.votes_id) DESC ";
@@ -181,45 +184,70 @@ class VotesStatsModel extends DatabaseManager
         $sql .= "LIMIT " . (new VotesConfigModel())->getConfig()?->getTopShow();
 
         $db = self::getInstance();
-        $req = $db->prepare($sql);
+        $res = $db->prepare($sql);
 
-        if ($req->execute()) {
-            return $req->fetchAll();
+        if (!$res->execute()) {
+            return array();
         }
 
-        return [];
+        $toReturn = array();
+
+        while ($stats = $res->fetch()) {
+            $toReturn[] = new VotesPlayerStatsEntity(
+                $stats['votes'],
+                $stats['pseudo'],
+                $stats['email']
+            );
+        }
+
+        return $toReturn;
     }
 
     //Public function for the top votes (global)
 
     /**
-     * @return array (votes, pseudo)
+     * @return VotesPlayerStatsEntity[]
      */
     public function getGlobalTop(): array
     {
 
         if (self::isMariadb()) {
-            $sql = "SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_pseudo as pseudo FROM cmw_votes_votes 
+            $sql = "SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_pseudo as pseudo, cmw_users.user_email
+                    as email  FROM cmw_votes_votes 
                     JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user 
                     ORDER BY COUNT(cmw_votes_votes.votes_id) DESC ";
         } else {
-            $sql = "SELECT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_pseudo as pseudo FROM cmw_votes_votes 
+            $sql = "SELECT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_pseudo as pseudo, cmw_users.user_email
+                    as email  FROM cmw_votes_votes 
                     JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user GROUP BY cmw_users.user_pseudo 
                     ORDER BY COUNT(cmw_votes_votes.votes_id) DESC ";
         }
         $sql .= "LIMIT " . (new VotesConfigModel())->getConfig()?->getTopShow();
 
         $db = self::getInstance();
-        $req = $db->prepare($sql);
+        $res = $db->prepare($sql);
 
-        if ($req->execute()) {
-            return $req->fetchAll();
+        if (!$res->execute()) {
+            return array();
         }
 
-        return [];
+        $toReturn = array();
+
+        while ($stats = $res->fetch()) {
+            $toReturn[] = new VotesPlayerStatsEntity(
+                $stats['votes'],
+                $stats['pseudo'],
+                $stats['email']
+            );
+        }
+
+        return $toReturn;
     }
 
 
+    /**
+     * @return VotesPlayerStatsEntity[]
+     */
     public function getActualTopNoLimit(): array
     {
 
@@ -238,15 +266,28 @@ class VotesStatsModel extends DatabaseManager
         }
 
         $db = self::getInstance();
-        $req = $db->prepare($sql);
+        $res = $db->prepare($sql);
 
-        if ($req->execute()) {
-            return $req->fetchAll();
+        if (!$res->execute()) {
+            return array();
         }
 
-        return [];
+        $toReturn = array();
+
+        while ($stats = $res->fetch()) {
+            $toReturn[] = new VotesPlayerStatsEntity(
+                $stats['votes'],
+                $stats['pseudo'],
+                $stats['email']
+            );
+        }
+
+        return $toReturn;
     }
 
+    /**
+     * @return VotesPlayerStatsEntity[]
+     */
     public function getGlobalTopNoLimit(): array
     {
 
@@ -264,15 +305,28 @@ class VotesStatsModel extends DatabaseManager
         }
 
         $db = self::getInstance();
-        $req = $db->prepare($sql);
+        $res = $db->prepare($sql);
 
-        if ($req->execute()) {
-            return $req->fetchAll();
+        if (!$res->execute()) {
+            return array();
         }
 
-        return [];
+        $toReturn = array();
+
+        while ($stats = $res->fetch()) {
+            $toReturn[] = new VotesPlayerStatsEntity(
+                $stats['votes'],
+                $stats['pseudo'],
+                $stats['email']
+            );
+        }
+
+        return $toReturn;
     }
 
+    /**
+     * @return VotesPlayerStatsEntity[]
+     */
     public function getPreviousMonthTop(): array
     {
 
@@ -291,13 +345,23 @@ class VotesStatsModel extends DatabaseManager
                     ORDER BY COUNT(cmw_votes_votes.votes_id) DESC";
         }
         $db = self::getInstance();
-        $req = $db->prepare($sql);
+        $res = $db->prepare($sql);
 
-        if ($req->execute()) {
-            return $req->fetchAll();
+        if (!$res->execute()) {
+            return array();
         }
 
-        return [];
+        $toReturn = array();
+
+        while ($stats = $res->fetch()) {
+            $toReturn[] = new VotesPlayerStatsEntity(
+                $stats['votes'],
+                $stats['pseudo'],
+                $stats['email']
+            );
+        }
+
+        return $toReturn;
     }
 
     public function getPlayerVotepoints(int|string $user): int
