@@ -2,10 +2,10 @@
   "name": "votes",
   "menus": [
     {
-      "name_menu": "Votes",
+      "name_menu_fr": "Votes",
       "icon_menu": "fas fa-vote-yea",
       "url_menu": "",
-      "urls_submenu": {
+      "urls_submenu_fr": {
         "Configuration": "votes/config",
         "Ajouter un site": "votes/site/add",
         "Liste des sites": "votes/site/list",
@@ -16,7 +16,18 @@
       }
     }
   ],
-  "description": "Intégrez un système de votes complet pour votre site.",
+
+  "description": [
+    {
+      "fr": "Intégrez un système de votes complet pour votre site.",
+      "en": "Add a brand new vote system to your website"
+    }
+  ],
+
+
   "version": "1.0.0",
-  "author": "Teyir"
+  "author": "Teyir",
+
+  "isGame": false,
+  "isCore": false
 }
