@@ -5,14 +5,17 @@ namespace CMW\Controller\Votes;
 use CMW\Controller\Core\CoreController;
 use CMW\Controller\Users\UsersController;
 use CMW\Manager\Api\APIManager;
+use CMW\Manager\Lang\LangManager;
 use CMW\Model\Minecraft\MinecraftModel;
 use CMW\Model\Users\UsersModel;
+use CMW\Model\Votes\CheckVotesModel;
 use CMW\Model\Votes\VotesConfigModel;
 use CMW\Model\Votes\VotesModel;
 use CMW\Model\Votes\VotesRewardsModel;
 use CMW\Model\Votes\VotesSitesModel;
 use CMW\Model\Votes\VotesStatsModel;
 use CMW\Router\Link;
+use CMW\Utils\Response;
 use CMW\Utils\Utils;
 use CMW\Utils\View;
 use JsonException;
@@ -27,22 +30,23 @@ use JsonException;
 class VotesController extends CoreController
 {
 
-    public static string $themePath;
     private VotesConfigModel $configModel;
     private VotesRewardsModel $rewardsModel;
     private VotesSitesModel $sitesModel;
     private VotesStatsModel $statsModel;
     private VotesModel $votesModel;
+    private CheckVotesModel $checkVotesModel;
 
 
-    public function __construct($themePath = null,)
+    public function __construct()
     {
-        parent::__construct($themePath);
+        parent::__construct();
         $this->configModel = new VotesConfigModel();
         $this->rewardsModel = new VotesRewardsModel();
         $this->sitesModel = new VotesSitesModel();
         $this->statsModel = new VotesStatsModel();
         $this->votesModel = new VotesModel();
+        $this->checkVotesModel = new CheckVotesModel();
     }
 
     /* ///////////////////// CONFIG /////////////////////*/
@@ -65,21 +69,14 @@ class VotesController extends CoreController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.configuration");
 
-        $topShow = filter_input(INPUT_POST, 'topShow');
-        $reset = filter_input(INPUT_POST, 'reset');
-        $autoTopRewardActive = filter_input(INPUT_POST, 'autoTopRewardActive');
-        $autoTopReward = filter_input(INPUT_POST, 'autoTopReward');
-        $enableApi = filter_input(INPUT_POST, 'api');
-
-
-        //Faire la config pour les rewards
+        [$topShow, $reset, $autoTopRewardActive, $autoTopReward, $enableApi] = Utils::filterInput("topShow",
+            "reset", "autoTopRewardActive", "autoTopReward", "api");
 
 
         $this->configModel->updateConfig($topShow, $reset, $autoTopRewardActive, $autoTopReward, $enableApi);
 
-//        $_SESSION['toaster'][0]['title'] = VOTES_TOAST_TITLE_SUCCESS;
-//        $_SESSION['toaster'][0]['type'] = "bg-success";
-//        $_SESSION['toaster'][0]['body'] = VOTES_TOAST_EDIT_SUCCESS;
+        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+            LangManager::translate("core.toaster.config.success"));
 
         header('location: ../votes/config/');
     }
@@ -87,17 +84,34 @@ class VotesController extends CoreController
 
     /* ///////////////////// SITES /////////////////////*/
 
+    public function getCompatiblesSites(): array
+    {
+        $file = Utils::getEnv()->getValue("DIR") . "app/package/votes/minecraftSitesCompatibles.php";
+
+        if(!file_exists($file)) {
+            return [];
+        }
+
+        $content = include $file;
+
+        if(!is_array($content)){
+            return [];
+        }
+
+        return $content;
+    }
+
     #[Link("/site/add", Link::GET, [], "/cmw-admin/votes")]
     public function addSiteAdmin(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.add");
 
         $rewards = $this->rewardsModel->getRewards();
+        $compatiblesSites = $this->getCompatiblesSites();
 
         View::createAdminView('votes', 'add_site')
-            ->addVariableList(["rewards" => $rewards])
-            ->addScriptBefore("app/package/votes/views/resources/js/testSitesId.js", "admin/resources/vendors/sweetalert2/sweetalert2.all.js")
-            ->addStyle("admin/resources/vendors/sweetalert2/sweetalert2.css")
+            ->addVariableList(["rewards" => $rewards, "compatiblesSites" => $compatiblesSites])
+            ->addScriptBefore("app/package/votes/views/resources/js/testSitesId.js")
             ->view();
     }
 
@@ -106,17 +120,13 @@ class VotesController extends CoreController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.add");
 
-        $title = filter_input(INPUT_POST, 'title');
-        $time = filter_input(INPUT_POST, 'time');
-        $idUnique = filter_input(INPUT_POST, 'idUnique');
-        $url = filter_input(INPUT_POST, 'url');
-        $rewardsId = filter_input(INPUT_POST, 'reward');
+        [$title, $time, $idUnique, $url, $rewardsId] = Utils::filterInput("title", "time", "idUnique",
+            "url", "reward");
 
         $this->sitesModel->addSite($title, $time, $idUnique, $url, $rewardsId);
 
-//        $_SESSION['toaster'][0]['title'] = VOTES_TOAST_TITLE_SUCCESS;
-//        $_SESSION['toaster'][0]['type'] = "bg-success";
-//        $_SESSION['toaster'][0]['body'] = VOTES_TOAST_ADD_SUCCESS;
+        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+            LangManager::translate("votes.toaster.site.add.success", ["name" => $title]));
 
         header('location: ../site/add');
     }
@@ -132,8 +142,7 @@ class VotesController extends CoreController
 
         View::createAdminView('votes', 'list_sites')
             ->addVariableList(["sites" => $sites, "rewards" => $rewards])
-            ->addScriptAfter("admin/resources/vendors/sweetalert2/sweetalert2.all.js", "app/package/votes/views/resources/js/testSitesId.js")
-            ->addStyle("admin/resources/vendors/sweetalert2/sweetalert2.css")
+            ->addScriptAfter("app/package/votes/views/resources/js/testSitesId.js")
             ->view();
     }
 
@@ -154,17 +163,13 @@ class VotesController extends CoreController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.edit");
 
-        $siteId = filter_input(INPUT_POST, 'siteId');
-        $title = filter_input(INPUT_POST, 'title');
-        $time = filter_input(INPUT_POST, 'time');
-        $idUnique = filter_input(INPUT_POST, 'idUnique');
-        $url = filter_input(INPUT_POST, 'url');
-        $rewardsId = filter_input(INPUT_POST, 'reward');
+        [$siteId, $title, $time, $idUnique, $url, $rewardsId] = Utils::filterInput("siteId", "title", "time",
+            "idUnique", "url", "reward");
+
         $this->sitesModel->updateSite($siteId, $title, $time, $idUnique, $url, $rewardsId);
 
-//        $_SESSION['toaster'][0]['title'] = VOTES_TOAST_TITLE_SUCCESS;
-//        $_SESSION['toaster'][0]['type'] = "bg-success";
-//        $_SESSION['toaster'][0]['body'] = VOTES_TOAST_EDIT_SUCCESS;
+        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+            LangManager::translate("votes.toaster.site.edit.success", ["name" => $title]));
 
         header('location: ../site/list/');
     }
@@ -176,9 +181,10 @@ class VotesController extends CoreController
 
         $this->sitesModel->deleteSite($id);
 
-//        $_SESSION['toaster'][0]['title'] = VOTES_TOAST_TITLE_SUCCESS;
-//        $_SESSION['toaster'][0]['type'] = "bg-success";
-//        $_SESSION['toaster'][0]['body'] = VOTES_TOAST_DELETE_SUCCESS;
+        $title = $this->sitesModel->getSiteById($id)?->getTitle();
+
+        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+            LangManager::translate("votes.toaster.site.delete.success", ["name" => $title]));
 
         header('location: ../list/');
     }
@@ -190,7 +196,6 @@ class VotesController extends CoreController
     public function votesRewards(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.rewards.edit");
-
 
         $rewards = $this->rewardsModel->getRewards();
 
@@ -214,25 +219,33 @@ class VotesController extends CoreController
         //Define the reward action
         switch ($rewardType) {
             case "votepoints":
-                $action = json_encode(array("type" => "votepoints", "amount" => filter_input(INPUT_POST, "amount")), JSON_THROW_ON_ERROR);
+                try {
+                    $action = json_encode(array("type" => "votepoints", "amount" => filter_input(INPUT_POST, "amount")), JSON_THROW_ON_ERROR);
+                } catch (JsonException) {
+                }
                 break;
 
             case "votepoints-random":
-                $action = json_encode(array("type" => "votepoints-random",
-                    "amount" => array(
-                        "min" => filter_input(INPUT_POST, "amount-min"),
-                        "max" => filter_input(INPUT_POST, "amount-max"))), JSON_THROW_ON_ERROR);
+                try {
+                    $action = json_encode(array("type" => "votepoints-random",
+                        "amount" => array(
+                            "min" => filter_input(INPUT_POST, "amount-min"),
+                            "max" => filter_input(INPUT_POST, "amount-max"))), JSON_THROW_ON_ERROR);
+                } catch (JsonException) {
+                }
                 break;
             case "minecraft-commands":
-                $action = json_encode(array("type" => "minecraft-commands",
-                    "commands" => filter_input(INPUT_POST, "minecraft-commands"),
-                    "servers" => $_POST['minecraft-servers']), JSON_THROW_ON_ERROR);
+                try {
+                    $action = json_encode(array("type" => "minecraft-commands",
+                        "commands" => filter_input(INPUT_POST, "minecraft-commands"),
+                        "servers" => $_POST['minecraft-servers']), JSON_THROW_ON_ERROR);
+                } catch (JsonException) {
+                }
                 break;
 
-            case "none"://Error, redirect
-//                $_SESSION['toaster'][0]['title'] = VOTES_TOAST_TITLE_ERROR;
-//                $_SESSION['toaster'][0]['type'] = "bg-danger";
-//                $_SESSION['toaster'][0]['body'] = VOTES_TOAST_ERROR_INTERNAL;
+            case "none": //Error, redirect
+                Response::sendAlert("error", LangManager::translate("core.toaster.error"),
+                    LangManager::translate("core.toaster.internalError"));
                 header("location: ../rewards");
                 break;
         }
@@ -240,9 +253,8 @@ class VotesController extends CoreController
         //Add reward
         $this->rewardsModel->addReward($title, $action);
 
-//        $_SESSION['toaster'][0]['title'] = VOTES_TOAST_TITLE_SUCCESS;
-//        $_SESSION['toaster'][0]['type'] = "bg-success";
-//        $_SESSION['toaster'][0]['body'] = VOTES_TOAST_ADD_SUCCESS;
+        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+            LangManager::translate("votes.toaster.reward.add.success", ["name" => $title]));
 
         header("location: ../rewards");
     }
@@ -254,9 +266,10 @@ class VotesController extends CoreController
 
         $this->rewardsModel->deleteReward($id);
 
-//        $_SESSION['toaster'][0]['title'] = VOTES_TOAST_TITLE_SUCCESS;
-//        $_SESSION['toaster'][0]['type'] = "bg-success";
-//        $_SESSION['toaster'][0]['body'] = VOTES_TOAST_DELETE_SUCCESS;
+        $title = $this->rewardsModel->getRewardById($id)?->getTitle();
+
+        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+            LangManager::translate("votes.toaster.reward.delete.success", ["name" => $title]));
 
         header('location: ../../rewards');
     }
@@ -266,43 +279,47 @@ class VotesController extends CoreController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.rewards.edit");
 
-        $rewardsId = filter_input(INPUT_POST, "reward_id");
-        $rewardType = filter_input(INPUT_POST, "reward_type");
-        $title = filter_input(INPUT_POST, "title");
+        [$rewardsId, $rewardType, $title] = Utils::filterInput("reward_id", "reward_type", "title");
 
         $action = "";
         //Define the reward action
         switch ($rewardType) {
             case "votepoints":
-                $action = json_encode(array("type" => "votepoints", "amount" => filter_input(INPUT_POST, "amount")), JSON_THROW_ON_ERROR);
+                try {
+                    $action = json_encode(array("type" => "votepoints", "amount" => filter_input(INPUT_POST, "amount")), JSON_THROW_ON_ERROR);
+                } catch (JsonException) {
+                }
                 break;
 
             case "votepoints-random":
-                $action = json_encode(array("type" => "votepoints-random",
-                    "amount" => array(
-                        "min" => filter_input(INPUT_POST, "amount-min"),
-                        "max" => filter_input(INPUT_POST, "amount-max"))), JSON_THROW_ON_ERROR);
+                try {
+                    $action = json_encode(array("type" => "votepoints-random",
+                        "amount" => array(
+                            "min" => filter_input(INPUT_POST, "amount-min"),
+                            "max" => filter_input(INPUT_POST, "amount-max"))), JSON_THROW_ON_ERROR);
+                } catch (JsonException) {
+                }
                 break;
             case "minecraft-commands":
-                $action = json_encode(array("type" => "minecraft-commands",
-                    "commands" => filter_input(INPUT_POST, "minecraft-commands"),
-                    "servers" => $_POST['minecraft-servers']), JSON_THROW_ON_ERROR);
+                try {
+                    $action = json_encode(array("type" => "minecraft-commands",
+                        "commands" => filter_input(INPUT_POST, "minecraft-commands"),
+                        "servers" => $_POST['minecraft-servers']), JSON_THROW_ON_ERROR);
+                } catch (JsonException) {
+                }
                 break;
 
-            case "none"://Error, redirect
-//                $_SESSION['toaster'][0]['title'] = VOTES_TOAST_TITLE_ERROR;
-//                $_SESSION['toaster'][0]['type'] = "bg-danger";
-//                $_SESSION['toaster'][0]['body'] = VOTES_TOAST_ERROR_INTERNAL;
+            case "none": //Error, redirect
+                Response::sendAlert("error", LangManager::translate("core.toaster.error"),
+                    LangManager::translate("core.toaster.internalError", ["name" => $title]));
                 header("location: ../votes/rewards");
                 break;
         }
 
-
         $this->rewardsModel->updateReward($rewardsId, $title, $action);
 
-//        $_SESSION['toaster'][0]['title'] = VOTES_TOAST_TITLE_SUCCESS;
-//        $_SESSION['toaster'][0]['type'] = "bg-success";
-//        $_SESSION['toaster'][0]['body'] = VOTES_TOAST_EDIT_SUCCESS;
+        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+            LangManager::translate("votes.toaster.reward.edit.success", ["name" => $title]));
 
         header('location: rewards');
     }
@@ -315,7 +332,7 @@ class VotesController extends CoreController
         if (empty(filter_input(INPUT_POST, "id"))) {
             try {
                 echo json_encode(array("response" => "ERROR-EMPTY_ID"), JSON_THROW_ON_ERROR);
-            } catch (JsonException $e) {
+            } catch (JsonException) {
             }
         } else {
             echo $this->rewardsModel->getRewardById(filter_input(INPUT_POST, "id"))?->getAction();
@@ -392,7 +409,7 @@ class VotesController extends CoreController
     {
         try {
             //First, check if the player can vote.
-            if ($this->votesModel->isVoteSend($this->sitesModel->getSiteById($id)?->getUrl(), $this->sitesModel->getSiteById($id)?->getIdUnique(), Utils::getClientIp())) {
+            if ($this->checkVotesModel->isVoteSend($this->sitesModel->getSiteById($id)?->getUrl(), $this->sitesModel->getSiteById($id)?->getIdUnique(), Utils::getClientIp())) {
 
                 //Check if the player has a vote stored
                 if ($this->votesModel->playerHasAVoteStored(UsersModel::getCurrentUser()?->getId(), $id)) {
@@ -430,21 +447,25 @@ class VotesController extends CoreController
                 $this->returnData("not_send");
             }
         } catch (JsonException $e) {
-            echo $e;
+            echo "Internal Error. " . $e;
         }
     }
 
     public function sendRewardsToCmwLink(string $rewardId): void
     {
-        foreach (json_decode($this->rewardsModel->getRewardById($rewardId)?->getAction(), false, 512, JSON_THROW_ON_ERROR)->servers as $serverId) {
-            $server = (new MinecraftModel())->getServerById($serverId);
-            $currentUser = UsersModel::getCurrentUser()?->getUsername();
+        try {
+            foreach (json_decode($this->rewardsModel->getRewardById($rewardId)?->getAction(), false, 512, JSON_THROW_ON_ERROR)->servers as $serverId) {
+                $server = (new MinecraftModel())->getServerById($serverId);
+                $currentUser = UsersModel::getCurrentUser()?->getUsername();
 
-            $cmd = json_decode($this->rewardsModel->getRewardById($rewardId)?->getAction(), false, 512, JSON_THROW_ON_ERROR)->commands;
-            $cmd = str_replace("{player}", $currentUser, $cmd);
-            $cmd = base64_encode($cmd);
+                $cmd = json_decode($this->rewardsModel->getRewardById($rewardId)?->getAction(), false, 512, JSON_THROW_ON_ERROR)->commands;
+                $cmd = str_replace("{player}", $currentUser, $cmd);
+                $cmd = base64_encode($cmd);
 
-            echo APIManager::getRequest("http://{$server?->getServerIp()}:{$server?->getServerCMWLPort()}/votes/send/reward/$currentUser/$cmd");
+                echo APIManager::getRequest("http://{$server?->getServerIp()}:{$server?->getServerCMWLPort()}/votes/send/reward/$currentUser/$cmd");
+            }
+        } catch (JsonException $e) {
+            echo "Internal Error. " . $e;
         }
 
     }
@@ -458,6 +479,7 @@ class VotesController extends CoreController
                 die();
             }
         } catch (JsonException $e) {
+            echo "Can't return data. " . $e;
         }
     }
 

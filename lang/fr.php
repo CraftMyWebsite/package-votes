@@ -105,4 +105,25 @@ return [
             ],
         ],
     ],
+    "toaster" => [
+        "site" => [
+            "add" => [
+                "success" => "Site <b>%name%</b> ajouté avec succès"
+            ],
+            "edit" => [
+                "success" => "Site <b>%name%</b> modifié avec succès"
+            ],
+            "delete" => [
+                "success" => "Site <b>%name%</b> supprimé avec succès"
+            ],
+        ],
+        "reward" => [
+            "add" => [
+                "success" => "Récompense <b>%name%</b> ajoutée avec succès"
+            ],
+            "delete" => [
+                "success" => "Récompense <b>%name%</b> supprimée avec succès"
+            ]
+        ],
+    ],
 ];

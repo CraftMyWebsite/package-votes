@@ -4,12 +4,8 @@ namespace CMW\Controller\Votes;
 
 use CMW\Controller\Core\CoreController;
 use CMW\Manager\Api\APIManager;
-use CMW\Manager\Database\DatabaseManager;
-use CMW\Model\Users\UsersModel;
 use CMW\Model\Votes\VotesStatsModel;
-use CMW\Model\Votes\VotesModel;
 use CMW\Router\Link;
-use CMW\Utils\Utils;
 use JetBrains\PhpStorm\ExpectedValues;
 
 

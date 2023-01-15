@@ -98,7 +98,6 @@ class VotesRewardsModel extends DatabaseManager
 
     public function selectReward(int $userId, int $idSite): void
     {
-
         //Select the reward action, rewards_id and id site with the site id
         $var = array(
             "id" => $idSite
@@ -118,7 +117,6 @@ class VotesRewardsModel extends DatabaseManager
             $rewardsId = $result['votes_sites_rewards_id'];
             $action = $result['votes_rewards_action'];
 
-
             //Detect type
             try {
                 switch (json_decode($action, false, 512, JSON_THROW_ON_ERROR)->type) {
@@ -128,20 +126,16 @@ class VotesRewardsModel extends DatabaseManager
                         $this->setLog($userId, $rewardsId);
                         break;
 
-
                     case "votepoints-random":
                         $this->giveRewardVotePointsRandom($userId, json_decode($action, false, 512, JSON_THROW_ON_ERROR)->amount->min,
                             json_decode($action, false, 512, JSON_THROW_ON_ERROR)->amount->min);
                         $this->setLog($userId, $rewardsId);
                         break;
-
-
                 }
-            } catch (JsonException $e) {
+            } catch (JsonException) {
+                die("Internal Error. (selectReward() → VotesRewardsModel)");
             }
         }
-
-
     }
 
     public function giveRewardVotePoints(int $userId, int $amount): void
@@ -165,7 +159,6 @@ class VotesRewardsModel extends DatabaseManager
         $db = self::getInstance();
         $req = $db->prepare($sql);
         $req->execute($var);
-
     }
 
     public function detectFirstVotePointsReward(int $userId): bool
@@ -193,7 +186,7 @@ class VotesRewardsModel extends DatabaseManager
     {
         try {
             $amount = random_int($min, $max);
-        } catch (Exception $e) {
+        } catch (Exception) {
             $amount = $max;
         }
 
@@ -207,22 +200,17 @@ class VotesRewardsModel extends DatabaseManager
             $sql = "INSERT INTO cmw_votes_votepoints (votes_votepoints_id_user, votes_votepoints_amount) 
                         VALUES (:id_user, :amount)";
 
-            $db = self::getInstance();
-            $req = $db->prepare($sql);
-            $req->execute($var);
-
         } else { //If the player has already got a reward
 
             $sql = "UPDATE cmw_votes_votepoints SET votes_votepoints_amount = votes_votepoints_amount+:amount 
                             WHERE votes_votepoints_id_user=:id_user";
 
-            $db = self::getInstance();
-            $req = $db->prepare($sql);
-            $req->execute($var);
         }
-    }
 
-    //Reward → votepoints random
+        $db = self::getInstance();
+        $req = $db->prepare($sql);
+        $req->execute($var);
+    }
 
     public function setLog(int $userId, int $rewardsId): void
     {

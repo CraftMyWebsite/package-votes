@@ -14,7 +14,6 @@ use CMW\Manager\Database\DatabaseManager;
 class VotesSitesModel extends DatabaseManager
 {
 
-
     //Add a new Website
     public function addSite(string $title, int $time, string $idUnique, string $url, int $rewardsId): ?VotesSitesEntity
     {

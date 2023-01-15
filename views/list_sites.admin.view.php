@@ -26,7 +26,8 @@ $description = LangManager::translate("votes.dashboard.desc");
 
                         <div id="accordion">
 
-                            <?php $i = 1; foreach ($sites as $site) : ?>
+                            <?php $i = 1;
+                            foreach ($sites as $site) : ?>
                                 <div class="card card-primary">
                                     <div class="card-header">
                                         <h4 class="card-title w-100">
@@ -155,7 +156,7 @@ $description = LangManager::translate("votes.dashboard.desc");
                                         </div>
                                     </div>
                                 </div>
-                            <?php ++$i; endforeach; ?>
+                                <?php ++$i; endforeach; ?>
 
                         </div>
                     </div>

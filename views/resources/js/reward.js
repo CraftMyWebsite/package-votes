@@ -1,13 +1,11 @@
-
-
 //Detect reward type & show html
-let reward_type;
-$(document).on('change','#reward_type',function(){
-    reward_type = this.value;
+
+function handleSelectChange(event) {
+    let reward_type = event.target.value;
 
     const btnsave = document.getElementById("reward-type-btn-save");
 
-    switch (reward_type){
+    switch (reward_type) {
         case "votepoints":
             cleanRewardType();
             createVotePoints();
@@ -29,28 +27,25 @@ $(document).on('change','#reward_type',function(){
             btnsave.setAttribute("disabled", true);//Change save button status
             break;
     }
-
-});
+}
 
 //For update current reward
-function updateReward(e, id){
+function updateReward(e, id) {
 
     let section = document.getElementById("reward-content-wrapper-update-" + id);
 
     /* Get action */
 
-    $.ajax({
-        type: "POST",
-        url: "rewards/get",
-        async: true,
-        dataType: "html",
-        data: {
-            id: id
-        },
-        success: function (response){
+    fetch("rewards/get", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: id }),
+    })
+        .then((response) => response.text())
+        .then((response) => {
             let action = JSON.parse(response);
 
-            switch (e.value){
+            switch (e.value) {
                 case "votepoints":
                     cleanRewardType(section);
                     createVotePoints(action.amount, section);
@@ -63,21 +58,18 @@ function updateReward(e, id){
                     cleanRewardType(section);
                     createMinecraftCommand(action.commands, action.servers, section);
                     break;
-                case "none"://If we don't select reward type
+                case "none": //If we don't select reward type
                     cleanRewardType(section);
                     break;
             }
-
-        }
-    })
-
+        });
 }
 
 
 //Clear old type
 function cleanRewardType(parent = null) {
 
-    if (parent === null){
+    if (parent === null) {
         parent = document.getElementById("reward-content-wrapper");
     }
 
@@ -90,13 +82,13 @@ function cleanRewardType(parent = null) {
 }
 
 //Votepoints html
-function createVotePoints(amount, parent = null){
+function createVotePoints(amount, parent = null) {
 
-    if (amount === undefined){
+    if (amount === undefined) {
         amount = "";
     }
 
-    if (parent === null){
+    if (parent === null) {
         parent = document.getElementById("reward-content-wrapper");
     }
 
@@ -122,22 +114,22 @@ function createVotePoints(amount, parent = null){
     input.setAttribute("required", "true");
 
 
-    parent.append(div_wrapper);
-    div_wrapper.append(div_prepend);
-    div_prepend.append(icon_wrapper);
-    icon_wrapper.append(icon);
-    div_wrapper.append(input);
+    parent.append("beforeend", div_wrapper);
+    div_wrapper.append("beforeend", div_prepend);
+    div_prepend.append("beforeend", icon_wrapper);
+    icon_wrapper.append("beforeend", icon);
+    div_wrapper.append("beforeend", input);
 }
 
 //VotepointsRandom html
-function createVotePointsRandom(min, max, parent = null){
+function createVotePointsRandom(min, max, parent = null) {
 
-    if (min === undefined || max === undefined){
+    if (min === undefined || max === undefined) {
         min = "";
         max = "";
     }
 
-    if (parent === null){
+    if (parent === null) {
         parent = document.getElementById("reward-content-wrapper");
     }
 
@@ -182,27 +174,27 @@ function createVotePointsRandom(min, max, parent = null){
     input_max.setAttribute("required", "true");
 
 
-    parent.append(div_wrapper);
-    div_wrapper.append(div_wrapper_min);
-    div_wrapper_min.append(div_form_group_min);
-    div_form_group_min.append(label_min);
-    div_form_group_min.append(input_min);
+    parent.append("beforeend", div_wrapper);
+    div_wrapper.append("beforeend", div_wrapper_min);
+    div_wrapper_min.append("beforeend", div_form_group_min);
+    div_form_group_min.append("beforeend", label_min);
+    div_form_group_min.append("beforeend", input_min);
 
-    div_wrapper.append(div_wrapper_max);
-    div_wrapper_max.append(div_form_group_max);
-    div_form_group_max.append(label_max);
-    div_form_group_max.append(input_max);
+    div_wrapper.append("beforeend", div_wrapper_max);
+    div_wrapper_max.append("beforeend", div_form_group_max);
+    div_form_group_max.append("beforeend", label_max);
+    div_form_group_max.append("beforeend", input_max);
 
 }
 
-function createMinecraftCommand(commands, servers, parent = null){
+function createMinecraftCommand(commands, servers, parent = null) {
 
-    if (commands === undefined || servers === undefined){
+    if (commands === undefined || servers === undefined) {
         commands = "";
         servers = [];
     }
 
-    if (parent === null){
+    if (parent === null) {
         parent = document.getElementById("reward-content-wrapper");
     }
 
@@ -248,18 +240,18 @@ function createMinecraftCommand(commands, servers, parent = null){
     select_server.setAttribute("multiple", "true");
 
 
-    parent.append(div_wrapper);
-    div_wrapper.append(div_wrapper_commands);
-    div_wrapper_commands.append(div_form_group_commands);
-    div_form_group_commands.append(label_commands);
-    div_form_group_commands.append(input_commands);
+    parent.append("beforeend", div_wrapper);
+    div_wrapper.append("beforeend", div_wrapper_commands);
+    div_wrapper_commands.append("beforeend", div_form_group_commands);
+    div_form_group_commands.append("beforeend", label_commands);
+    div_form_group_commands.append("beforeend", input_commands);
 
-    div_wrapper.append(div_wrapper_server);
-    div_wrapper_server.append(div_form_group_server);
-    div_form_group_server.append(label_server);
-    div_form_group_server.append(select_server);
+    div_wrapper.append("beforeend", div_wrapper_server);
+    div_wrapper_server.append("beforeend", div_form_group_server);
+    div_form_group_server.append("beforeend", label_server);
+    div_form_group_server.append("beforeend", select_server);
 
-    parent.append(placeholder);
+    parent.append("beforeend", placeholder);
 
     getServers(select_server, servers).then(r => r);
 }
@@ -274,9 +266,9 @@ const getServers = async (select_server, servers) => {
         option.innerText = `${serverName}`;
 
         for (const srvId of servers) {
-            srvId === serverId ? option.setAttribute("selected",  `true`) : "" ;
+            srvId === serverId ? option.setAttribute("selected", `true`) : "";
         }
 
-        select_server.append(option);
+        select_server.append("beforeend", option);
     }
 }

@@ -29,6 +29,9 @@ class VotesStatsModel extends DatabaseManager
     public function statsVotes(string $type): array
     {
 
+        $rangeStart = null;
+        $rangeFinish = null;
+
         if ($type === "all") {
 
             $sql = "SELECT * FROM cmw_votes_votes";
@@ -78,19 +81,17 @@ class VotesStatsModel extends DatabaseManager
             $db = self::getInstance();
             $req = $db->prepare($sql);
             $res = $req->execute($var);
-        }
 
-        if ($res) {
-            return $req->fetchAll();
+            if ($res) {
+                return $req->fetchAll();
+            }
         }
 
         return [];
-
     }
 
     public function statsVotesSitesTotaux(string $title): int
     {
-
         $var = array(
             "title" => $title
         );
@@ -105,17 +106,14 @@ class VotesStatsModel extends DatabaseManager
 
         if ($res) {
             $lines = $req->fetchAll();
-
             return count($lines);
         }
 
         return 0;
-
     }
 
     public function statsVotesSitesMonth(string $title): int
     {
-
         $rangeStart = date("Y-m-d 00:00:00", strtotime("first day of this month"));
         $rangeFinish = date("Y-m-d 00:00:00", strtotime("last day of this month"));
 
@@ -141,7 +139,6 @@ class VotesStatsModel extends DatabaseManager
         }
 
         return 0;
-
     }
 
     public function getNumberOfSites(): int
@@ -157,13 +154,13 @@ class VotesStatsModel extends DatabaseManager
             return count($lines);
         }
 
-        return "";
+        return 0;
     }
 
-    //Public function for the top votes (actual month)
 
     /**
      * @return VotesPlayerStatsEntity[]
+     * @desc Public function for the top votes (actual month)
      */
     public function getActualTop(): array
     {
@@ -201,14 +198,13 @@ class VotesStatsModel extends DatabaseManager
         return $toReturn;
     }
 
-    //Public function for the top votes (global)
 
     /**
      * @return VotesPlayerStatsEntity[]
+     * @desc Public function for the top votes (global)
      */
     public function getGlobalTop(): array
     {
-
         if (self::isMariadb()) {
             $sql = "SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_id as userId FROM cmw_votes_votes 
                     JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user GROUP BY cmw_users.user_pseudo 
@@ -245,7 +241,6 @@ class VotesStatsModel extends DatabaseManager
      */
     public function getActualTopNoLimit(): array
     {
-
         if (self::isMariadb()) {
             $sql = "SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_id as userId 
                     FROM cmw_votes_votes JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user 
@@ -282,7 +277,6 @@ class VotesStatsModel extends DatabaseManager
      */
     public function getGlobalTopNoLimit(): array
     {
-
         if (self::isMariadb()) {
             $sql = "SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_id as userId
                     FROM cmw_votes_votes JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user 
@@ -318,7 +312,6 @@ class VotesStatsModel extends DatabaseManager
      */
     public function getPreviousMonthTop(): array
     {
-
         if (self::isMariadb()) {
             $sql = "SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_id as userId FROM cmw_votes_votes 
                     JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user 
@@ -376,6 +369,10 @@ class VotesStatsModel extends DatabaseManager
         return $toReturn;
     }
 
+    /**
+     * @param int|string $user
+     * @return int
+     */
     public function getPlayerVotepoints(int|string $user): int
     {
         if (is_int($user)) {
@@ -397,6 +394,10 @@ class VotesStatsModel extends DatabaseManager
         return 0;
     }
 
+    /**
+     * @param int|string $user
+     * @return int
+     */
     public function getPlayerCurrentVotes(int|string $user): int
     {
         if (is_int($user)) {
@@ -420,6 +421,10 @@ class VotesStatsModel extends DatabaseManager
         return 0;
     }
 
+    /**
+     * @param int|string $user
+     * @return int
+     */
     public function getPlayerTotalVotes(int|string $user): int
     {
         if (is_int($user)) {

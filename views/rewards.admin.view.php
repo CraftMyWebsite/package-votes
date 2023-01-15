@@ -38,7 +38,7 @@ $description = LangManager::translate("votes.dashboard.desc");
                             </div>
 
                             <label><?= LangManager::translate("votes.dashboard.rewards.add.placeholder.type") ?></label>
-                            <select id="reward_type" name="reward_type" class="form-control" required>
+                            <select id="reward_type" name="reward_type" class="form-control" required onchange="handleSelectChange(event)">
                                 <option value="none"
                                         selected><?= LangManager::translate("votes.dashboard.rewards.add.placeholder.type_select") ?></option>
                                 <option value="votepoints"><?= LangManager::translate("votes.dashboard.rewards.votepoints.name") ?></option>
