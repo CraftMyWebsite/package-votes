@@ -114,11 +114,11 @@ function createVotePoints(amount, parent = null) {
     input.setAttribute("required", "true");
 
 
-    parent.append("beforeend", div_wrapper);
-    div_wrapper.append("beforeend", div_prepend);
-    div_prepend.append("beforeend", icon_wrapper);
-    icon_wrapper.append("beforeend", icon);
-    div_wrapper.append("beforeend", input);
+    parent.append(div_wrapper);
+    div_wrapper.append(div_prepend);
+    div_prepend.append(icon_wrapper);
+    icon_wrapper.append(icon);
+    div_wrapper.append(input);
 }
 
 //VotepointsRandom html
@@ -174,16 +174,16 @@ function createVotePointsRandom(min, max, parent = null) {
     input_max.setAttribute("required", "true");
 
 
-    parent.append("beforeend", div_wrapper);
-    div_wrapper.append("beforeend", div_wrapper_min);
-    div_wrapper_min.append("beforeend", div_form_group_min);
-    div_form_group_min.append("beforeend", label_min);
-    div_form_group_min.append("beforeend", input_min);
+    parent.append(div_wrapper);
+    div_wrapper.append(div_wrapper_min);
+    div_wrapper_min.append(div_form_group_min);
+    div_form_group_min.append(label_min);
+    div_form_group_min.append(input_min);
 
-    div_wrapper.append("beforeend", div_wrapper_max);
-    div_wrapper_max.append("beforeend", div_form_group_max);
-    div_form_group_max.append("beforeend", label_max);
-    div_form_group_max.append("beforeend", input_max);
+    div_wrapper.append(div_wrapper_max);
+    div_wrapper_max.append(div_form_group_max);
+    div_form_group_max.append(label_max);
+    div_form_group_max.append(input_max);
 
 }
 
@@ -240,18 +240,18 @@ function createMinecraftCommand(commands, servers, parent = null) {
     select_server.setAttribute("multiple", "true");
 
 
-    parent.append("beforeend", div_wrapper);
-    div_wrapper.append("beforeend", div_wrapper_commands);
-    div_wrapper_commands.append("beforeend", div_form_group_commands);
-    div_form_group_commands.append("beforeend", label_commands);
-    div_form_group_commands.append("beforeend", input_commands);
+    parent.append(div_wrapper);
+    div_wrapper.append(div_wrapper_commands);
+    div_wrapper_commands.append(div_form_group_commands);
+    div_form_group_commands.append(label_commands);
+    div_form_group_commands.append(input_commands);
 
-    div_wrapper.append("beforeend", div_wrapper_server);
-    div_wrapper_server.append("beforeend", div_form_group_server);
-    div_form_group_server.append("beforeend", label_server);
-    div_form_group_server.append("beforeend", select_server);
+    div_wrapper.append(div_wrapper_server);
+    div_wrapper_server.append(div_form_group_server);
+    div_form_group_server.append(label_server);
+    div_form_group_server.append(select_server);
 
-    parent.append("beforeend", placeholder);
+    parent.append(placeholder);
 
     getServers(select_server, servers).then(r => r);
 }
@@ -269,6 +269,6 @@ const getServers = async (select_server, servers) => {
             srvId === serverId ? option.setAttribute("selected", `true`) : "";
         }
 
-        select_server.append("beforeend", option);
+        select_server.append(option);
     }
 }
