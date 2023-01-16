@@ -4,26 +4,34 @@ return [
     "votes" => "Votes",
     "dashboard" => [
         "title" => [
-            "config" => "Votes - Configuration",
-            "stats" => "Votes - Stats de votes",
-            "add_site" => "Votes - Ajouter un site",
-            "list_sites" => "Votes - Liste des sites",
-            "rewards" => "Votes - Récompenses",
+            "config" => "Configuration",
+            "stats" => "Statistiques",
+            "add_site" => "Ajouter un site",
+            "manage_site" => "Gestion des sites",
+            "list_sites" => "Liste des sites",
+            "rewards" => "Récompenses",
         ],
 
         "desc" => "Gérez votre plugin de votes.",
 
         "add_site" => [
             "card_title" => "Ajouter un site de votes",
-            "placeholder" => [
+            "input" => [
                 "title" => "Titre du site de votes",
-                "time" => "Temps entre chaques votes en minutes (exemple: 90)",
-                "id_unique" => "Id unique de votre site (exemple: 2154)",
+                "time" => "Temps entre chaques votes en minutes",
+                "id_unique" => "Id ou clé API du site de vote",
                 "url" => "Liens vers la page de votes",
+                "rewards" => "Récompenses lors du vote",
+            ],
+            "placeholder" => [
+                "title" => "Top Serveurs",
+                "time" => "90",
+                "id_unique" => "2154 / B5CYHZSRVE3S",
+                "url" => "https://top-serveurs.net/minecraft/vote/name",
                 "rewards" => "Récompenses",
             ],
             "btn" => [
-                "sitescomp" => "Afficher les sites de votes compatibles",
+                "sitescomp" => "Sites compatibles",
                 "testid" => "Tester l'Id",
             ],
             "sitescomp" => [
@@ -54,17 +62,17 @@ return [
                 "1" => "Activer l'api locale"
             ],
             "placeholder" => [
-                "reset" => "Sélection du mode de reset des modes",
-                "top_show" => "Sélection du nombre de joueurs à afficher au classement sur votre site",
+                "reset" => "Mode de reset des votes",
+                "top_show" => "Nombre de voteurs à afficher",
                 "enable_api" => "Activer l'api du site"
             ],
         ],
 
         "stats" => [
-            "totals" => "Votes totaux",
-            "month" => "Votes du mois en cours",
-            "week" => "Votes de là semaine en cours",
-            "day" => "Votes d'aujourd'hui",
+            "totals" => "Totaux",
+            "month" => "Ce mois",
+            "week" => "Cette semaine",
+            "day" => "Aujourd'hui",
             "3pastsMonths" => "Votes des 3 derniers mois",
             "sites_totals" => "Votes par site (totaux)",
             "sites_current" => "Votes par site (mois en cours)",
@@ -75,7 +83,8 @@ return [
 
         "rewards" => [
             "votepoints" => [
-                "name" => "Votepoints",
+                "name" => "Points de vote",
+                "fixed" => " unique",
                 "random" => " aléatoires",
             ],
             "minecraft" => [
@@ -86,10 +95,10 @@ return [
                 ]
             ],
             "add" => [
-                "title" => "Ajouter une nouvelle récompense",
+                "title" => "Ajouter une récompense",
                 "placeholder" => [
-                    "title" => "Nom de la récompense",
-                    "type" => "Type de la récompense",
+                    "title" => "Nom de récompense",
+                    "type" => "Type de récompense",
                     "type_select" => "Choisissez une récompense",
                     "amount" => "Montant",
                     "amount_minimum" => "Montant minimum",

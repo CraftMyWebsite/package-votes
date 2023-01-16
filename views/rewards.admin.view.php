@@ -9,149 +9,136 @@ $description = LangManager::translate("votes.dashboard.desc");
 /* @var \CMW\Entity\Votes\VotesRewardsEntity[] $rewards */
 /* @var \CMW\Entity\Minecraft\MinecraftServerEntity[] $minecraftServers */
 ?>
+<div class="d-flex flex-wrap justify-content-between">
+    <h3><i class="fa-solid fa-award"></i> <span class="m-lg-auto"><?= LangManager::translate("votes.dashboard.title.rewards") ?></span></h3>
+</div>
 
-<div class="content">
-
-    <div class="container-fluid">
-        <div class="row">
-
-            <!-- Add new rewards -->
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title"><?= LangManager::translate("votes.dashboard.title.rewards") ?></h3>
+<section class="row">
+    <div class="col-12 col-lg-5">
+        <div class="card">
+            <div class="card-header">
+                <h4><?= LangManager::translate("votes.dashboard.rewards.add.title") ?></h4>
+            </div>
+            <div class="card-body">
+                <form method="post" action="rewards/add">
+                    <?php (new SecurityService())->insertHiddenToken() ?>
+                    <h6><?= LangManager::translate("votes.dashboard.rewards.add.placeholder.title") ?> :</h6>
+                    <div class="form-group position-relative has-icon-left">
+                        <input type="text" class="form-control" name="title" value="" required
+                               placeholder="<?= LangManager::translate("votes.dashboard.rewards.add.placeholder.title") ?>">
+                        <div class="form-control-icon">
+                            <i class="fas fa-heading"></i>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <form action="rewards/add" method="post">
-                            <?php (new SecurityService())->insertHiddenToken() ?>
-                            <div class="form-group">
-                                <label><?= LangManager::translate("votes.dashboard.rewards.add.title") ?></label>
-                            </div>
-
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fas fa-heading"></i></span>
-                                </div>
-                                <input type="text" name="title" class="form-control"
-                                       placeholder="<?= LangManager::translate("votes.dashboard.rewards.add.placeholder.title") ?>"
-                                       required>
-                            </div>
-
-                            <label><?= LangManager::translate("votes.dashboard.rewards.add.placeholder.type") ?></label>
-                            <select id="reward_type" name="reward_type" class="form-control" required onchange="handleSelectChange(event)">
-                                <option value="none"
-                                        selected><?= LangManager::translate("votes.dashboard.rewards.add.placeholder.type_select") ?></option>
-                                <option value="votepoints"><?= LangManager::translate("votes.dashboard.rewards.votepoints.name") ?></option>
-                                <option value="votepoints-random">
-                                    <?= LangManager::translate("votes.dashboard.rewards.votepoints.name") ?>
-                                    <?= LangManager::translate("votes.dashboard.rewards.votepoints.random") ?>
-                                </option>
-                                <option value="minecraft-commands">
-                                    <?= LangManager::translate("votes.dashboard.rewards.minecraft.commands") ?>
-                                </option>
-                            </select>
-
+                    
+                    <h6><?= LangManager::translate("votes.dashboard.rewards.add.placeholder.type") ?> :</h6>
+                    <div class="form-group position-relative">
+                        <select id="reward_type" name="reward_type" class="form-control" required onchange="handleSelectChange(event)">
+                            <option value="none"
+                                    selected><?= LangManager::translate("votes.dashboard.rewards.add.placeholder.type_select") ?></option>
+                            <option value="votepoints"><?= LangManager::translate("votes.dashboard.rewards.votepoints.name") ?><?= LangManager::translate("votes.dashboard.rewards.votepoints.fixed") ?></option>
+                            <option value="votepoints-random">
+                                <?= LangManager::translate("votes.dashboard.rewards.votepoints.name") ?><?= LangManager::translate("votes.dashboard.rewards.votepoints.random") ?>
+                            </option>
+                            <option value="minecraft-commands">
+                                <?= LangManager::translate("votes.dashboard.rewards.minecraft.commands") ?>
+                            </option>
+                        </select>
+                    </div>
                             <!-- JS container -->
                             <div id="reward-content-wrapper" class="mt-3"></div>
-
-
-                            <input type="submit" value="<?= LangManager::translate("core.btn.save") ?>"
-                                   class="btn btn-primary float-right" id="reward-type-btn-save" disabled>
-                        </form>
+                    <div class="text-center">
+                        <button disabled type="submit" id="reward-type-btn-save" class="btn btn-primary float-right">
+                            <?= LangManager::translate("core.btn.add") ?>
+                        </button>
                     </div>
-                </div>
-
+                </form>
             </div>
-
-            <!-- List rewards -->
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title"><?= LangManager::translate("votes.dashboard.rewards.list.title") ?></h3>
-                    </div>
-
-                    <div class="card-body">
-
-                        <div id="accordion">
-
-                            <?php foreach ($rewards as $reward) : ?>
-                                <div class="card card-primary">
-                                    <div class="card-header">
-                                        <h4 class="card-title w-100">
-                                            <a class="d-block w-100 collapsed" data-toggle="collapse"
-                                               href="#collapse<?= $reward->getRewardsId() ?>" aria-expanded="false">
-                                                <?= $reward->getTitle() ?>
-                                            </a>
-                                        </h4>
+        </div>
+    </div>
+    <div class="col-12 col-lg-7">
+        <div class="card">
+            <div class="card-header">
+                <h4><?= LangManager::translate("votes.dashboard.title.list_sites") ?></h4>
+            </div>
+            <div class="card-body">
+                <table class="table" id="table1">
+                    <thead>
+                    <tr>
+                        <th class="text-center">Nom</th>
+                        <th class="text-center">Type de récompense</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody class="text-center">
+                    <?php foreach ($rewards as $reward) : ?>
+                        <tr>
+                            <td><?= $reward->getTitle() ?></td>
+                            <td>
+                                <?php if (json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->type === "votepoints"): ?>
+                                    <?= json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->amount ?> <span style="text-transform: lowercase;"><?= LangManager::translate("votes.dashboard.rewards.votepoints.name") ?></span>
+                                <?php elseif (json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->type === "votepoints-random"): ?>
+                                    Entre <?= json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->amount->min ?> et <?= json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->amount->max ?> <span style="text-transform: lowercase;"><?= LangManager::translate("votes.dashboard.rewards.votepoints.name") ?></span>
+                                <?php elseif (json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->type === "minecraft-commands"): ?>
+                                    <?= LangManager::translate("votes.dashboard.rewards.minecraft.commands") ?>
+                                <?php endif; ?>
+                            </td>                         
+                            <td>
+                                <a type="button" data-bs-toggle="modal" data-bs-target="#edit-<?= $reward->getRewardsId() ?>">
+                                    <i class="text-primary me-3 fas fa-edit"></i>
+                                </a>
+                                <a type="button" data-bs-toggle="modal" data-bs-target="#delete-<?= $reward->getRewardsId() ?>">
+                                    <i class="text-danger fas fa-trash-alt"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        <div class="modal modal-lg fade text-left" id="edit-<?= $reward->getRewardsId() ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel160" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-primary">
+                                        <h5 class="modal-title white" id="myModalLabel160">Edition de <?= $reward->getTitle() ?></h5>
                                     </div>
-                                    <div id="collapse<?= $reward->getRewardsId() ?>" class="collapse"
-                                         data-parent="#accordion" style="">
-                                        <div class="card-body">
-                                            <form action="" method="post">
-                                                <?php (new SecurityService())->insertHiddenToken() ?>
-                                                <!-- Faire une requête ajax pour récupérer l'action -->
+                                    <div class="modal-body">
+                                        <form id="serveredit-<?= $reward->getRewardsId() ?>" method="post" action="">
+                                            <?php (new SecurityService())->insertHiddenToken() ?>
+                                            <!-- Faire une requête ajax pour récupérer l'action -->
                                                 <input type="hidden" value="<?= "'" . $reward->getAction() . "'" ?>">
-
-                                                <input type="text" name="reward_id"
-                                                       value="<?= $reward->getRewardsId() ?>"
-                                                       hidden>
-
-                                                <div class="input-group mb-3">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text"><i
-                                                                    class="fas fa-heading"></i></span>
-                                                    </div>
-                                                    <input type="text" name="title" class="form-control"
-                                                           placeholder="<?= LangManager::translate("votes.dashboard.rewards.add.placeholder.title") ?>"
-                                                           value="<?= $reward->getTitle() ?>"
-                                                           required>
+                                                <input type="text" name="reward_id" value="<?= $reward->getRewardsId() ?>" hidden>
+                                            <h6><?= LangManager::translate("votes.dashboard.rewards.add.placeholder.title") ?> :</h6>
+                                            <div class="form-group position-relative has-icon-left">
+                                                <input type="text" class="form-control" name="title" required placeholder="<?= LangManager::translate("votes.dashboard.rewards.add.placeholder.title") ?>" value="<?= $reward->getTitle() ?>">
+                                                <div class="form-control-icon">
+                                                    <i class="fas fa-heading"></i>
                                                 </div>
-
-                                                <div class="form-group">
-                                                    <label><?= LangManager::translate("votes.dashboard.add_site.placeholder.rewards") ?></label>
-                                                    <select name="reward_type" class="form-control"
-                                                            onchange="updateReward(this, <?= $reward->getRewardsId() ?>)"
-                                                            required>
-
+                                            </div>
+                                            <div class="form-group">
+                                                <label><?= LangManager::translate("votes.dashboard.add_site.placeholder.rewards") ?></label>
+                                                    <select name="reward_type" class="form-control" onchange="updateReward(this, <?= $reward->getRewardsId() ?>)" required>
                                                         <option value="none" <?= json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->type === NULL ? "selected" : "" ?>>
                                                             <?= LangManager::translate("votes.dashboard.rewards.add.placeholder.type_select") ?>
                                                         </option>
-
                                                         <option value="votepoints" <?= json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->type === "votepoints" ? "selected" : "" ?>>
                                                             <?= LangManager::translate("votes.dashboard.rewards.votepoints.name") ?>
                                                         </option>
-
                                                         <option value="votepoints-random" <?= json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->type === "votepoints-random" ? "selected" : "" ?>>
                                                             <?= LangManager::translate("votes.dashboard.rewards.votepoints.name") ?>
                                                             <?= LangManager::translate("votes.dashboard.rewards.votepoints.random") ?>
                                                         </option>
-
                                                         <option value="minecraft-commands" <?= json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->type === "minecraft-commands" ? "selected" : "" ?>>
                                                             <?= LangManager::translate("votes.dashboard.rewards.minecraft.commands") ?>
                                                         </option>
-
                                                     </select>
-                                                </div>
-
+                                            </div>
                                                 <!-- JS container (auto generate with php, and update with reward.js) -->
-                                                <div id="reward-content-wrapper-update-<?= $reward->getRewardsId() ?>"
-                                                     class="mt-3">
+                                                <div id="reward-content-wrapper-update-<?= $reward->getRewardsId() ?>" class="mt-3">
                                                     <?php if (json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->type === "votepoints"): ?>
-                                                        <div class="input-group mb-3">
-                                                            <div class="input-group-prepend">
-                                                                <span class="input-group-text"><i
-                                                                            class="fas fa-coins"></i></span>
+                                                        <div class="form-group position-relative has-icon-left">
+                                                            <input value="<?= json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->amount ?>" placeholder="<?= LangManager::translate("votes.dashboard.rewards.add.placeholder.amount") ?>" type="number" name="amount" class="form-control" required="true">
+                                                            <div class="form-control-icon">
+                                                                <i class="fas fa-coins"></i>
                                                             </div>
-
-                                                            <input value="<?= json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->amount ?>"
-                                                                   placeholder="<?= LangManager::translate("votes.dashboard.rewards.add.placeholder.amount") ?>>"
-                                                                   type="number" name="amount"
-                                                                   class="form-control" required>
-
                                                         </div>
-
                                                     <?php elseif (json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->type === "votepoints-random"): ?>
-
                                                         <div id="reward-content-wrapper" class="mt-3">
                                                             <div class="row">
                                                                 <div class="col-sm-6">
@@ -186,7 +173,6 @@ $description = LangManager::translate("votes.dashboard.desc");
                                                                                class="form-control" required>
                                                                     </div>
                                                                 </div>
-
                                                                 <div class="col-sm-6">
                                                                     <div class="form-group">
                                                                         <label><?= LangManager::translate("votes.dashboard.rewards.minecraft.servers") ?></label>
@@ -209,64 +195,51 @@ $description = LangManager::translate("votes.dashboard.desc");
                                                         </div>
                                                     <?php endif; ?>
                                                 </div>
-
-
-                                                <input type="submit"
-                                                       value="<?= LangManager::translate("core.btn.save") ?>"
-                                                       class="btn btn-primary float-right">
-
-                                                <button type="button" class="btn btn-danger" data-toggle="modal"
-                                                        data-target="#rewardDel<?= $reward->getRewardsId() ?>">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </button>
-
-
-                                                <!-- Modal Delete verif -->
-                                                <div class="modal fade" id="rewardDel<?= $reward->getRewardsId() ?>"
-                                                     tabindex="-1" role="dialog"
-                                                     aria-labelledby="rewardDelLabel<?= $reward->getRewardsId() ?>"
-                                                     aria-hidden="true">
-                                                    <div class="modal-dialog" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="rewardCompLabel">
-                                                                    <?= LangManager::translate("votes.dashboard.rewards.del.title") ?>
-                                                                    <strong><?= $reward->getTitle() ?></strong>
-                                                                </h5>
-                                                                <button type="button" class="close" data-dismiss="modal"
-                                                                        aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                </button>
-                                                            </div>
-                                                            <!-- Button for delete the website -->
-                                                            <div class="modal-body">
-                                                                <?= LangManager::translate("votes.dashboard.rewards.del.body") ?>
-                                                            </div>
-
-                                                            <div class="modal-footer">
-                                                                <a href="rewards/delete/<?= $reward->getRewardsId() ?>"
-                                                                   class="btn btn-danger">
-                                                                    <?= LangManager::translate("core.btn.delete_forever") ?>
-                                                                </a>
-                                                                <button type="button" class="btn btn-secondary"
-                                                                        data-dismiss="modal"><?= LangManager::translate("core.btn.close") ?></button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                                        <i class="bx bx-x d-block d-sm-none"></i>
+                                        <span class="d-none d-sm-block"><?= LangManager::translate("core.btn.close") ?></span>
+                                    </button>
+                                    <button type="submit" form="serveredit-<?= $reward->getRewardsId() ?>" class="btn btn-success ml-1" data-bs-dismiss="modal">
+                                        <i class="bx bx-check d-block d-sm-none"></i>
+                                        <span class="d-none d-sm-block"><?= LangManager::translate("core.btn.save") ?></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade text-left" id="delete-<?= $reward->getRewardsId() ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel160" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-danger">
+                                        <h5 class="modal-title white" id="myModalLabel160">supression de <?= $reward->getTitle() ?></h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>
+                                        La suppression de la récompense est définitive !<br>
+                                        Si celle-ci est utilisé pour un site veillez à le changer.
+                                        </p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                                            <i class="bx bx-x d-block d-sm-none"></i>
+                                            <span class="d-none d-sm-block"><?= LangManager::translate("core.btn.close") ?></span>
+                                        </button>
+                                        <a href="rewards/delete/<?= $reward->getRewardsId() ?>" class="btn btn-danger ml-1">
+                                            <i class="bx bx-check d-block d-sm-none"></i>
+                                            <span class="d-none d-sm-block"><?= LangManager::translate("core.btn.delete") ?></span>
+                                        </a>
                                             </form>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
                             <?php endforeach; ?>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
+                    </tbody>
+                </table>
         </div>
     </div>
-
 </div>
+</section>

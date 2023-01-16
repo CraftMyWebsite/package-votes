@@ -101,21 +101,30 @@ class VotesController extends CoreController
         return $content;
     }
 
-    #[Link("/site/add", Link::GET, [], "/cmw-admin/votes")]
-    public function addSiteAdmin(): void
+
+
+    
+
+
+    #[Link("/site/list", Link::GET, [], "/cmw-admin/votes")]
+    public function listSites(): void
     {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.list");
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.add");
 
+        $sites = $this->sitesModel->getSites();
         $rewards = $this->rewardsModel->getRewards();
         $compatiblesSites = $this->getCompatiblesSites();
 
-        View::createAdminView('votes', 'add_site')
-            ->addVariableList(["rewards" => $rewards, "compatiblesSites" => $compatiblesSites])
-            ->addScriptBefore("app/package/votes/views/resources/js/testSitesId.js")
+        View::createAdminView('votes', 'list_sites')
+            ->addVariableList(["sites" => $sites, "rewards" => $rewards, "compatiblesSites" => $compatiblesSites])
+            ->addStyle("admin/resources/vendors/simple-datatables/style.css","admin/resources/assets/css/pages/simple-datatables.css")
+            ->addScriptAfter("app/package/votes/views/resources/js/testSitesId.js","admin/resources/vendors/simple-datatables/umd/simple-datatables.js",
+                "admin/resources/assets/js/pages/simple-datatables.js")
             ->view();
     }
 
-    #[Link("/site/add", Link::POST, [], "/cmw-admin/votes")]
+    #[Link("/site/list", Link::POST, [], "/cmw-admin/votes")]
     public function addSiteAdminPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.add");
@@ -128,22 +137,7 @@ class VotesController extends CoreController
         Response::sendAlert("success", LangManager::translate("core.toaster.success"),
             LangManager::translate("votes.toaster.site.add.success", ["name" => $title]));
 
-        header('location: ../site/add');
-    }
-
-
-    #[Link("/site/list", Link::GET, [], "/cmw-admin/votes")]
-    public function listSites(): void
-    {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.list");
-
-        $sites = $this->sitesModel->getSites();
-        $rewards = $this->rewardsModel->getRewards();
-
-        View::createAdminView('votes', 'list_sites')
-            ->addVariableList(["sites" => $sites, "rewards" => $rewards])
-            ->addScriptAfter("app/package/votes/views/resources/js/testSitesId.js")
-            ->view();
+        header('location: ../site/list');
     }
 
     #[Link("/site/list", Link::GET, [], "/cmw-admin/votes")]
@@ -204,6 +198,9 @@ class VotesController extends CoreController
         View::createAdminView('votes', 'rewards')
             ->addVariableList(["rewards" => $rewards, "minecraftServers" => $minecraftServers])
             ->addScriptBefore("app/package/votes/views/resources/js/reward.js")
+            ->addStyle("admin/resources/vendors/simple-datatables/style.css","admin/resources/assets/css/pages/simple-datatables.css")
+            ->addScriptAfter("admin/resources/vendors/simple-datatables/umd/simple-datatables.js","admin/resources/assets/js/pages/simple-datatables.js")
+
             ->view();
     }
 
@@ -365,15 +362,9 @@ class VotesController extends CoreController
         $previous3Months = $stats->get3PreviousMonthsVotes();
 
         View::createAdminView('votes', 'stats')
-            ->addScriptBefore("admin/resources/vendors/bootstrap/js/bootstrap.bundle.min.js",
-                "admin/resources/vendors/datatables/jquery.dataTables.min.js",
-                "admin/resources/vendors/datatables-bs4/js/dataTables.bootstrap4.min.js",
-                "admin/resources/vendors/datatables-responsive/js/dataTables.responsive.min.js",
-                "admin/resources/vendors/datatables-responsive/js/responsive.bootstrap4.min.js",
-                "admin/resources/vendors/chart.js/Chart.min.js",
-                "app/package/votes/views/resources/js/main.js")
-            ->addStyle("admin/resources/vendors/datatables-bs4/css/dataTables.bootstrap4.min.css",
-                "admin/resources/vendors/datatables-responsive/css/responsive.bootstrap4.min.css")
+            ->addScriptBefore("admin/resources/vendors/chart/chart.min.js","app/package/votes/views/resources/js/main.js")
+            ->addStyle("admin/resources/vendors/simple-datatables/style.css","admin/resources/assets/css/pages/simple-datatables.css")
+            ->addScriptAfter("admin/resources/vendors/simple-datatables/umd/simple-datatables.js","admin/resources/assets/js/pages/simple-datatables.js")
             ->addVariableList(["stats" => $stats, "all" => $all, "month" => $month, "week" => $week, "day" => $day,
                 "listSites" => $listSites, "numberOfSites" => $numberOfSites, "actualTop" => $actualTop,
                 "globalTop" => $globalTop, "previousTop" => $previousTop, "previous3Months" => $previous3Months])
