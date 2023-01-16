@@ -65,9 +65,9 @@ $description = LangManager::translate("votes.dashboard.desc");
                 <table class="table" id="table1">
                     <thead>
                     <tr>
-                        <th class="text-center">Nom</th>
-                        <th class="text-center">Type de récompense</th>
-                        <th class="text-center">Actions</th>
+                        <th class="text-center"><?= LangManager::translate("votes.dashboard.table.name") ?></th>
+                        <th class="text-center"><?= LangManager::translate("votes.dashboard.table.type") ?></th>
+                        <th class="text-center"><?= LangManager::translate("votes.dashboard.table.action") ?></th>
                     </tr>
                     </thead>
                     <tbody class="text-center">
@@ -96,7 +96,7 @@ $description = LangManager::translate("votes.dashboard.desc");
                             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header bg-primary">
-                                        <h5 class="modal-title white" id="myModalLabel160">Edition de <?= $reward->getTitle() ?></h5>
+                                        <h5 class="modal-title white" id="myModalLabel160"><?= LangManager::translate("votes.dashboard.modal.editing") ?> <?= $reward->getTitle() ?></h5>
                                     </div>
                                     <div class="modal-body">
                                         <form id="serveredit-<?= $reward->getRewardsId() ?>" method="post" action="">
@@ -214,13 +214,10 @@ $description = LangManager::translate("votes.dashboard.desc");
                             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header bg-danger">
-                                        <h5 class="modal-title white" id="myModalLabel160">supression de <?= $reward->getTitle() ?></h5>
+                                        <h5 class="modal-title white" id="myModalLabel160"><?= LangManager::translate("votes.dashboard.modal.delete") ?> <?= $reward->getTitle() ?></h5>
                                     </div>
                                     <div class="modal-body">
-                                        <p>
-                                        La suppression de la récompense est définitive !<br>
-                                        Si celle-ci est utilisé pour un site veillez à le changer.
-                                        </p>
+                                        <?= LangManager::translate("votes.dashboard.modal.deletealertreward") ?>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">

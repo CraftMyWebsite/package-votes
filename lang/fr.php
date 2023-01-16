@@ -10,6 +10,23 @@ return [
             "manage_site" => "Gestion des sites",
             "list_sites" => "Liste des sites",
             "rewards" => "Récompenses",
+            "settings" => "Réglages",
+        ],
+        "table" => [
+            "name" => "Nom",
+            "time" => "Temps de vote",
+            "url" => "URL",
+            "api" => "Id / API",
+            "reward" => "Récompenses",
+            "action" => "Actions",
+            "min" => "minutes",
+            "type" => "Type de récompense",
+        ],
+        "modal" => [
+            "editing" => "Édition de :",
+            "delete" => "Supression de :",
+            "deletealert" => "La suppression du site de vote est définitive.",
+            "deletealertreward" => "La suppression de la récompense est définitive !<br>Si celle-ci est utilisé pour un site veillez à le changer.",
         ],
 
         "desc" => "Gérez votre plugin de votes.",
@@ -69,6 +86,7 @@ return [
         ],
 
         "stats" => [
+            "somenumber" => "Quelques chiffres",
             "totals" => "Totaux",
             "month" => "Ce mois",
             "week" => "Cette semaine",

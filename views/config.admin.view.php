@@ -17,7 +17,7 @@ $description = LangManager::translate("votes.dashboard.desc");
     <div class="col-12 col-lg-4">
         <div class="card">
             <div class="card-header">
-                <h4>Réglages</h4>
+                <h4><?= LangManager::translate("votes.dashboard.title.settings") ?></h4>
             </div>
             <div class="card-body">
                 <form method="post" action="">

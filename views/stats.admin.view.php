@@ -24,7 +24,7 @@ $description = LangManager::translate("votes.dashboard.desc");
     <div class="col-12 col-lg-3">
         <div class="card">
             <div class="card-header">
-                <h4>Quelques chiffres</h4>
+                <h4><?= LangManager::translate("votes.dashboard.stats.somenumber") ?></h4>
             </div>
             <div class="card-body">
                 <div class="alert alert-primary text-center">
@@ -144,7 +144,7 @@ $description = LangManager::translate("votes.dashboard.desc");
 <div class="col-12 col-lg-6">
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title"><?= LangManager::translate("votes.dashboard.stats.top_totals") ?></h3>
+            <h4 class="card-title"><?= LangManager::translate("votes.dashboard.stats.top_totals") ?></h4>
         </div>
         <div class="card-body">
             <table id="table2" class="table table-bordered table-striped">
@@ -180,7 +180,7 @@ $description = LangManager::translate("votes.dashboard.desc");
 <div class="col-12 col-lg-6">
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title"><?= LangManager::translate("votes.dashboard.stats.top_pastMonth") ?></h3>
+            <h4 class="card-title"><?= LangManager::translate("votes.dashboard.stats.top_pastMonth") ?></h4>
         </div>
         <div class="card-body">
             <table id="table3" class="table table-bordered table-striped">

@@ -19,7 +19,7 @@ $description = LangManager::translate("votes.dashboard.desc");
     <div class="col-12 col-lg-4">
         <div class="card">
             <div class="card-header">
-                <h4>Ajout d'un site</h4>
+                <h4><?= LangManager::translate("votes.dashboard.title.add_site") ?></h4>
             </div>
             <div class="card-body">
                 <form method="post" action="">
@@ -86,19 +86,19 @@ $description = LangManager::translate("votes.dashboard.desc");
                 <table class="table" id="table1">
                     <thead>
                     <tr>
-                        <th class="text-center">Nom</th>
-                        <th class="text-center">Temps de vote</th>
-                        <th class="text-center">URL</th>
-                        <th class="text-center">Id / API</th>
-                        <th class="text-center">Récompenses</th>
-                        <th class="text-center">Actions</th>
+                        <th class="text-center"><?= LangManager::translate("votes.dashboard.table.name") ?></th>
+                        <th class="text-center"><?= LangManager::translate("votes.dashboard.table.time") ?></th>
+                        <th class="text-center"><?= LangManager::translate("votes.dashboard.table.url") ?></th>
+                        <th class="text-center"><?= LangManager::translate("votes.dashboard.table.api") ?></th>
+                        <th class="text-center"><?= LangManager::translate("votes.dashboard.table.reward") ?></th>
+                        <th class="text-center"><?= LangManager::translate("votes.dashboard.table.action") ?></th>
                     </tr>
                     </thead>
                     <tbody class="text-center">
                     <?php $i = 1; foreach ($sites as $site) : ?>
                         <tr>
                             <td><?= $site->getTitle() ?></td>
-                            <td><?= $site->getTime() ?> minutes</td>
+                            <td><?= $site->getTime() ?> <?= LangManager::translate("votes.dashboard.table.min") ?></td>
                             <td><?= mb_strimwidth($site->getUrl(), 0, 35, '...') ?></td>
                             <td><?= $site->getIdUnique() ?></td>
                             <td>Je sais pas faire</td>                         
@@ -115,13 +115,12 @@ $description = LangManager::translate("votes.dashboard.desc");
                             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header bg-primary">
-                                        <h5 class="modal-title white" id="myModalLabel160">Edition de <?= $site->getTitle() ?></h5>
+                                        <h5 class="modal-title white" id="myModalLabel160"><?= LangManager::translate("votes.dashboard.modal.editing") ?> <?= $site->getTitle() ?></h5>
                                     </div>
                                     <div class="modal-body">
                                         <form id="serveredit-<?= $site->getSiteId() ?>" method="post" action="">
                                             <?php (new SecurityService())->insertHiddenToken() ?>
-                                            <input type="text" name="siteId" value="<?= $site->getSiteId() ?>"
-                                                       hidden>
+                                            <input type="text" name="siteId" value="<?= $site->getSiteId() ?>" hidden>
                                         <h6><?= LangManager::translate("votes.dashboard.add_site.input.title") ?> :</h6>
                                         <div class="form-group position-relative has-icon-left">
                                             <input type="text" class="form-control" name="title" value="<?= $site->getTitle() ?>" required autocomplete="off"
@@ -174,7 +173,7 @@ $description = LangManager::translate("votes.dashboard.desc");
                                         <i class="bx bx-x d-block d-sm-none"></i>
                                         <span class="d-none d-sm-block"><?= LangManager::translate("core.btn.close") ?></span>
                                     </button>
-                                    <button type="submit" form="serveredit-<?= $site->getSiteId() ?>" class="btn btn-success ml-1" data-bs-dismiss="modal">
+                                    <button type="submit" form="serveredit-<?= $site->getSiteId() ?>" class="btn btn-primary ml-1" data-bs-dismiss="modal">
                                         <i class="bx bx-check d-block d-sm-none"></i>
                                         <span class="d-none d-sm-block"><?= LangManager::translate("core.btn.save") ?></span>
                                     </button>
@@ -186,10 +185,10 @@ $description = LangManager::translate("votes.dashboard.desc");
                             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header bg-danger">
-                                        <h5 class="modal-title white" id="myModalLabel160">supression de <?= $site->getTitle() ?></h5>
+                                        <h5 class="modal-title white" id="myModalLabel160"><?= LangManager::translate("votes.dashboard.modal.delete") ?> <?= $site->getTitle() ?></h5>
                                     </div>
                                     <div class="modal-body">
-                                        La suppression du site de vote est définitive.
+                                        <?= LangManager::translate("votes.dashboard.modal.deletealert") ?>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
@@ -209,8 +208,6 @@ $description = LangManager::translate("votes.dashboard.desc");
                     </tbody>
                 </table>
         </div>
-    Recompenses à recuperer et afficher dans le tableau</br>
-Bouton supression fonctionne mais y'as un bug
     </div>
 </div>
 </section>
