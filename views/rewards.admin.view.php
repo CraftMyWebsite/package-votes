@@ -76,24 +76,12 @@ $description = LangManager::translate("votes.dashboard.desc");
                     <tr>
                         <th class="text-center"><?= LangManager::translate("votes.dashboard.table.name") ?></th>
                         <th class="text-center"><?= LangManager::translate("votes.dashboard.table.type") ?></th>
-                        <th class="text-center"><?= LangManager::translate("votes.dashboard.table.action") ?></th>
                     </tr>
                     </thead>
                     <tbody class="text-center">
                     <?php foreach ($rewards as $reward) : ?>
                         <tr>
                             <td><?= $reward->getTitle() ?></td>
-                            <td>
-                                <?php if (json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->type === "votepoints"): ?>
-                                    <?= json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->amount ?>
-                                    <span style="text-transform: lowercase;"><?= LangManager::translate("votes.dashboard.rewards.votepoints.name") ?></span>
-                                <?php elseif (json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->type === "votepoints-random"): ?>
-                                    Entre <?= json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->amount->min ?> et <?= json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->amount->max ?>
-                                    <span style="text-transform: lowercase;"><?= LangManager::translate("votes.dashboard.rewards.votepoints.name") ?></span>
-                                <?php elseif (json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->type === "minecraft-commands"): ?>
-                                    <?= LangManager::translate("votes.dashboard.rewards.minecraft.commands") ?>
-                                <?php endif; ?>
-                            </td>
                             <td>
                                 <a type="button" data-bs-toggle="modal"
                                    data-bs-target="#edit-<?= $reward->getRewardsId() ?>">
