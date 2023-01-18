@@ -118,8 +118,12 @@ class VotesController extends CoreController
 
         View::createAdminView('votes', 'list_sites')
             ->addVariableList(["sites" => $sites, "rewards" => $rewards, "compatiblesSites" => $compatiblesSites])
-            ->addStyle("admin/resources/vendors/simple-datatables/style.css","admin/resources/assets/css/pages/simple-datatables.css")
-            ->addScriptAfter("app/package/votes/views/resources/js/testSitesId.js","admin/resources/vendors/simple-datatables/umd/simple-datatables.js",
+            ->addStyle("app/package/votes/views/resources/vendors/css/iziToast.min.css",
+                "admin/resources/vendors/simple-datatables/style.css",
+                "admin/resources/assets/css/pages/simple-datatables.css")
+            ->addScriptAfter("app/package/votes/views/resources/vendors/js/iziToast.min.js",
+                "app/package/votes/views/resources/js/testSitesId.js",
+                "admin/resources/vendors/simple-datatables/umd/simple-datatables.js",
                 "admin/resources/assets/js/pages/simple-datatables.js")
             ->view();
     }
