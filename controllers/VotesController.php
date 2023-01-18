@@ -358,8 +358,6 @@ class VotesController extends CoreController
 
         $listSites = $this->sitesModel->getSites();
 
-        $numberOfSites = $stats->getNumberOfSites();
-
         $actualTop = $stats->getActualTopNoLimit();
         $globalTop = $stats->getGlobalTopNoLimit();
         $previousTop = $stats->getPreviousMonthTop();
@@ -371,7 +369,7 @@ class VotesController extends CoreController
             ->addStyle("admin/resources/vendors/simple-datatables/style.css","admin/resources/assets/css/pages/simple-datatables.css")
             ->addScriptAfter("admin/resources/vendors/simple-datatables/umd/simple-datatables.js","admin/resources/assets/js/pages/simple-datatables.js")
             ->addVariableList(["stats" => $stats, "all" => $all, "month" => $month, "week" => $week, "day" => $day,
-                "listSites" => $listSites, "numberOfSites" => $numberOfSites, "actualTop" => $actualTop,
+                "listSites" => $listSites, "actualTop" => $actualTop,
                 "globalTop" => $globalTop, "previousTop" => $previousTop, "previous3Months" => $previous3Months])
             ->view();
     }
