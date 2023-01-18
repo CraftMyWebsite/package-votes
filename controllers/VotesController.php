@@ -265,9 +265,10 @@ class VotesController extends CoreController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.rewards.delete");
 
+        $title = $this->rewardsModel->getRewardById($id)?->getTitle();
+
         $this->rewardsModel->deleteReward($id);
 
-        $title = $this->rewardsModel->getRewardById($id)?->getTitle();
 
         Response::sendAlert("success", LangManager::translate("core.toaster.success"),
             LangManager::translate("votes.toaster.reward.delete.success", ["name" => $title]));
