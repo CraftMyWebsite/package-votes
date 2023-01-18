@@ -127,6 +127,9 @@ $description = LangManager::translate("votes.dashboard.desc");
                                 </a>
                             </td>
                         </tr>
+
+                        <!-- MODAL edit  -->
+
                         <div class="modal modal-lg fade text-left" id="edit-<?= $site->getSiteId() ?>" tabindex="-1"
                              role="dialog" aria-labelledby="myModalLabel160" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
@@ -136,7 +139,7 @@ $description = LangManager::translate("votes.dashboard.desc");
                                             id="myModalLabel160"><?= LangManager::translate("votes.dashboard.modal.editing") ?> <?= $site->getTitle() ?></h5>
                                     </div>
                                     <div class="modal-body">
-                                        <form id="serveredit-<?= $site->getSiteId() ?>" method="post" action="">
+                                        <form id="serveredit-<?= $site->getSiteId() ?>" method="post" action="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') . 'cmw-admin/votes/site/edit' ?>">
                                             <?php (new SecurityService())->insertHiddenToken() ?>
                                             <input type="text" name="siteId" value="<?= $site->getSiteId() ?>" hidden>
                                             <h6><?= LangManager::translate("votes.dashboard.add_site.input.title") ?>
@@ -210,6 +213,9 @@ $description = LangManager::translate("votes.dashboard.desc");
                                 </div>
                             </div>
                         </div>
+
+                        <!-- MODAL delete  -->
+
                         <div class="modal fade text-left" id="delete-<?= $site->getSiteId() ?>" tabindex="-1"
                              role="dialog" aria-labelledby="myModalLabel160" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
@@ -242,6 +248,8 @@ $description = LangManager::translate("votes.dashboard.desc");
         </div>
     </div>
 </section>
+
+<!-- MODAL SiteCompatibles -->
 
 <div class="modal modal-lg fade text-left" id="sitecompatible" tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel160" aria-hidden="true">

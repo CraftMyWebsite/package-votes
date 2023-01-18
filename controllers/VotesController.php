@@ -156,7 +156,7 @@ class VotesController extends CoreController
             ->view();
     }
 
-    #[Link("/site/list", Link::POST, [], "/cmw-admin/votes")]
+    #[Link("/site/edit", Link::POST, [], "/cmw-admin/votes")]
     public function votesSitesEditPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.edit");
