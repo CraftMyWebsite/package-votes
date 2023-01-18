@@ -102,7 +102,6 @@ $description = LangManager::translate("votes.dashboard.desc");
                         <th class="text-center"><?= LangManager::translate("votes.dashboard.table.name") ?></th>
                         <th class="text-center"><?= LangManager::translate("votes.dashboard.table.time") ?></th>
                         <th class="text-center"><?= LangManager::translate("votes.dashboard.table.url") ?></th>
-                        <th class="text-center"><?= LangManager::translate("votes.dashboard.table.api") ?></th>
                         <th class="text-center"><?= LangManager::translate("votes.dashboard.table.reward") ?></th>
                         <th class="text-center"><?= LangManager::translate("votes.dashboard.table.action") ?></th>
                     </tr>
@@ -114,8 +113,7 @@ $description = LangManager::translate("votes.dashboard.desc");
                             <td><?= $site->getTitle() ?></td>
                             <td><?= $site->getTime() ?> <?= LangManager::translate("votes.dashboard.table.min") ?></td>
                             <td><?= mb_strimwidth($site->getUrl(), 0, 35, '...') ?></td>
-                            <td><?= $site->getIdUnique() ?></td>
-                            <td>Je sais pas faire</td>
+                            <td><?= $site->getRewards()->getTitle() ?></td>
                             <td>
                                 <a type="button" data-bs-toggle="modal"
                                    data-bs-target="#edit-<?= $site->getSiteId() ?>">

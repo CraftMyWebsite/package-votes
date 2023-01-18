@@ -16,7 +16,6 @@ return [
             "name" => "Nom",
             "time" => "Temps de vote",
             "url" => "URL",
-            "api" => "Id / API",
             "reward" => "Récompenses",
             "action" => "Actions",
             "min" => "minutes",
