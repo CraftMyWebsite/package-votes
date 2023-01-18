@@ -177,9 +177,9 @@ class VotesController extends CoreController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.delete");
 
-        $this->sitesModel->deleteSite($id);
-
         $title = $this->sitesModel->getSiteById($id)?->getTitle();
+
+        $this->sitesModel->deleteSite($id);
 
         Response::sendAlert("success", LangManager::translate("core.toaster.success"),
             LangManager::translate("votes.toaster.site.delete.success", ["name" => $title]));
