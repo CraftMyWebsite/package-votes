@@ -2,6 +2,7 @@
 
 use CMW\Manager\Lang\LangManager;
 use CMW\Utils\SecurityService;
+use CMW\Utils\Utils;
 
 $title = LangManager::translate("votes.dashboard.title.list_sites");
 $description = LangManager::translate("votes.dashboard.desc");
@@ -60,7 +61,14 @@ $description = LangManager::translate("votes.dashboard.desc");
                         </button>
                     </div>
 
-                    <h6><?= LangManager::translate("votes.dashboard.add_site.input.rewards") ?> :</h6>
+                    <h6>
+                        <a href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') . 'cmw-admin/votes/rewards' ?>">
+                            <i data-bs-toggle="tooltip"
+                                       title="<?= LangManager::translate('votes.dashboard.list_sites.tooltip.rewards') ?>"
+                                       class="fa-sharp fa-solid fa-circle-question"></i>
+                        </a>
+                        <?= LangManager::translate("votes.dashboard.add_site.input.rewards") ?> :
+                    </h6>
                     <div class="form-group position-relative">
                         <select name="reward" class="form-control" required>
                             <?php foreach ($rewards as $reward) : ?>

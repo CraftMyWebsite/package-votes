@@ -66,6 +66,9 @@ return [
                     "body" => "Êtes-vous certains de vouloir supprimer ce site ?"
                 ],
             ],
+            "tooltip" => [
+                "rewards" => "Choisis la récompense que tu as précédemment configuré. Clique sur l'icône pour accéder directement sur la page de configuration des récompenses"
+            ],
             "noreward" => "Vous ne possédez aucune récompense"
         ],
 
