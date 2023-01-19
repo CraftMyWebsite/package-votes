@@ -113,7 +113,7 @@ $description = LangManager::translate("votes.dashboard.desc");
                             <td><?= $site->getTitle() ?></td>
                             <td><?= $site->getTime() ?> <?= LangManager::translate("votes.dashboard.table.min") ?></td>
                             <td><?= mb_strimwidth($site->getUrl(), 0, 35, '...') ?></td>
-                            <td><?= $site->getRewards()->getTitle() ?></td>
+                            <td><?= $site->getRewards()?->getTitle() ?></td>
                             <td>
                                 <a type="button" data-bs-toggle="modal"
                                    data-bs-target="#edit-<?= $site->getSiteId() ?>">
@@ -163,7 +163,7 @@ $description = LangManager::translate("votes.dashboard.desc");
                                             <h6><?= LangManager::translate("votes.dashboard.add_site.input.url") ?>
                                                 :</h6>
                                             <div class="form-group position-relative has-icon-left">
-                                                <input type="url" class="form-control" name="url" id="url"
+                                                <input type="url" class="form-control" name="url" id="urlEdit-<?= $site->getSiteId() ?>"
                                                        value="<?= $site->getUrl() ?>" required autocomplete="off"
                                                        placeholder="<?= LangManager::translate("votes.dashboard.add_site.placeholder.url") ?>">
                                                 <div class="form-control-icon">
@@ -173,10 +173,10 @@ $description = LangManager::translate("votes.dashboard.desc");
                                             <h6><?= LangManager::translate("votes.dashboard.add_site.input.id_unique") ?>
                                                 :</h6>
                                             <div class="input-group mb-3">
-                                                <input type="text" name="idUnique" id="idUnique"
+                                                <input type="text" name="idUnique" id="idUniqueEdit-<?= $site->getSiteId() ?>"
                                                        value="<?= $site->getIdUnique() ?>" required class="form-control"
                                                        placeholder="<?= LangManager::translate("votes.dashboard.add_site.placeholder.id_unique") ?>">
-                                                <button class="btn btn-success" type="button" id="button-addon1">
+                                                <button class="btn btn-success" type="button" id="button-addon1" onclick="testId(<?= $site->getSiteId() ?>)">
                                                     <?= LangManager::translate("votes.dashboard.add_site.btn.testid") ?>
                                                 </button>
                                             </div>

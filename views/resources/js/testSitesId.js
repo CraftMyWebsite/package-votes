@@ -28,9 +28,14 @@ function toasterEmptyFields() {
 
 // Function for test the unique Id
 
-async function testId() {
-    const idUnique = document.getElementById('idUnique').value;
-    const url = document.getElementById('url').value;
+async function testId(editId = null) {
+    let idUnique = document.getElementById('idUnique').value;
+    let url = document.getElementById('url').value;
+
+    if (editId !== null) {
+        idUnique = document.getElementById('idUniqueEdit-' + editId).value;
+        url = document.getElementById('urlEdit-' + editId).value;
+    }
 
     if (idUnique === "" || url === "") {
         toasterEmptyFields();
