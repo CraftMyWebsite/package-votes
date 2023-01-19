@@ -13,118 +13,81 @@ $description = LangManager::translate("votes.dashboard.desc");
 /* @var $week */
 /* @var $day */
 /* @var VotesSitesEntity[] $listSites */
-/* @var $numberOfSites */
 /* @var $previous3Months [] */
+?>
+<div class="d-flex flex-wrap justify-content-between">
+    <h3><i class="fas fa-chart-area"></i> <span
+                class="m-lg-auto"><?= LangManager::translate("votes.dashboard.title.stats") ?></span></h3>
+</div>
 
-$scripts = '
-    <script>
-    $(function () {
-        $("table[id^=' . "datatable-" . ']").DataTable({
-            "responsive": true, 
-            "lengthChange": false, 
-            "autoWidth": false,
-            language: {
-            processing:     "' . LangManager::translate("core.datatables.list.processing") . '",
-                search:         "' . LangManager::translate("core.datatables.list.search") . '",
-                lengthMenu:    "' . LangManager::translate("core.datatables.list.lenghtmenu") . '",
-                info:           "' . LangManager::translate("core.datatables.list.info") . '",
-                infoEmpty:      "' . LangManager::translate("core.datatables.list.info_empty") . '",
-                infoFiltered:   "' . LangManager::translate("core.datatables.list.info_filtered") . '",
-                infoPostFix:    "' . LangManager::translate("core.datatables.list.info_postfix") . '",
-                loadingRecords: "' . LangManager::translate("core.datatables.list.loadingrecords") . '",
-                zeroRecords:    "' . LangManager::translate("core.datatables.list.zerorecords") . '",
-                emptyTable:     "' . LangManager::translate("core.datatables.list.emptytable") . '",
-                paginate: {
-                first:      "' . LangManager::translate("core.datatables.list.first") . '",
-                    previous:   "' . LangManager::translate("core.datatables.list.previous") . '",
-                    next:       "' . LangManager::translate("core.datatables.list.next") . '",
-                    last:       "' . LangManager::translate("core.datatables.list.last") . '"
-                },
-                aria: {
-                sortAscending:  "' . LangManager::translate("core.datatables.list.sort.ascending") . '",
-                    sortDescending: "' . LangManager::translate("core.datatables.list.sort.descending") . '"
-                }
-            },
-        });
-    });
-</script>'; ?>
-
-<div class="container-fluid">
-    <div class="row">
-
-        <!-- All votes -->
-        <div class="col-lg-3 col-6">
-            <div class="small-box bg-success">
-                <div class="inner">
-                    <h3><?= number_format(count($all)) ?></h3>
-
-                    <p><?= LangManager::translate("votes.dashboard.stats.totals") ?></p>
+<section class="row">
+    <div class="col-12 col-lg-3">
+        <div class="card">
+            <div class="card-header">
+                <h4><?= LangManager::translate("votes.dashboard.stats.somenumber") ?></h4>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-primary text-center">
+                    <h4 class="alert-heading"><span
+                                style="font-size: smaller;"><?= LangManager::translate("votes.dashboard.stats.day") ?> :</span> <?= number_format(count($day)) ?>
+                        <span class=""
+                              style="text-transform: lowercase;font-size: smaller;"><?= LangManager::translate("votes.votes") ?></span>
+                    </h4>
                 </div>
-                <div class="icon">
-                    <i class="fas fa-vote-yea"></i>
+                <div class="alert alert-primary text-center">
+                    <h4 class="alert-heading"><span
+                                style="font-size: smaller;"><?= LangManager::translate("votes.dashboard.stats.week") ?> : </span><?= number_format(count($week)) ?>
+                        <span class=""
+                              style="text-transform: lowercase;font-size: smaller;"><?= LangManager::translate("votes.votes") ?></span>
+                    </h4>
+                </div>
+                <div class="alert alert-primary text-center">
+                    <h4 class="alert-heading"><span
+                                style="font-size: smaller;"><?= LangManager::translate("votes.dashboard.stats.month") ?> :</span> <?= number_format(count($month)) ?>
+                        <span class=""
+                              style="text-transform: lowercase;font-size: smaller;"><?= LangManager::translate("votes.votes") ?></span>
+                    </h4>
+                </div>
+                <div class="alert alert-primary">
+                    <h4 class="alert-heading text-center"><span
+                                style="font-size: smaller;"><?= LangManager::translate("votes.dashboard.stats.totals") ?></span>
+                        : <?= number_format(count($all)) ?> <span class=""
+                                                                  style="text-transform: lowercase;font-size: smaller;"><?= LangManager::translate("votes.votes") ?></span>
+                    </h4>
                 </div>
             </div>
         </div>
-
-        <!-- Votes of the month -->
-        <div class="col-lg-3 col-6">
-            <div class="small-box bg-success">
-                <div class="inner">
-                    <h3><?= number_format(count($month)) ?></h3>
-
-                    <p><?= LangManager::translate("votes.dashboard.stats.month") ?></p>
-                </div>
-                <div class="icon">
-                    <i class="fas fa-vote-yea"></i>
-                </div>
-            </div>
-        </div>
-
-        <!-- Votes of the week -->
-        <div class="col-lg-3 col-6">
-            <div class="small-box bg-success">
-                <div class="inner">
-                    <h3><?= number_format(count($week)) ?></h3>
-
-                    <p><?= LangManager::translate("votes.dashboard.stats.week") ?></p>
-                </div>
-                <div class="icon">
-                    <i class="fas fa-vote-yea"></i>
-                </div>
-            </div>
-        </div>
-
-        <!-- Votes of the day -->
-        <div class="col-lg-3 col-6">
-            <div class="small-box bg-success">
-                <div class="inner">
-                    <h3><?= number_format(count($day)) ?></h3>
-
-                    <p><?= LangManager::translate("votes.dashboard.stats.day") ?></p>
-                </div>
-                <div class="icon">
-                    <i class="fas fa-vote-yea"></i>
-                </div>
-            </div>
-        </div>
-
     </div>
-
-
-    <div class="row">
-        <!-- STATS "globaux" -->
-        <div class="col">
-            <div class="card card-danger">
-                <div class="card-header">
-                    <h3 class="card-title"><?= LangManager::translate("votes.dashboard.stats.3pastsMonths") ?></h3>
-
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas fa-minus"></i>
-                        </button>
+    <div class="col-12 col-lg-9">
+        <div class="card">
+            <div class="card-header">
+                <h4><?= LangManager::translate("votes.dashboard.stats.3pastsMonths") ?></h4>
+            </div>
+            <div class="card-body">
+                <div class="chartjs-size-monitor">
+                    <div class="chartjs-size-monitor-expand">
+                        <div class=""></div>
+                    </div>
+                    <div class="chartjs-size-monitor-shrink">
+                        <div class=""></div>
                     </div>
                 </div>
-                <div class="card-body">
+                <canvas id="chartGlobal"
+                        style="min-height: 340px; height: 340px; max-height: 340px; max-width: 100%; display: block; width: 765px;"
+                        width="765" height="340" class="chartjs-render-monitor"></canvas>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="row">
+    <div class="col-12 col-lg-3">
+        <div class="card">
+            <div class="card-header">
+                <h4><?= LangManager::translate("votes.dashboard.stats.sites_current") ?></h4>
+            </div>
+            <div class="card-body">
+                <div class="chart">
                     <div class="chartjs-size-monitor">
                         <div class="chartjs-size-monitor-expand">
                             <div class=""></div>
@@ -133,186 +96,142 @@ $scripts = '
                             <div class=""></div>
                         </div>
                     </div>
-                    <canvas id="chartGlobal"
-                            style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 765px;"
-                            width="765" height="250" class="chartjs-render-monitor"></canvas>
+                    <canvas id="chartSiteTotals" class="chartjs-render-monitor"></canvas>
                 </div>
-
             </div>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card card-success">
-                <div class="card-header">
-                    <h3 class="card-title"><?= LangManager::translate("votes.dashboard.stats.sites_totals") ?></h3>
-
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="chart">
-                        <div class="chartjs-size-monitor">
-                            <div class="chartjs-size-monitor-expand">
-                                <div class=""></div>
-                            </div>
-                            <div class="chartjs-size-monitor-shrink">
-                                <div class=""></div>
-                            </div>
+    <div class="col-12 col-lg-3">
+        <div class="card">
+            <div class="card-header">
+                <h4><?= LangManager::translate("votes.dashboard.stats.sites_totals") ?></h4>
+            </div>
+            <div class="card-body">
+                <div class="chart">
+                    <div class="chartjs-size-monitor">
+                        <div class="chartjs-size-monitor-expand">
+                            <div class=""></div>
                         </div>
-                        <canvas id="chartSiteTotals"
-                                style="min-height: 350px; height: 350px; max-height: 350px; max-width: 100%; display: block; width: 765px;"
-                                width="765" height="250" class="chartjs-render-monitor"></canvas>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-        <div class="col-md-6">
-            <div class="card card-success">
-                <div class="card-header">
-                    <h3 class="card-title"><?= LangManager::translate("votes.dashboard.stats.sites_current") ?></h3>
-
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="chart">
-                        <div class="chartjs-size-monitor">
-                            <div class="chartjs-size-monitor-expand">
-                                <div class=""></div>
-                            </div>
-                            <div class="chartjs-size-monitor-shrink">
-                                <div class=""></div>
-                            </div>
+                        <div class="chartjs-size-monitor-shrink">
+                            <div class=""></div>
                         </div>
-                        <canvas id="chartSiteMonth"
-                                style="min-height: 350px; height: 350px; max-height: 350px; max-width: 100%; display: block; width: 765px;"
-                                width="765" height="250" class="chartjs-render-monitor"></canvas>
                     </div>
+                    <canvas id="chartSiteMonth" class="chartjs-render-monitor"></canvas>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title"><?= LangManager::translate("votes.dashboard.stats.top_current") ?></h4>
+            </div>
+            <div class="card-body">
+                <table id="table1" class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th><?= LangManager::translate("users.users.pseudo") ?></th>
+                        <th><?= LangManager::translate("votes.votes") ?></th>
+                        <th><?= LangManager::translate("users.users.mail") ?></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php /** @var \CMW\Entity\Votes\VotesPlayerStatsEntity[] $actualTop */
+                    foreach ($actualTop as $player) : ?>
+                        <tr>
+                            <td><?= $player->getUser()->getUsername() ?></td>
+                            <td><?= $player->getVotes() ?></td>
+                            <td><?= $player->getUser()->getMail() ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th><?= LangManager::translate("users.users.pseudo") ?></th>
+                        <th><?= LangManager::translate("votes.votes") ?></th>
+                        <th><?= LangManager::translate("users.users.mail") ?></th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
 
+<section class="row">
+    <div class="col-12 col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title"><?= LangManager::translate("votes.dashboard.stats.top_totals") ?></h4>
+            </div>
+            <div class="card-body">
+                <table id="table2" class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th><?= LangManager::translate("users.users.pseudo") ?></th>
+                        <th><?= LangManager::translate("votes.votes") ?></th>
+                        <th><?= LangManager::translate("users.users.mail") ?></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php /** @var \CMW\Entity\Votes\VotesPlayerStatsEntity[] $globalTop */
+                    foreach ($globalTop as $player) : ?>
+                        <tr>
+                            <td><?= $player->getUser()->getUsername() ?></td>
+                            <td><?= $player->getVotes() ?></td>
+                            <td><?= $player->getUser()->getMail() ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th><?= LangManager::translate("users.users.pseudo") ?></th>
+                        <th><?= LangManager::translate("votes.votes") ?></th>
+                        <th><?= LangManager::translate("users.users.mail") ?></th>
+                    </tr>
+                    </tfoot>
+                </table>
             </div>
         </div>
     </div>
 
-</div>
-
-<div class="col-12">
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title"><?= LangManager::translate("votes.dashboard.stats.top_current") ?></h3>
-        </div>
-        <div class="card-body">
-            <table id="datatable-1" class="table table-bordered table-striped">
-                <thead>
-                <tr>
-                    <th><?= LangManager::translate("users.users.pseudo") ?></th>
-                    <th><?= LangManager::translate("votes.votes") ?></th>
-                    <th><?= LangManager::translate("users.users.mail") ?></th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php /** @var \CMW\Entity\Votes\VotesPlayerStatsEntity[] $actualTop */
-                foreach ($actualTop as $player) : ?>
+    <div class="col-12 col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title"><?= LangManager::translate("votes.dashboard.stats.top_pastMonth") ?></h4>
+            </div>
+            <div class="card-body">
+                <table id="table3" class="table table-bordered table-striped">
+                    <thead>
                     <tr>
-                        <td><?= $player->getUser()->getUsername() ?></td>
-                        <td><?= $player->getVotes() ?></td>
-                        <td><?= $player->getUser()->getMail() ?></td>
+                        <th><?= LangManager::translate("users.users.pseudo") ?></th>
+                        <th><?= LangManager::translate("votes.votes") ?></th>
+                        <th><?= LangManager::translate("users.users.mail") ?></th>
                     </tr>
-                <?php endforeach; ?>
-                </tbody>
-                <tfoot>
-                <tr>
-                    <th><?= LangManager::translate("users.users.pseudo") ?></th>
-                    <th><?= LangManager::translate("votes.votes") ?></th>
-                    <th><?= LangManager::translate("users.users.mail") ?></th>
-                </tr>
-                </tfoot>
-            </table>
+                    </thead>
+                    <tbody>
+                    <?php /** @var \CMW\Entity\Votes\VotesPlayerStatsEntity[] $previousTop */
+                    foreach ($previousTop as $player) : ?>
+                        <tr>
+                            <td><?= $player->getUser()->getUsername() ?></td>
+                            <td><?= $player->getVotes() ?></td>
+                            <td><?= $player->getUser()->getMail() ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th><?= LangManager::translate("users.users.pseudo") ?></th>
+                        <th><?= LangManager::translate("votes.votes") ?></th>
+                        <th><?= LangManager::translate("users.users.mail") ?></th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
         </div>
     </div>
-</div>
-
-<div class="col-12">
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title"><?= LangManager::translate("votes.dashboard.stats.top_totals") ?></h3>
-        </div>
-        <div class="card-body">
-            <table id="datatable-2" class="table table-bordered table-striped">
-                <thead>
-                <tr>
-                    <th><?= LangManager::translate("users.users.pseudo") ?></th>
-                    <th><?= LangManager::translate("votes.votes") ?></th>
-                    <th><?= LangManager::translate("users.users.mail") ?></th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php /** @var \CMW\Entity\Votes\VotesPlayerStatsEntity[] $globalTop */
-                foreach ($globalTop as $player) : ?>
-                    <tr>
-                        <td><?= $player->getUser()->getUsername() ?></td>
-                        <td><?= $player->getVotes() ?></td>
-                        <td><?= $player->getUser()->getMail() ?></td>
-                    </tr>
-                <?php endforeach; ?>
-                </tbody>
-                <tfoot>
-                <tr>
-                    <th><?= LangManager::translate("users.users.pseudo") ?></th>
-                    <th><?= LangManager::translate("votes.votes") ?></th>
-                    <th><?= LangManager::translate("users.users.mail") ?></th>
-                </tr>
-                </tfoot>
-            </table>
-        </div>
-    </div>
-</div>
-
-<div class="col-12">
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title"><?= LangManager::translate("votes.dashboard.stats.top_pastMonth") ?></h3>
-        </div>
-        <div class="card-body">
-            <table id="datatable-3" class="table table-bordered table-striped">
-                <thead>
-                <tr>
-                    <th><?= LangManager::translate("users.users.pseudo") ?></th>
-                    <th><?= LangManager::translate("votes.votes") ?></th>
-                    <th><?= LangManager::translate("users.users.mail") ?></th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php /** @var \CMW\Entity\Votes\VotesPlayerStatsEntity[] $previousTop */
-                foreach ($previousTop as $player) : ?>
-                    <tr>
-                        <td><?= $player->getUser()->getUsername() ?></td>
-                        <td><?= $player->getVotes() ?></td>
-                        <td><?= $player->getUser()->getMail() ?></td>
-                    </tr>
-                <?php endforeach; ?>
-                </tbody>
-                <tfoot>
-                <tr>
-                    <th><?= LangManager::translate("users.users.pseudo") ?></th>
-                    <th><?= LangManager::translate("votes.votes") ?></th>
-                    <th><?= LangManager::translate("users.users.mail") ?></th>
-                </tr>
-                </tfoot>
-            </table>
-        </div>
-    </div>
-</div>
+</section>
 
 <script>
     //Get months
@@ -336,7 +255,7 @@ $scripts = '
         data: {
             labels: getLast3Months(),
             datasets: [{
-                label: "Votes",
+                label: "Votes du mois",
                 data: <?= json_encode($previous3Months, JSON_THROW_ON_ERROR) ?>,
                 backgroundColor: "#6B48FF",
                 borderColor: "#6B48FF",
@@ -354,6 +273,37 @@ $scripts = '
                     beginAtZero: true
                 },
             }
+        }
+    });
+    //Chart Site month
+    const ctxSiteMonth = document.getElementById('chartSiteMonth').getContext('2d');
+    const chartSiteMonth = new Chart(ctxSiteMonth, {
+        type: 'doughnut',
+        data: {
+            //website name
+            labels: [
+                <?php foreach ($listSites as $site):
+                echo json_encode($site->getTitle(), JSON_THROW_ON_ERROR) . ",";
+            endforeach;?>
+            ],
+            datasets: [{
+                //Number of votes
+                data: [
+                    <?php foreach ($listSites as $site):
+                    echo json_encode($stats->statsVotesSitesMonth($site->getTitle()), JSON_THROW_ON_ERROR) . ",";
+                endforeach;?>
+                ],
+                //Color (random)
+                backgroundColor: [
+                    <?php for ($i = 0,$iMax = count($listSites); $i < $iMax ; $i++): ?>
+                    <?= "random_rgb()," ?>
+                    <?php endfor; ?>
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
         }
     });
 
@@ -378,7 +328,7 @@ $scripts = '
                 ],
                 //Color (random)
                 backgroundColor: [
-                    <?php for ($i = 0; $i < $numberOfSites; $i++): ?>
+                    <?php for ($i = 0,$iMax = count($listSites); $i < $iMax ; $i++): ?>
                     <?= "random_rgb()," ?>
                     <?php endfor; ?>
                 ],
@@ -389,38 +339,5 @@ $scripts = '
             responsive: true,
         }
     });
-
-    //Chart Site month
-    const ctxSiteMonth = document.getElementById('chartSiteMonth').getContext('2d');
-    const chartSiteMonth = new Chart(ctxSiteMonth, {
-        type: 'doughnut',
-        data: {
-            //website name
-            labels: [
-                <?php foreach ($listSites as $site):
-                echo json_encode($site->getTitle(), JSON_THROW_ON_ERROR) . ",";
-            endforeach;?>
-            ],
-            datasets: [{
-                //Number of votes
-                data: [
-                    <?php foreach ($listSites as $site):
-                    echo json_encode($stats->statsVotesSitesMonth($site->getTitle()), JSON_THROW_ON_ERROR) . ",";
-                endforeach;?>
-                ],
-                //Color (random)
-                backgroundColor: [
-                    <?php for ($i = 0; $i < $numberOfSites; $i++): ?>
-                    <?= "random_rgb()," ?>
-                    <?php endfor; ?>
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-        }
-    });
-
 
 </script>

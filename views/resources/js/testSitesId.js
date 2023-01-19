@@ -1,27 +1,45 @@
 //Toasters
 function toasterIdGood() {
-    Swal.fire({
-        icon: 'success',
-        title: 'Id unique validé !'
-    })
+    iziToast.show(
+        {
+            title: "Succès",
+            message: "Id unique validé !",
+            color: "green"
+        });
 }
 
 function toasterIdError() {
-    Swal.fire({
-        icon: 'error',
-        title: 'Id unique non-valide !'
-    })
+    iziToast.show(
+        {
+            title: "Erreur",
+            message: "Id unique non-validé !",
+            color: "red"
+        });
+}
+
+function toasterEmptyFields() {
+    iziToast.show(
+        {
+            title: "Erreur",
+            message: "Meri de remplir tous les champs !",
+            color: "red"
+        });
 }
 
 // Function for test the unique Id
 
-async function testId(i) {
-    const idUnique = document.getElementById('idUnique-' + i).value;
-    const url = document.getElementById('url-' + i).value;
+async function testId() {
+    const idUnique = document.getElementById('idUnique').value;
+    const url = document.getElementById('url').value;
+
+    if (idUnique === "" || url === "") {
+        toasterEmptyFields();
+        return;
+    }
 
 
     if (url.includes("serveur-prive.net")) {
-        let obj = await(await fetch("https://serveur-prive.net/api/stats/json/" + idUnique + "/position")).json();
+        let obj = await (await fetch("https://serveur-prive.net/api/stats/json/" + idUnique + "/position")).json();
         if (obj.status === 1) { // If api response = 1 it's good
             toasterIdGood();
         } else {
@@ -29,7 +47,7 @@ async function testId(i) {
         }
 
     } else if (url.includes("serveur-minecraft-vote.fr")) {
-        let obj = await(await fetch("https://serveur-minecraft-vote.fr/api/v1/servers/" + idUnique).then(function (response) {
+        let obj = await (await fetch("https://serveur-minecraft-vote.fr/api/v1/servers/" + idUnique).then(function (response) {
             if (response.status === 200) {
                 toasterIdGood();
             } else {
@@ -38,7 +56,7 @@ async function testId(i) {
         }));
 
     } else if (url.includes("serveurs-mc.net")) {
-        let obj = await(await fetch("https://serveurs-mc.net/api/hasVote/" + idUnique + "/0.0.0.0/10").then(function (response) {
+        let obj = await (await fetch("https://serveurs-mc.net/api/hasVote/" + idUnique + "/0.0.0.0/10").then(function (response) {
             if (response.status === 200) {
                 toasterIdGood();
             } else {
@@ -47,7 +65,7 @@ async function testId(i) {
         }));
 
     } else if (url.includes("top-serveurs.net")) {
-        let obj = await(await fetch("https://api.top-serveurs.net/v1/servers/" + idUnique + "/players-ranking")).json();
+        let obj = await (await fetch("https://api.top-serveurs.net/v1/servers/" + idUnique + "/players-ranking")).json();
         if (obj.code === 200) { // If api response = 200 it's good
             toasterIdGood();
         } else {
@@ -55,7 +73,7 @@ async function testId(i) {
         }
 
     } else if (url.includes("serveursminecraft.org")) {
-        let obj = await(await fetch("https://www.serveursminecraft.org/serveur/" + idUnique));
+        let obj = await (await fetch("https://www.serveursminecraft.org/serveur/" + idUnique));
         if (obj.code === 200) { // If api response = 200 it's good
             toasterIdGood();
         } else {

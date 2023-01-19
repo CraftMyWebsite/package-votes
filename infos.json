@@ -8,11 +8,10 @@
       "url_menu": "",
       "urls_submenu_fr": {
         "Configuration": "votes/config",
-        "Ajouter un site": "votes/site/add",
-        "Liste des sites": "votes/site/list",
+        "Gestion des sites": "votes/site/list",
         "Récompenses": "votes/rewards",
-        "Statistiques de votes": "votes/stats",
-        "Muliplicateur de votes": "votes/boost/",
+        "Statistiques": "votes/stats",
+        "Muliplicateur": "votes/boost/",
         "VoteShop": "votes/voteshop"
       }
     }

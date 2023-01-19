@@ -20,11 +20,11 @@ function handleSelectChange(event) {
             break;
         case "none"://If we don't select reward type
             cleanRewardType();
-            btnsave.setAttribute("disabled", true);//Change save button status
+            btnsave.setAttribute("disabled", "true");//Change save button status
             break;
         default://Default statement in case of error
             cleanRewardType();
-            btnsave.setAttribute("disabled", true);//Change save button status
+            btnsave.setAttribute("disabled", "true");//Change save button status
             break;
     }
 }
@@ -38,8 +38,8 @@ function updateReward(e, id) {
 
     fetch("rewards/get", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: id }),
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({id: id}),
     })
         .then((response) => response.text())
         .then((response) => {
@@ -52,7 +52,11 @@ function updateReward(e, id) {
                     break;
                 case "votepoints-random":
                     cleanRewardType(section);
-                    createVotePointsRandom(action.amount.min, action.amount.max, section);
+                    if (action.amount === undefined) {
+                        createVotePointsRandom(1, 2, section);
+                    } else {
+                        createVotePointsRandom(action.amount.min, action.amount.max, section);
+                    }
                     break;
                 case "minecraft-commands":
                     cleanRewardType(section);
@@ -94,13 +98,10 @@ function createVotePoints(amount, parent = null) {
 
 
     let div_wrapper = document.createElement("div");
-    div_wrapper.setAttribute("class", "input-group mb-3");
+    div_wrapper.setAttribute("class", "form-group position-relative has-icon-left");
 
     let div_prepend = document.createElement("div");
-    div_prepend.setAttribute("class", "input-group-prepend");
-
-    let icon_wrapper = document.createElement("span");
-    icon_wrapper.setAttribute("class", "input-group-text");
+    div_prepend.setAttribute("class", "form-control-icon");
 
     let icon = document.createElement("i");
     icon.setAttribute("class", "fas fa-coins");
@@ -115,10 +116,10 @@ function createVotePoints(amount, parent = null) {
 
 
     parent.append(div_wrapper);
-    div_wrapper.append(div_prepend);
-    div_prepend.append(icon_wrapper);
-    icon_wrapper.append(icon);
+
     div_wrapper.append(input);
+    div_wrapper.append(div_prepend);
+    div_prepend.append(icon);
 }
 
 //VotepointsRandom html
@@ -144,8 +145,8 @@ function createVotePointsRandom(min, max, parent = null) {
     let div_form_group_min = document.createElement("div");
     div_form_group_min.setAttribute("class", "form-group");
 
-    let label_min = document.createElement("label");
-    label_min.innerText = "Montant minimum";
+    let label_min = document.createElement("h6");
+    label_min.innerText = "Montant minimum :";
 
     let input_min = document.createElement("input");
     input_min.setAttribute("value", min);
@@ -162,8 +163,8 @@ function createVotePointsRandom(min, max, parent = null) {
     let div_form_group_max = document.createElement("div");
     div_form_group_max.setAttribute("class", "form-group");
 
-    let label_max = document.createElement("label");
-    label_max.innerText = "Montant maximum";
+    let label_max = document.createElement("h6");
+    label_max.innerText = "Montant maximum :";
 
     let input_max = document.createElement("input");
     input_max.setAttribute("value", max);
@@ -209,12 +210,12 @@ function createMinecraftCommand(commands, servers, parent = null) {
     let div_form_group_commands = document.createElement("div");
     div_form_group_commands.setAttribute("class", "form-group");
 
-    let label_commands = document.createElement("label");
-    label_commands.innerText = "Command(s)";
+    let label_commands = document.createElement("h6");
+    label_commands.innerText = "Commande(s) :";
 
     let input_commands = document.createElement("input");
     input_commands.setAttribute("value", commands);
-    input_commands.setAttribute("placeholder", "Command(s), séparez vos commandes avec '|'")
+    input_commands.setAttribute("placeholder", "Séparez vos commandes avec '| (Alt Gr + 6)'")
     input_commands.setAttribute("type", "text")
     input_commands.setAttribute("name", "minecraft-commands");
     input_commands.setAttribute("class", "form-control");
@@ -227,11 +228,12 @@ function createMinecraftCommand(commands, servers, parent = null) {
     let div_form_group_server = document.createElement("div");
     div_form_group_server.setAttribute("class", "form-group");
 
-    let label_server = document.createElement("label");
-    label_server.innerText = "Serveur";
+    let label_server = document.createElement("h6");
+    label_server.innerText = "Serveur :";
 
     let placeholder = document.createElement("p");
-    placeholder.innerText = "Vous pouvez utiliser le placeholder {player} pour obtenir le pseudo du joueur qui recevra la récompense."
+    placeholder.setAttribute("class", "small");
+    placeholder.innerText = "Utilisez {player} pour récuperez le nom du joueur qui vote."
 
     let select_server = document.createElement("select");
     select_server.setAttribute("name", "minecraft-servers[]");
@@ -245,13 +247,12 @@ function createMinecraftCommand(commands, servers, parent = null) {
     div_wrapper_commands.append(div_form_group_commands);
     div_form_group_commands.append(label_commands);
     div_form_group_commands.append(input_commands);
-
+    div_form_group_commands.append(placeholder);
     div_wrapper.append(div_wrapper_server);
     div_wrapper_server.append(div_form_group_server);
     div_form_group_server.append(label_server);
     div_form_group_server.append(select_server);
 
-    parent.append(placeholder);
 
     getServers(select_server, servers).then(r => r);
 }
