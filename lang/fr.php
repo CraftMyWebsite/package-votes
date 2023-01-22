@@ -104,8 +104,8 @@ return [
         "rewards" => [
             "votepoints" => [
                 "name" => "Points de vote",
-                "fixed" => " unique",
-                "random" => " aléatoires",
+                "fixed" => "Unique",
+                "random" => "Aléatoires",
             ],
             "minecraft" => [
                 "commands" => "Commandes Minecraft",
