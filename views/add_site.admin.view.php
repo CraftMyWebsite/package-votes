@@ -2,7 +2,7 @@
 header('Access-Control-Allow-Origin: *');
 
 use CMW\Manager\Lang\LangManager;
-use CMW\Utils\SecurityService;
+use CMW\Manager\Security\SecurityManager;
 
 $title = LangManager::translate("votes.dashboard.title.add_site");
 $description = LangManager::translate("votes.dashboard.desc");
@@ -19,7 +19,7 @@ $description = LangManager::translate("votes.dashboard.desc");
 
             <div class="col-12">
                 <form action="" method="post">
-                    <?php (new SecurityService())->insertHiddenToken() ?>
+                    <?php (new SecurityManager())->insertHiddenToken() ?>
                     <div class="card card-primary">
                         <div class="card-header">
                             <h3 class="card-title"><?= LangManager::translate("votes.dashboard.add_site.card_title") ?>

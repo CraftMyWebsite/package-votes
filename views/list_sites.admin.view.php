@@ -1,7 +1,7 @@
 <?php
 
 use CMW\Manager\Lang\LangManager;
-use CMW\Utils\SecurityService;
+use CMW\Manager\Security\SecurityManager;
 use CMW\Utils\Utils;
 
 $title = LangManager::translate("votes.dashboard.title.list_sites");
@@ -27,7 +27,7 @@ $description = LangManager::translate("votes.dashboard.desc");
             </div>
             <div class="card-body">
                 <form method="post" action="">
-                    <?php (new SecurityService())->insertHiddenToken() ?>
+                    <?php (new SecurityManager())->insertHiddenToken() ?>
                     <h6><?= LangManager::translate("votes.dashboard.add_site.input.title") ?> :</h6>
                     <div class="form-group position-relative has-icon-left">
                         <input type="text" class="form-control" name="title" value="" required
@@ -138,7 +138,7 @@ $description = LangManager::translate("votes.dashboard.desc");
                                     </div>
                                     <div class="modal-body">
                                         <form id="serveredit-<?= $site->getSiteId() ?>" method="post" action="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') . 'cmw-admin/votes/site/edit' ?>">
-                                            <?php (new SecurityService())->insertHiddenToken() ?>
+                                            <?php (new SecurityManager())->insertHiddenToken() ?>
                                             <input type="text" name="siteId" value="<?= $site->getSiteId() ?>" hidden>
                                             <h6><?= LangManager::translate("votes.dashboard.add_site.input.title") ?>
                                                 :</h6>

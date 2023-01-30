@@ -1,7 +1,7 @@
 <?php
 
 use CMW\Manager\Lang\LangManager;
-use CMW\Utils\SecurityService;
+use CMW\Manager\Security\SecurityManager;
 
 $title = LangManager::translate("votes.dashboard.title.rewards");
 $description = LangManager::translate("votes.dashboard.desc");
@@ -22,7 +22,7 @@ $description = LangManager::translate("votes.dashboard.desc");
             </div>
             <div class="card-body">
                 <form method="post" action="rewards/add">
-                    <?php (new SecurityService())->insertHiddenToken() ?>
+                    <?php (new SecurityManager())->insertHiddenToken() ?>
                     <h6><?= LangManager::translate("votes.dashboard.rewards.add.placeholder.title") ?> :</h6>
                     <div class="form-group position-relative has-icon-left">
                         <input type="text" class="form-control" name="title" value="" required
@@ -103,7 +103,7 @@ $description = LangManager::translate("votes.dashboard.desc");
                                     </div>
                                     <div class="modal-body">
                                         <form id="serveredit-<?= $reward->getRewardsId() ?>" method="post" action="">
-                                            <?php (new SecurityService())->insertHiddenToken() ?>
+                                            <?php (new SecurityManager())->insertHiddenToken() ?>
                                             <!-- Faire une requête ajax pour récupérer l'action -->
                                             <input type="hidden" value="<?= "'" . $reward->getAction() . "'" ?>">
                                             <input type="text" name="reward_id" value="<?= $reward->getRewardsId() ?>"

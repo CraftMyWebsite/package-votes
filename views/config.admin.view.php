@@ -1,7 +1,7 @@
 <?php
 
 use CMW\Manager\Lang\LangManager;
-use CMW\Utils\SecurityService;
+use CMW\Manager\Security\SecurityManager;
 
 $title = LangManager::translate("votes.dashboard.title.config");
 $description = LangManager::translate("votes.dashboard.desc");
@@ -21,7 +21,7 @@ $description = LangManager::translate("votes.dashboard.desc");
             </div>
             <div class="card-body">
                 <form method="post" action="">
-                    <?php (new SecurityService())->insertHiddenToken() ?>
+                    <?php (new SecurityManager())->insertHiddenToken() ?>
                     <h6><?= LangManager::translate("votes.dashboard.config.placeholder.top_show") ?> :</h6>
                     <div class="form-group position-relative has-icon-left">
                         <input type="text" class="form-control" name="topShow" value="<?= $config->getTopShow() ?>" required autocomplete="off"
