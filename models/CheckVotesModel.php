@@ -23,11 +23,6 @@ class CheckVotesModel extends DatabaseManager
      */
     public function isVoteSend(string $url, string $idUnique, string $ipPlayer): bool
     {
-        /* IGNORE HTTP ERROR */
-        $context = stream_context_create(array(
-            'http' => array('ignore_errors' => true),
-        ));
-
         //List of all websites:
 
         if (self::checkUrl($url, 'serveur-prive.net')) {
