@@ -145,6 +145,11 @@ return [
             "delete" => [
                 "success" => "Site <b>%name%</b> supprimé avec succès"
             ],
+            "test_id" => [
+                "success" => "Id unique validé !",
+                "error" => "Id unique non validé !",
+                "empty_input" => "Merci de remplir tous les champs !"
+            ],
         ],
         "reward" => [
             "add" => [

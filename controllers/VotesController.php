@@ -187,6 +187,43 @@ class VotesController extends CoreController
         header('location: ../list/');
     }
 
+    /**
+     * @throws \JsonException
+     */
+    #[Link("/site/test/id", Link::POST, [], "/cmw-admin/votes", secure: false)]
+    public function checkSiteId(): void
+    {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.add");
+
+        [$url, $siteId] = Utils::filterInput('url', 'site_id');
+
+        if (Utils::hasOneNullValue($url, $siteId)){
+            print (json_encode(["status" => "0", "toaster" =>
+                ["type" => "error",
+                    "title" => LangManager::translate("core.toaster.error"),
+                    "content" => LangManager::translate("votes.toaster.site.test_id.empty_input")
+                ]
+            ], JSON_THROW_ON_ERROR));
+            return;
+        }
+
+        if ($this->checkVotesModel->testSiteId($url, $siteId)){
+            print (json_encode(["status" => "1", "toaster" =>
+                ["type" => "success",
+                    "title" => LangManager::translate("core.toaster.success"),
+                    "content" => LangManager::translate("votes.toaster.site.test_id.success")
+                ]
+            ], JSON_THROW_ON_ERROR));
+        } else {
+            print (json_encode(["status" => "0", "toaster" =>
+                ["type" => "error",
+                    "title" => LangManager::translate("core.toaster.error"),
+                    "content" => LangManager::translate("votes.toaster.site.test_id.error")
+                ]
+            ], JSON_THROW_ON_ERROR));
+        }
+    }
+
 
     /* ///////////////////// REWARDS /////////////////////*/
 

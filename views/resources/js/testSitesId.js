@@ -1,110 +1,39 @@
 //Toasters
-function toasterIdGood() {
+function sendToaster(title, content, type) {
     iziToast.show(
         {
-            title: "Succès",
-            message: "Id unique validé !",
-            color: "green"
-        });
-}
-
-function toasterIdError() {
-    iziToast.show(
-        {
-            title: "Erreur",
-            message: "Id unique non-validé !",
-            color: "red"
-        });
-}
-
-function toasterEmptyFields() {
-    iziToast.show(
-        {
-            title: "Erreur",
-            message: "Meri de remplir tous les champs !",
-            color: "red"
+            title: title,
+            message: content,
+            color: type === "1" ? "green" : "red"
         });
 }
 
 // Function for test the unique Id
-
 async function testId(editId = null) {
-    let idUnique = document.getElementById('idUnique').value;
+    let site_id = document.getElementById('idUnique').value;
     let url = document.getElementById('url').value;
 
     if (editId !== null) {
-        idUnique = document.getElementById('idUniqueEdit-' + editId).value;
+        site_id = document.getElementById('idUniqueEdit-' + editId).value;
         url = document.getElementById('urlEdit-' + editId).value;
     }
 
-    if (idUnique === "" || url === "") {
-        toasterEmptyFields();
-        return;
+    let formData = {
+        'url': url,
+        'site_id': site_id
     }
 
 
-    if (url.includes("serveur-prive.net")) {
-        let obj = await (await fetch("https://serveur-prive.net/api/stats/json/" + idUnique + "/position")).json();
-        if (obj.status === 1) { // If api response = 1 it's good
-            toasterIdGood();
-        } else {
-            toasterIdError();
-        }
+    let request = await fetch('test/id', {
+        method: 'POST',
+        headers: {"Content-type": "application/x-www-form-urlencoded; charset=UTF-8"},
+        body: Object.entries(formData).map(([k, v]) => {
+            return k + '=' + v
+        }).join('&')
+    })
 
-    } else if (url.includes("serveur-minecraft-vote.fr")) {
-        let obj = await (await fetch("https://serveur-minecraft-vote.fr/api/v1/servers/" + idUnique).then(function (response) {
-            if (response.status === 200) {
-                toasterIdGood();
-            } else {
-                toasterIdError();
-            }
-        }));
+    const response = await request.json();
 
-    } else if (url.includes("serveurs-mc.net")) {
-        let obj = await (await fetch("https://serveurs-mc.net/api/hasVote/" + idUnique + "/0.0.0.0/10").then(function (response) {
-            if (response.status === 200) {
-                toasterIdGood();
-            } else {
-                toasterIdError();
-            }
-        }));
-
-    } else if (url.includes("top-serveurs.net")) {
-        let obj = await (await fetch("https://api.top-serveurs.net/v1/servers/" + idUnique + "/players-ranking")).json();
-        if (obj.code === 200) { // If api response = 200 it's good
-            toasterIdGood();
-        } else {
-            toasterIdError();
-        }
-
-    } else if (url.includes("serveursminecraft.org")) {
-        let obj = await (await fetch("https://www.serveursminecraft.org/serveur/" + idUnique));
-        if (obj.code === 200) { // If api response = 200 it's good
-            toasterIdGood();
-        } else {
-            toasterIdError();
-        }
-
-    }
-
-
-    /*else if (url.includes("serveurs-minecraft.org") && !url.includes("liste-serveurs-minecraft.org")){
-
-        let obj = await fetch("https://serveurs-minecraft.org/api/is_online.php?id=" + idUnique + '&format=ajax', {mode: 'no-cors'});
-        if (obj === 0){
-            toasterIdGood();
-        }else {
-            toasterIdError();
-        }
-
-    }*//*else if (url.includes("serveur-minecraft.com")){
-
-        //let obj = fetch("https://serveur-minecraft.com/"+idUnique, {mode: 'no-cors'});
-
-
-
-    }*/
-
-
+    sendToaster(response['toaster']['title'], response['toaster']['content'], response['status']);
 }
 
