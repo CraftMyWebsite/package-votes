@@ -454,6 +454,8 @@ class VotesController extends CoreController
                             json_decode($this->rewardsModel->getRewardById($id)?->getAction(), false, 512,
                                 JSON_THROW_ON_ERROR)->type === "minecraft-commands") {
                             $this->sendRewardsToCmwLink($id);
+                            // TODO config to toggle this feature
+                            $this->sendVoteToCmwLink($id, $this->sitesModel->getSiteById($id)?->getTitle());
                         }
 
                         $this->returnData("send", true);
@@ -482,7 +484,7 @@ class VotesController extends CoreController
         }
     }
 
-    public function sendRewardsToCmwLink(string $rewardId): void
+    public function sendRewardsToCmwLink(int $rewardId): void
     {
         try {
             foreach (json_decode($this->rewardsModel->getRewardById($rewardId)?->getAction(), false, 512, JSON_THROW_ON_ERROR)->servers as $serverId) {
@@ -493,7 +495,27 @@ class VotesController extends CoreController
                 $cmd = str_replace("{player}", $currentUser, $cmd);
                 $cmd = base64_encode($cmd);
 
-                echo APIManager::getRequest("http://{$server?->getServerIp()}:{$server?->getServerCMWLPort()}/votes/send/reward/$currentUser/$cmd");
+                echo APIManager::getRequest("http://{$server?->getServerIp()}:{$server?->getServerCMWLPort()}/votes/send/reward/$currentUser/$cmd",
+                    cmwlToken: $server?->getServerCMWToken());
+            }
+        } catch (JsonException $e) {
+            echo "Internal Error. " . $e;
+        }
+
+    }
+
+    public function sendVoteToCmwLink(int $rewardId, string $siteName): void
+    {
+        try {
+            foreach (json_decode($this->rewardsModel->getRewardById($rewardId)?->getAction(), false, 512, JSON_THROW_ON_ERROR)->servers as $serverId) {
+                $rewardName = base64_encode($this->rewardsModel->getRewardById($rewardId)?->getTitle());
+                $siteName = base64_encode($siteName);
+
+                $server = (new MinecraftModel())->getServerById($serverId);
+                $currentUser = UsersModel::getCurrentUser()?->getUsername();
+
+                echo APIManager::getRequest("http://{$server?->getServerIp()}:{$server?->getServerCMWLPort()}/votes/send/validate/$currentUser/$siteName/$rewardName",
+                    cmwlToken: $server?->getServerCMWToken());
             }
         } catch (JsonException $e) {
             echo "Internal Error. " . $e;
