@@ -140,7 +140,7 @@ $description = LangManager::translate("votes.dashboard.desc");
                     <?php /** @var \CMW\Entity\Votes\VotesPlayerStatsEntity[] $actualTop */
                     foreach ($actualTop as $player) : ?>
                         <tr>
-                            <td><?= $player->getUser()->getUsername() ?></td>
+                            <td><?= $player->getUser()->getPseudo() ?></td>
                             <td><?= $player->getVotes() ?></td>
                             <td><?= $player->getUser()->getMail() ?></td>
                         </tr>
@@ -178,7 +178,7 @@ $description = LangManager::translate("votes.dashboard.desc");
                     <?php /** @var \CMW\Entity\Votes\VotesPlayerStatsEntity[] $globalTop */
                     foreach ($globalTop as $player) : ?>
                         <tr>
-                            <td><?= $player->getUser()->getUsername() ?></td>
+                            <td><?= $player->getUser()->getPseudo() ?></td>
                             <td><?= $player->getVotes() ?></td>
                             <td><?= $player->getUser()->getMail() ?></td>
                         </tr>
@@ -214,7 +214,7 @@ $description = LangManager::translate("votes.dashboard.desc");
                     <?php /** @var \CMW\Entity\Votes\VotesPlayerStatsEntity[] $previousTop */
                     foreach ($previousTop as $player) : ?>
                         <tr>
-                            <td><?= $player->getUser()->getUsername() ?></td>
+                            <td><?= $player->getUser()->getPseudo() ?></td>
                             <td><?= $player->getVotes() ?></td>
                             <td><?= $player->getUser()->getMail() ?></td>
                         </tr>

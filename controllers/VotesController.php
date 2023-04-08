@@ -489,7 +489,7 @@ class VotesController extends CoreController
         try {
             foreach (json_decode($this->rewardsModel->getRewardById($rewardId)?->getAction(), false, 512, JSON_THROW_ON_ERROR)->servers as $serverId) {
                 $server = (new MinecraftModel())->getServerById($serverId);
-                $currentUser = UsersModel::getCurrentUser()?->getUsername();
+                $currentUser = UsersModel::getCurrentUser()?->getPseudo();
 
                 $cmd = json_decode($this->rewardsModel->getRewardById($rewardId)?->getAction(), false, 512, JSON_THROW_ON_ERROR)->commands;
                 $cmd = str_replace("{player}", $currentUser, $cmd);
@@ -512,7 +512,7 @@ class VotesController extends CoreController
                 $siteName = base64_encode($siteName);
 
                 $server = (new MinecraftModel())->getServerById($serverId);
-                $currentUser = UsersModel::getCurrentUser()?->getUsername();
+                $currentUser = UsersModel::getCurrentUser()?->getPseudo();
 
                 echo APIManager::getRequest("http://{$server?->getServerIp()}:{$server?->getServerCMWLPort()}/votes/send/validate/$currentUser/$siteName/$rewardName",
                     cmwlToken: $server?->getServerCMWToken());
