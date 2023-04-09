@@ -103,14 +103,12 @@ class VotesController extends CoreController
 
 
 
-    
 
 
     #[Link("/site/list", Link::GET, [], "/cmw-admin/votes")]
     public function listSites(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.list");
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.add");
 
         $sites = $this->sitesModel->getSites();
         $rewards = $this->rewardsModel->getRewards();
@@ -367,6 +365,8 @@ class VotesController extends CoreController
     #[Link("/rewards/get", Link::POST, [], "/cmw-admin/votes", secure: false)]
     public function getReward(): void
     {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.rewards.edit");
+
         /* Error section */
         if (empty(filter_input(INPUT_POST, "id"))) {
             try {
