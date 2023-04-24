@@ -29,6 +29,15 @@ class VotesApiController extends CoreController
         print($toReturn);
     }
 
+    #[Link("/getTopVotesPoints/rank/:rank", Link::GET, ["rank" => "[0-9]+"], scope: "/api/votes")]
+    public function getTopVotePoints(int $rank): void
+    {
+        $votePoints = (new VotesStatsModel())->getRankTopVotePoints($rank);
+
+        $toReturn = APIManager::createResponse(data: $votePoints);
+        print($toReturn);
+    }
+
     #[Link("/getPlayerCurrentVotes/:pseudo", Link::GET, ["pseudo" => self::usernameRegex], scope: "/api/votes")]
     public function getPlayerCurrentVotes(string $pseudo): void
     {
@@ -62,7 +71,7 @@ class VotesApiController extends CoreController
     }
 
 
-    #[Link("/getActualTop", Link::GET, scope: "/api/votes")]
+    #[Link("/getTopActual", Link::GET, scope: "/api/votes")]
     public function getActualTop(): void
     {
         $votes = (new VotesStatsModel())->getActualTop();
@@ -75,6 +84,24 @@ class VotesApiController extends CoreController
     public function getTopGlobal(): void
     {
         $votes = (new VotesStatsModel())->getGlobalTop();
+
+        $toReturn = APIManager::createResponse(data: $votes);
+        print($toReturn);
+    }
+
+    #[Link("/getTopVotesActual/:rank", Link::GET, ["rank" => "[0-9]+"], scope: "/api/votes")]
+    public function getActualTopSpecificRank(int $rank): void
+    {
+        $votes = (new VotesStatsModel())->getActualTopPlayerRank($rank);
+
+        $toReturn = APIManager::createResponse(data: $votes);
+        print($toReturn);
+    }
+
+    #[Link("/getTopVotesGlobal/:rank", Link::GET, ["rank" => "[0-9]+"], scope: "/api/votes")]
+    public function getGlobalTopSpecificRank(int $rank): void
+    {
+        $votes = (new VotesStatsModel())->getGlobalTopPlayerRank($rank);
 
         $toReturn = APIManager::createResponse(data: $votes);
         print($toReturn);

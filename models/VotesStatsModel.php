@@ -166,14 +166,16 @@ class VotesStatsModel extends DatabaseManager
     {
 
         if (self::isMariadb()) {
-            $sql = "SELECT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_id as userId FROM cmw_votes_votes 
-                    JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user 
-                    WHERE MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE()) GROUP BY cmw_users.user_pseudo 
+            $sql = "SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) AS votes, cmw_users.user_id as userId FROM cmw_votes_votes
+                    JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user
+                    WHERE MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE())
+                    GROUP BY userId
                     ORDER BY COUNT(cmw_votes_votes.votes_id) DESC ";
         } else {
-            $sql = "SELECT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_id as userId FROM cmw_votes_votes 
-                    JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user 
-                    WHERE MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE()) GROUP BY cmw_users.user_pseudo 
+            $sql = "SELECT COUNT(cmw_votes_votes.votes_id) AS votes, cmw_users.user_id as userId FROM cmw_votes_votes
+                    JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user
+                    WHERE MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE())
+                    GROUP BY userId
                     ORDER BY COUNT(cmw_votes_votes.votes_id) DESC ";
         }
 
@@ -207,11 +209,11 @@ class VotesStatsModel extends DatabaseManager
     {
         if (self::isMariadb()) {
             $sql = "SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_id as userId FROM cmw_votes_votes 
-                    JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user GROUP BY cmw_users.user_pseudo 
+                    JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user GROUP BY userId
                     ORDER BY COUNT(cmw_votes_votes.votes_id) DESC ";
         } else {
             $sql = "SELECT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_id as userId FROM cmw_votes_votes 
-                    JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user GROUP BY cmw_users.user_pseudo 
+                    JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user GROUP BY userId 
                     ORDER BY COUNT(cmw_votes_votes.votes_id) DESC ";
         }
         $sql .= "LIMIT " . (new VotesConfigModel())->getConfig()?->getTopShow();
@@ -235,6 +237,85 @@ class VotesStatsModel extends DatabaseManager
         return $toReturn;
     }
 
+    /**
+     * @param int $rank
+     * @return VotesPlayerStatsEntity[]
+     * @desc Get the X rank player for actual month
+     */
+    public function getActualTopPlayerRank(int $rank): array
+    {
+        if (self::isMariadb()) {
+            $sql = "SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) AS votes, cmw_users.user_id as userId FROM cmw_votes_votes
+                    JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user
+                    WHERE MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE())
+                    GROUP BY userId
+                    ORDER BY COUNT(cmw_votes_votes.votes_id) DESC ";
+        } else {
+            $sql = "SELECT COUNT(cmw_votes_votes.votes_id) AS votes, cmw_users.user_id as userId FROM cmw_votes_votes
+                    JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user
+                    WHERE MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE())
+                    GROUP BY userId
+                    ORDER BY COUNT(cmw_votes_votes.votes_id) DESC ";
+        }
+
+        $sql .= "LIMIT 1 OFFSET " . $rank -1;
+
+        $db = self::getInstance();
+        $res = $db->prepare($sql);
+
+        if (!$res->execute()) {
+            return array();
+        }
+
+        $toReturn = array();
+
+        while ($stats = $res->fetch()) {
+            $toReturn[] = new VotesPlayerStatsEntity(
+                $stats['votes'],
+                (new UsersModel())->getUserById($stats['userId'])
+            );
+        }
+
+        return $toReturn;
+    }
+
+    /**
+     * @param int $rank
+     * @return VotesPlayerStatsEntity[]
+     * @desc Get the X rank player for the global top
+     */
+    public function getGlobalTopPlayerRank(int $rank): array
+    {
+        if (self::isMariadb()) {
+            $sql = "SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_id as userId FROM cmw_votes_votes 
+                    JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user GROUP BY userId
+                    ORDER BY COUNT(cmw_votes_votes.votes_id) DESC ";
+        } else {
+            $sql = "SELECT COUNT(cmw_votes_votes.votes_id) as votes, cmw_users.user_id as userId FROM cmw_votes_votes 
+                    JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user GROUP BY userId 
+                    ORDER BY COUNT(cmw_votes_votes.votes_id) DESC ";
+        }
+
+        $sql .= "LIMIT 1 OFFSET " . $rank -1;
+
+        $db = self::getInstance();
+        $res = $db->prepare($sql);
+
+        if (!$res->execute()) {
+            return array();
+        }
+
+        $toReturn = array();
+
+        while ($stats = $res->fetch()) {
+            $toReturn[] = new VotesPlayerStatsEntity(
+                $stats['votes'],
+                (new UsersModel())->getUserById($stats['userId'])
+            );
+        }
+
+        return $toReturn;
+    }
 
     /**
      * @return VotesPlayerStatsEntity[]
@@ -419,6 +500,30 @@ class VotesStatsModel extends DatabaseManager
         }
 
         return 0;
+    }
+
+    /**
+     * @param int $rank
+     * @return array
+     */
+    public function getRankTopVotePoints(int $rank): array
+    {
+
+        $sql = "SELECT cmw_votes_votepoints.votes_votepoints_amount AS votes, cmw_users.user_pseudo FROM cmw_votes_votepoints
+                JOIN cmw_users ON cmw_users.user_id = cmw_votes_votepoints.votes_votepoints_id_user = cmw_users.user_id
+                ORDER BY cmw_votes_votepoints.votes_votepoints_amount DESC ";
+
+        $sql .= "LIMIT 1 OFFSET " . $rank -1;
+
+        $db = self::getInstance();
+
+        $req = $db->prepare($sql);
+
+        if (!$req->execute()) {
+           return [];
+        }
+
+        return $req->fetch();
     }
 
     /**
