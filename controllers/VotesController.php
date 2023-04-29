@@ -51,8 +51,8 @@ class VotesController extends CoreController
 
     /* ///////////////////// CONFIG /////////////////////*/
 
-    #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/votes")]
-    #[Link("/config", Link::GET, [], "/cmw-admin/votes")]
+    #[Link(path: "/", method: Link::GET, scope: "/cmw-Admin/votes")]
+    #[Link("/config", Link::GET, [], "/cmw-Admin/votes")]
     public function votesConfig(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.configuration");
@@ -64,7 +64,7 @@ class VotesController extends CoreController
             ->view();
     }
 
-    #[Link("/config", Link::POST, [], "/cmw-admin/votes")]
+    #[Link("/config", Link::POST, [], "/cmw-Admin/votes")]
     public function votesConfigPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.configuration");
@@ -86,7 +86,7 @@ class VotesController extends CoreController
 
     public function getCompatiblesSites(): array
     {
-        $file = Utils::getEnv()->getValue("DIR") . "app/package/votes/minecraftSitesCompatibles.php";
+        $file = Utils::getEnv()->getValue("DIR") . "App/Package/votes/minecraftSitesCompatibles.php";
 
         if(!file_exists($file)) {
             return [];
@@ -105,7 +105,7 @@ class VotesController extends CoreController
 
 
 
-    #[Link("/site/list", Link::GET, [], "/cmw-admin/votes")]
+    #[Link("/site/list", Link::GET, [], "/cmw-Admin/votes")]
     public function listSites(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.list");
@@ -116,17 +116,17 @@ class VotesController extends CoreController
 
         View::createAdminView('votes', 'list_sites')
             ->addVariableList(["sites" => $sites, "rewards" => $rewards, "compatiblesSites" => $compatiblesSites])
-            ->addStyle("app/package/votes/views/resources/vendors/css/iziToast.min.css",
-                "admin/resources/vendors/simple-datatables/style.css",
-                "admin/resources/assets/css/pages/simple-datatables.css")
-            ->addScriptAfter("app/package/votes/views/resources/vendors/js/iziToast.min.js",
-                "app/package/votes/views/resources/js/testSitesId.js",
-                "admin/resources/vendors/simple-datatables/umd/simple-datatables.js",
-                "admin/resources/assets/js/pages/simple-datatables.js")
+            ->addStyle("App/Package/votes/Views/Resources/Vendors/Css/iziToast.min.css",
+                "Admin/Resources/Vendors/Simple-datatables/style.css",
+                "Admin/Resources/Assets/Css/Pages/simple-datatables.css")
+            ->addScriptAfter("App/Package/votes/Views/Resources/Vendors/Js/iziToast.min.js",
+                "App/Package/votes/Views/Resources/Js/testSitesId.js",
+                "Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js",
+                "Admin/Resources/Assets/Js/Pages/simple-datatables.js")
             ->view();
     }
 
-    #[Link("/site/list", Link::POST, [], "/cmw-admin/votes")]
+    #[Link("/site/list", Link::POST, [], "/cmw-Admin/votes")]
     public function addSiteAdminPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.add");
@@ -142,7 +142,7 @@ class VotesController extends CoreController
         header('location: ../site/list');
     }
 
-    #[Link("/site/list", Link::GET, [], "/cmw-admin/votes")]
+    #[Link("/site/list", Link::GET, [], "/cmw-Admin/votes")]
     public function votesSitesEdit(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.edit");
@@ -154,7 +154,7 @@ class VotesController extends CoreController
             ->view();
     }
 
-    #[Link("/site/edit", Link::POST, [], "/cmw-admin/votes")]
+    #[Link("/site/edit", Link::POST, [], "/cmw-Admin/votes")]
     public function votesSitesEditPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.edit");
@@ -170,7 +170,7 @@ class VotesController extends CoreController
         header('location: ../site/list/');
     }
 
-    #[Link("/site/delete/:id", Link::GET, ['id' => '[0-9]+'], "/cmw-admin/votes")]
+    #[Link("/site/delete/:id", Link::GET, ['id' => '[0-9]+'], "/cmw-Admin/votes")]
     public function deleteSitePostAdmin(int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.delete");
@@ -188,7 +188,7 @@ class VotesController extends CoreController
     /**
      * @throws \JsonException
      */
-    #[Link("/site/test/id", Link::POST, [], "/cmw-admin/votes", secure: false)]
+    #[Link("/site/test/id", Link::POST, [], "/cmw-Admin/votes", secure: false)]
     public function checkSiteId(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.add");
@@ -225,7 +225,7 @@ class VotesController extends CoreController
 
     /* ///////////////////// REWARDS /////////////////////*/
 
-    #[Link("/rewards", Link::GET, [], "/cmw-admin/votes")]
+    #[Link("/rewards", Link::GET, [], "/cmw-Admin/votes")]
     public function votesRewards(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.rewards.edit");
@@ -236,14 +236,14 @@ class VotesController extends CoreController
 
         View::createAdminView('votes', 'rewards')
             ->addVariableList(["rewards" => $rewards, "minecraftServers" => $minecraftServers])
-            ->addScriptBefore("app/package/votes/views/resources/js/reward.js")
-            ->addStyle("admin/resources/vendors/simple-datatables/style.css","admin/resources/assets/css/pages/simple-datatables.css")
-            ->addScriptAfter("admin/resources/vendors/simple-datatables/umd/simple-datatables.js","admin/resources/assets/js/pages/simple-datatables.js")
+            ->addScriptBefore("App/Package/votes/Views/Resources/Js/reward.js")
+            ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css","Admin/Resources/Assets/Css/Pages/simple-datatables.css")
+            ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js","Admin/Resources/Assets/Js/Pages/simple-datatables.js")
 
             ->view();
     }
 
-    #[Link("/rewards/add", Link::POST, [], "/cmw-admin/votes")]
+    #[Link("/rewards/add", Link::POST, [], "/cmw-Admin/votes")]
     public function addRewardPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.rewards.add");
@@ -295,7 +295,7 @@ class VotesController extends CoreController
         header("location: ../rewards");
     }
 
-    #[Link("/rewards/delete/:id", Link::GET, ['id' => '[0-9]+'], "/cmw-admin/votes")]
+    #[Link("/rewards/delete/:id", Link::GET, ['id' => '[0-9]+'], "/cmw-Admin/votes")]
     public function deleteRewardPostAdmin(int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.rewards.delete");
@@ -311,7 +311,7 @@ class VotesController extends CoreController
         header('location: ../../rewards');
     }
 
-    #[Link("/rewards", Link::POST, [], "/cmw-admin/votes")]
+    #[Link("/rewards", Link::POST, [], "/cmw-Admin/votes")]
     public function editRewardPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.rewards.edit");
@@ -362,7 +362,7 @@ class VotesController extends CoreController
     }
 
     //Return the reward with a specific ID
-    #[Link("/rewards/get", Link::POST, [], "/cmw-admin/votes", secure: false)]
+    #[Link("/rewards/get", Link::POST, [], "/cmw-Admin/votes", secure: false)]
     public function getReward(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.rewards.edit");
@@ -381,7 +381,7 @@ class VotesController extends CoreController
 
     /* ///////////////////// STATS /////////////////////*/
 
-    #[Link("/stats", Link::GET, [], "/cmw-admin/votes")]
+    #[Link("/stats", Link::GET, [], "/cmw-Admin/votes")]
     public function statsVotes(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.stats");
@@ -402,9 +402,9 @@ class VotesController extends CoreController
         $previous3Months = $stats->get3PreviousMonthsVotes();
 
         View::createAdminView('votes', 'stats')
-            ->addScriptBefore("admin/resources/vendors/chart/chart.min.js","app/package/votes/views/resources/js/main.js")
-            ->addStyle("admin/resources/vendors/simple-datatables/style.css","admin/resources/assets/css/pages/simple-datatables.css")
-            ->addScriptAfter("admin/resources/vendors/simple-datatables/umd/simple-datatables.js","admin/resources/assets/js/pages/simple-datatables.js")
+            ->addScriptBefore("Admin/Resources/Vendors/chart/chart.min.js","App/Package/votes/Views/Resources/Js/main.js")
+            ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css","Admin/Resources/Assets/Css/Pages/simple-datatables.css")
+            ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js","Admin/Resources/Assets/Js/Pages/simple-datatables.js")
             ->addVariableList(["stats" => $stats, "all" => $all, "month" => $month, "week" => $week, "day" => $day,
                 "listSites" => $listSites, "actualTop" => $actualTop,
                 "globalTop" => $globalTop, "previousTop" => $previousTop, "previous3Months" => $previous3Months])
@@ -426,12 +426,12 @@ class VotesController extends CoreController
         $topCurrent = $this->statsModel->getActualTop();
         $topGlobal = $this->statsModel->getGlobalTop();
 
-        //Include the public view file ("public/themes/$themePath/views/votes/main.view.php")
+        //Include the Public view file ("Public/Themes/$themePath/Views/votes/main.view.php")
         $view = new View('votes', 'main');
 
         $view->addVariableList(["sites" => $sites,
             "topCurrent" => $topCurrent, "topGlobal" => $topGlobal]);
-        $view->addScriptAfter("app/package/votes/views/resources/js/public.js");
+        $view->addScriptAfter("App/Package/votes/Views/Resources/Js/Public.js");
         $view->view();
     }
 
