@@ -1,6 +1,6 @@
 <?php
 
-namespace cmw\Model\Votes;
+namespace CMW\Model\Votes;
 
 
 use CMW\Entity\Votes\VotesConfigEntity;
