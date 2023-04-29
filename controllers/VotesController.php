@@ -51,8 +51,8 @@ class VotesController extends CoreController
 
     /* ///////////////////// CONFIG /////////////////////*/
 
-    #[Link(path: "/", method: Link::GET, scope: "/cmw-Admin/votes")]
-    #[Link("/config", Link::GET, [], "/cmw-Admin/votes")]
+    #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/votes")]
+    #[Link("/config", Link::GET, [], "/cmw-admin/votes")]
     public function votesConfig(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.configuration");
@@ -64,7 +64,7 @@ class VotesController extends CoreController
             ->view();
     }
 
-    #[Link("/config", Link::POST, [], "/cmw-Admin/votes")]
+    #[Link("/config", Link::POST, [], "/cmw-admin/votes")]
     public function votesConfigPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.configuration");
@@ -105,7 +105,7 @@ class VotesController extends CoreController
 
 
 
-    #[Link("/site/list", Link::GET, [], "/cmw-Admin/votes")]
+    #[Link("/site/list", Link::GET, [], "/cmw-admin/votes")]
     public function listSites(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.list");
@@ -126,7 +126,7 @@ class VotesController extends CoreController
             ->view();
     }
 
-    #[Link("/site/list", Link::POST, [], "/cmw-Admin/votes")]
+    #[Link("/site/list", Link::POST, [], "/cmw-admin/votes")]
     public function addSiteAdminPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.add");
@@ -142,7 +142,7 @@ class VotesController extends CoreController
         header('location: ../site/list');
     }
 
-    #[Link("/site/list", Link::GET, [], "/cmw-Admin/votes")]
+    #[Link("/site/list", Link::GET, [], "/cmw-admin/votes")]
     public function votesSitesEdit(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.edit");
@@ -154,7 +154,7 @@ class VotesController extends CoreController
             ->view();
     }
 
-    #[Link("/site/edit", Link::POST, [], "/cmw-Admin/votes")]
+    #[Link("/site/edit", Link::POST, [], "/cmw-admin/votes")]
     public function votesSitesEditPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.edit");
@@ -170,7 +170,7 @@ class VotesController extends CoreController
         header('location: ../site/list/');
     }
 
-    #[Link("/site/delete/:id", Link::GET, ['id' => '[0-9]+'], "/cmw-Admin/votes")]
+    #[Link("/site/delete/:id", Link::GET, ['id' => '[0-9]+'], "/cmw-admin/votes")]
     public function deleteSitePostAdmin(int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.delete");
@@ -188,7 +188,7 @@ class VotesController extends CoreController
     /**
      * @throws \JsonException
      */
-    #[Link("/site/test/id", Link::POST, [], "/cmw-Admin/votes", secure: false)]
+    #[Link("/site/test/id", Link::POST, [], "/cmw-admin/votes", secure: false)]
     public function checkSiteId(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.add");
@@ -225,7 +225,7 @@ class VotesController extends CoreController
 
     /* ///////////////////// REWARDS /////////////////////*/
 
-    #[Link("/rewards", Link::GET, [], "/cmw-Admin/votes")]
+    #[Link("/rewards", Link::GET, [], "/cmw-admin/votes")]
     public function votesRewards(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.rewards.edit");
@@ -243,7 +243,7 @@ class VotesController extends CoreController
             ->view();
     }
 
-    #[Link("/rewards/add", Link::POST, [], "/cmw-Admin/votes")]
+    #[Link("/rewards/add", Link::POST, [], "/cmw-admin/votes")]
     public function addRewardPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.rewards.add");
@@ -295,7 +295,7 @@ class VotesController extends CoreController
         header("location: ../rewards");
     }
 
-    #[Link("/rewards/delete/:id", Link::GET, ['id' => '[0-9]+'], "/cmw-Admin/votes")]
+    #[Link("/rewards/delete/:id", Link::GET, ['id' => '[0-9]+'], "/cmw-admin/votes")]
     public function deleteRewardPostAdmin(int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.rewards.delete");
@@ -311,7 +311,7 @@ class VotesController extends CoreController
         header('location: ../../rewards');
     }
 
-    #[Link("/rewards", Link::POST, [], "/cmw-Admin/votes")]
+    #[Link("/rewards", Link::POST, [], "/cmw-admin/votes")]
     public function editRewardPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.rewards.edit");
@@ -362,7 +362,7 @@ class VotesController extends CoreController
     }
 
     //Return the reward with a specific ID
-    #[Link("/rewards/get", Link::POST, [], "/cmw-Admin/votes", secure: false)]
+    #[Link("/rewards/get", Link::POST, [], "/cmw-admin/votes", secure: false)]
     public function getReward(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.rewards.edit");
@@ -381,7 +381,7 @@ class VotesController extends CoreController
 
     /* ///////////////////// STATS /////////////////////*/
 
-    #[Link("/stats", Link::GET, [], "/cmw-Admin/votes")]
+    #[Link("/stats", Link::GET, [], "/cmw-admin/votes")]
     public function statsVotes(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.stats");
