@@ -4,6 +4,7 @@ namespace CMW\Controller\Votes;
 
 use CMW\Controller\Core\CoreController;
 use CMW\Manager\Api\APIManager;
+use CMW\Manager\Requests\Request;
 use CMW\Model\Votes\VotesStatsModel;
 use CMW\Router\Link;
 use JetBrains\PhpStorm\ExpectedValues;
@@ -21,7 +22,7 @@ class VotesApiController extends CoreController
     private const usernameRegex = "^[a-zA-Z0-9_]{2,16}$";
 
     #[Link("/getVotePoints/:pseudo", Link::GET, ["pseudo" => self::usernameRegex], scope: "/api/votes")]
-    public function getVotePoints(string $pseudo): void
+    public function getVotePoints(Request $request, string $pseudo): void
     {
         $votePoints = (new VotesStatsModel())->getPlayerVotepoints($pseudo);
 
@@ -30,7 +31,7 @@ class VotesApiController extends CoreController
     }
 
     #[Link("/getTopVotesPoints/rank/:rank", Link::GET, ["rank" => "[0-9]+"], scope: "/api/votes")]
-    public function getTopVotePoints(int $rank): void
+    public function getTopVotePoints(Request $request, int $rank): void
     {
         $votePoints = (new VotesStatsModel())->getRankTopVotePoints($rank);
 
@@ -39,7 +40,7 @@ class VotesApiController extends CoreController
     }
 
     #[Link("/getPlayerCurrentVotes/:pseudo", Link::GET, ["pseudo" => self::usernameRegex], scope: "/api/votes")]
-    public function getPlayerCurrentVotes(string $pseudo): void
+    public function getPlayerCurrentVotes(Request $request, string $pseudo): void
     {
         $votes = (new VotesStatsModel())->getPlayerCurrentVotes($pseudo);
 
@@ -48,7 +49,7 @@ class VotesApiController extends CoreController
     }
 
     #[Link("/getPlayerTotalVotes/:pseudo", Link::GET, ["pseudo" => self::usernameRegex], scope: "/api/votes")]
-    public function getPlayerTotalVotes(string $pseudo): void
+    public function getPlayerTotalVotes(Request $request, string $pseudo): void
     {
         $votes = (new VotesStatsModel())->getPlayerTotalVotes($pseudo);
 
@@ -57,12 +58,13 @@ class VotesApiController extends CoreController
     }
 
     /**
+     * @param \CMW\Manager\Requests\Request $request
      * @param string $type
      * @return void
      * @desc Type: all, month, week, day, hour, minute
      */
     #[Link("/getVotes/:type", Link::GET, ["type" => ".*?"], scope: "/api/votes")]
-    public function getVotes(#[ExpectedValues(["all", "month", "week", "day", "hour", "minute"])] string $type): void
+    public function getVotes(Request $request, #[ExpectedValues(["all", "month", "week", "day", "hour", "minute"])] string $type): void
     {
         $votes = count((new VotesStatsModel())->statsVotes($type));
 
@@ -90,7 +92,7 @@ class VotesApiController extends CoreController
     }
 
     #[Link("/getTopVotesActual/:rank", Link::GET, ["rank" => "[0-9]+"], scope: "/api/votes")]
-    public function getActualTopSpecificRank(int $rank): void
+    public function getActualTopSpecificRank(Request $request, int $rank): void
     {
         $votes = (new VotesStatsModel())->getActualTopPlayerRank($rank);
 
@@ -99,7 +101,7 @@ class VotesApiController extends CoreController
     }
 
     #[Link("/getTopVotesGlobal/:rank", Link::GET, ["rank" => "[0-9]+"], scope: "/api/votes")]
-    public function getGlobalTopSpecificRank(int $rank): void
+    public function getGlobalTopSpecificRank(Request $request, int $rank): void
     {
         $votes = (new VotesStatsModel())->getGlobalTopPlayerRank($rank);
 

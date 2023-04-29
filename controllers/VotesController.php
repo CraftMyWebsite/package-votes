@@ -6,6 +6,7 @@ use CMW\Controller\Core\CoreController;
 use CMW\Controller\Users\UsersController;
 use CMW\Manager\Api\APIManager;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Requests\Request;
 use CMW\Model\Minecraft\MinecraftModel;
 use CMW\Model\Users\UsersModel;
 use CMW\Model\Votes\CheckVotesModel;
@@ -171,7 +172,7 @@ class VotesController extends CoreController
     }
 
     #[Link("/site/delete/:id", Link::GET, ['id' => '[0-9]+'], "/cmw-admin/votes")]
-    public function deleteSitePostAdmin(int $id): void
+    public function deleteSitePostAdmin(Request $request, int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.delete");
 
@@ -296,7 +297,7 @@ class VotesController extends CoreController
     }
 
     #[Link("/rewards/delete/:id", Link::GET, ['id' => '[0-9]+'], "/cmw-admin/votes")]
-    public function deleteRewardPostAdmin(int $id): void
+    public function deleteRewardPostAdmin(Request $request, int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.rewards.delete");
 
@@ -436,7 +437,7 @@ class VotesController extends CoreController
     }
 
     #[Link('/vote/send/:id', Link::GET, ["id" => "[0-9]+"])]
-    public function votesWebsitePublic(int $id): void
+    public function votesWebsitePublic(Request $request, int $id): void
     {
         try {
             //First, check if the player can vote.
@@ -537,7 +538,7 @@ class VotesController extends CoreController
     }
 
     #[Link('/vote/geturl/:id', Link::GET, ["id" => "[0-9]+"])]
-    public function votesGetWebsiteUrlPublic(int $id): void
+    public function votesGetWebsiteUrlPublic(Request $request, int $id): void
     {
         print $this->sitesModel->getSiteById($id)?->getUrl();
     }
