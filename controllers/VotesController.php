@@ -60,7 +60,7 @@ class VotesController extends CoreController
 
         $config = $this->configModel->getConfig();
 
-        View::createAdminView('votes', 'config')
+        View::createAdminView('Votes', 'config')
             ->addVariableList(["config" => $config])
             ->view();
     }
@@ -115,7 +115,7 @@ class VotesController extends CoreController
         $rewards = $this->rewardsModel->getRewards();
         $compatiblesSites = $this->getCompatiblesSites();
 
-        View::createAdminView('votes', 'list_sites')
+        View::createAdminView('Votes', 'list_sites')
             ->addVariableList(["sites" => $sites, "rewards" => $rewards, "compatiblesSites" => $compatiblesSites])
             ->addStyle("App/Package/votes/Views/Resources/Vendors/Css/iziToast.min.css",
                 "Admin/Resources/Vendors/Simple-datatables/style.css",
@@ -150,7 +150,7 @@ class VotesController extends CoreController
 
         $votes = $this->sitesModel->getSiteById(filter_input(INPUT_POST, 'siteId'));
 
-        View::createAdminView('votes', 'list_sites')
+        View::createAdminView('Votes', 'list_sites')
             ->addVariableList(["votes" => $votes])
             ->view();
     }
@@ -235,7 +235,7 @@ class VotesController extends CoreController
 
         $minecraftServers = (new MinecraftModel())->getServers();
 
-        View::createAdminView('votes', 'rewards')
+        View::createAdminView('Votes', 'rewards')
             ->addVariableList(["rewards" => $rewards, "minecraftServers" => $minecraftServers])
             ->addScriptBefore("App/Package/votes/Views/Resources/Js/reward.js")
             ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css","Admin/Resources/Assets/Css/Pages/simple-datatables.css")
@@ -402,7 +402,7 @@ class VotesController extends CoreController
 
         $previous3Months = $stats->get3PreviousMonthsVotes();
 
-        View::createAdminView('votes', 'stats')
+        View::createAdminView('Votes', 'stats')
             ->addScriptBefore("Admin/Resources/Vendors/chart/chart.min.js","App/Package/votes/Views/Resources/Js/main.js")
             ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css","Admin/Resources/Assets/Css/Pages/simple-datatables.css")
             ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js","Admin/Resources/Assets/Js/Pages/simple-datatables.js")
@@ -428,7 +428,7 @@ class VotesController extends CoreController
         $topGlobal = $this->statsModel->getGlobalTop();
 
         //Include the Public view file ("Public/Themes/$themePath/Views/votes/main.view.php")
-        $view = new View('votes', 'main');
+        $view = new View('Votes', 'main');
 
         $view->addVariableList(["sites" => $sites,
             "topCurrent" => $topCurrent, "topGlobal" => $topGlobal]);
