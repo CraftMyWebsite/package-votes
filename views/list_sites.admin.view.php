@@ -62,7 +62,7 @@ $description = LangManager::translate("votes.dashboard.desc");
                     </div>
 
                     <h6>
-                        <a href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') . 'cmw-admin/votes/rewards' ?>">
+                        <a href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') . 'cmw-Admin/votes/rewards' ?>">
                             <i data-bs-toggle="tooltip"
                                        title="<?= LangManager::translate('votes.dashboard.list_sites.tooltip.rewards') ?>"
                                        class="fa-sharp fa-solid fa-circle-question"></i>
@@ -137,7 +137,7 @@ $description = LangManager::translate("votes.dashboard.desc");
                                             id="myModalLabel160"><?= LangManager::translate("votes.dashboard.modal.editing") ?> <?= $site->getTitle() ?></h5>
                                     </div>
                                     <div class="modal-body">
-                                        <form id="serveredit-<?= $site->getSiteId() ?>" method="post" action="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') . 'cmw-admin/votes/site/edit' ?>">
+                                        <form id="serveredit-<?= $site->getSiteId() ?>" method="post" action="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') . 'cmw-Admin/votes/site/edit' ?>">
                                             <?php (new SecurityManager())->insertHiddenToken() ?>
                                             <input type="text" name="siteId" value="<?= $site->getSiteId() ?>" hidden>
                                             <h6><?= LangManager::translate("votes.dashboard.add_site.input.title") ?>
