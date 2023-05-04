@@ -427,7 +427,7 @@ class VotesController extends CoreController
         $topCurrent = $this->statsModel->getActualTop();
         $topGlobal = $this->statsModel->getGlobalTop();
 
-        //Include the Public view file ("Public/Themes/$themePath/Views/votes/main.view.php")
+        //Include the Public view file ("Public/Themes/$themePath/Views/Votes/main.view.php")
         $view = new View('Votes', 'main');
 
         $view->addVariableList(["sites" => $sites,
