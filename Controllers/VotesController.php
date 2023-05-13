@@ -71,7 +71,7 @@ class VotesController extends AbstractController
 
     public function getCompatiblesSites(): array
     {
-        $file = EnvManager::getInstance()->getValue("DIR") . "App/Package/votes/minecraftSitesCompatibles.php";
+        $file = EnvManager::getInstance()->getValue("DIR") . "App/Package/Votes/minecraftSitesCompatibles.php";
 
         if(!file_exists($file)) {
             return [];
@@ -97,11 +97,11 @@ class VotesController extends AbstractController
 
         View::createAdminView('Votes', 'list_sites')
             ->addVariableList(["sites" => $sites, "rewards" => $rewards, "compatiblesSites" => $compatiblesSites])
-            ->addStyle("App/Package/votes/Views/Resources/Vendors/Css/iziToast.min.css",
+            ->addStyle("Admin/Resources/Vendors/Izitoast/iziToast.min.css",
                 "Admin/Resources/Vendors/Simple-datatables/style.css",
                 "Admin/Resources/Assets/Css/Pages/simple-datatables.css")
-            ->addScriptAfter("App/Package/votes/Views/Resources/Vendors/Js/iziToast.min.js",
-                "App/Package/votes/Views/Resources/Js/testSitesId.js",
+            ->addScriptAfter("Admin/Resources/Vendors/Izitoast/iziToast.min.js",
+                "App/Package/Votes/Views/Resources/Js/testSitesId.js",
                 "Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js",
                 "Admin/Resources/Assets/Js/Pages/simple-datatables.js")
             ->view();
@@ -131,6 +131,8 @@ class VotesController extends AbstractController
         $votes = VotesSitesModel::getInstance()->getSiteById(filter_input(INPUT_POST, 'siteId'));
 
         View::createAdminView('Votes', 'list_sites')
+            ->addStyle("App/Package/Votes/Views/Resources/Vendors/Css/iziToast.min.css")
+            ->addScriptAfter("App/Package/Votes/Views/Resources/Vendors/Js/iziToast.min.js")
             ->addVariableList(["votes" => $votes])
             ->view();
     }
@@ -218,7 +220,7 @@ class VotesController extends AbstractController
 
         View::createAdminView('Votes', 'rewards')
             ->addVariableList(["rewards" => $rewards, "minecraftServers" => $minecraftServers])
-            ->addScriptBefore("App/Package/votes/Views/Resources/Js/reward.js")
+            ->addScriptBefore("App/Package/Votes/Views/Resources/Js/reward.js")
             ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css","Admin/Resources/Assets/Css/Pages/simple-datatables.css")
             ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js","Admin/Resources/Assets/Js/Pages/simple-datatables.js")
 
@@ -416,7 +418,7 @@ class VotesController extends AbstractController
 
         $view->addVariableList(["sites" => $sites,
             "topCurrent" => $topCurrent, "topGlobal" => $topGlobal]);
-        $view->addScriptAfter("App/Package/votes/Views/Resources/Js/Public.js");
+        $view->addScriptAfter("App/Package/Votes/Views/Resources/Js/public.js");
         $view->view();
     }
 
