@@ -20,7 +20,6 @@ use CMW\Model\Votes\VotesRewardsModel;
 use CMW\Model\Votes\VotesSitesModel;
 use CMW\Model\Votes\VotesStatsModel;
 use CMW\Utils\Redirect;
-use CMW\Utils\Response;
 use CMW\Utils\Utils;
 use CMW\Manager\Views\View;
 use CMW\Utils\Website;
@@ -64,7 +63,7 @@ class VotesController extends AbstractController
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.config.success"));
 
-        Redirect::redirectToPreviousPage();
+        Redirect::redirectPreviousRoute();
     }
 
 
