@@ -386,7 +386,7 @@ class VotesController extends AbstractController
         $previous3Months = $stats->get3PreviousMonthsVotes();
 
         View::createAdminView('Votes', 'stats')
-            ->addScriptBefore("Admin/Resources/Vendors/chart/chart.min.js",
+            ->addScriptBefore("Admin/Resources/Vendors/Chart/chart.min.js",
                 "App/Package/votes/Views/Resources/Js/main.js")
             ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css",
                 "Admin/Resources/Assets/Css/Pages/simple-datatables.css")
