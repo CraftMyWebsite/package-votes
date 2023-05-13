@@ -2,6 +2,7 @@
 
 return [
     "votes" => "Votes",
+    "vote" => "Vote",
     "dashboard" => [
         "title" => [
             "config" => "Configuration",
