@@ -2,7 +2,8 @@
 
 namespace CMW\Entity\Votes;
 
-use CMW\Utils\Utils;
+use CMW\Controller\Core\CoreController;
+use CMW\Manager\Env\EnvManager;
 
 class VotesSitesEntity
 {
@@ -99,12 +100,12 @@ class VotesSitesEntity
      */
     public function getDateCreate(): string
     {
-        return $this->dateCreate;
+        return CoreController::formatDate($this->dateCreate);
     }
 
     public function getSendLink(): string
     {
-        return Utils::getEnv()->getValue("PATH_SUBFOLDER") . "vote/send/" . $this->siteId;
+        return EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . "vote/send/" . $this->siteId;
     }
 
 }
