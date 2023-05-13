@@ -2,11 +2,15 @@
 
 namespace CMW\Controller\Votes;
 
-use CMW\Controller\Core\CoreController;
 use CMW\Controller\Users\UsersController;
 use CMW\Manager\Api\APIManager;
+use CMW\Manager\Env\EnvManager;
+use CMW\Manager\Flash\Alert;
+use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Requests\Request;
+use CMW\Manager\Router\Link;
 use CMW\Model\Minecraft\MinecraftModel;
 use CMW\Model\Users\UsersModel;
 use CMW\Model\Votes\CheckVotesModel;
@@ -15,10 +19,11 @@ use CMW\Model\Votes\VotesModel;
 use CMW\Model\Votes\VotesRewardsModel;
 use CMW\Model\Votes\VotesSitesModel;
 use CMW\Model\Votes\VotesStatsModel;
-use CMW\Router\Link;
+use CMW\Utils\Redirect;
 use CMW\Utils\Response;
 use CMW\Utils\Utils;
 use CMW\Manager\Views\View;
+use CMW\Utils\Website;
 use JsonException;
 
 
@@ -28,27 +33,8 @@ use JsonException;
  * @author Teyir
  * @version 1.0
  */
-class VotesController extends CoreController
+class VotesController extends AbstractController
 {
-
-    private VotesConfigModel $configModel;
-    private VotesRewardsModel $rewardsModel;
-    private VotesSitesModel $sitesModel;
-    private VotesStatsModel $statsModel;
-    private VotesModel $votesModel;
-    private CheckVotesModel $checkVotesModel;
-
-
-    public function __construct()
-    {
-        parent::__construct();
-        $this->configModel = new VotesConfigModel();
-        $this->rewardsModel = new VotesRewardsModel();
-        $this->sitesModel = new VotesSitesModel();
-        $this->statsModel = new VotesStatsModel();
-        $this->votesModel = new VotesModel();
-        $this->checkVotesModel = new CheckVotesModel();
-    }
 
     /* ///////////////////// CONFIG /////////////////////*/
 
@@ -58,7 +44,7 @@ class VotesController extends CoreController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.configuration");
 
-        $config = $this->configModel->getConfig();
+        $config = VotesConfigModel::getInstance()->getConfig();
 
         View::createAdminView('Votes', 'config')
             ->addVariableList(["config" => $config])
@@ -73,13 +59,12 @@ class VotesController extends CoreController
         [$topShow, $reset, $autoTopRewardActive, $autoTopReward, $enableApi] = Utils::filterInput("topShow",
             "reset", "autoTopRewardActive", "autoTopReward", "api");
 
+        VotesConfigModel::getInstance()->updateConfig($topShow, $reset, $autoTopRewardActive, $autoTopReward, $enableApi);
 
-        $this->configModel->updateConfig($topShow, $reset, $autoTopRewardActive, $autoTopReward, $enableApi);
-
-        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.config.success"));
 
-        header('location: ../votes/config/');
+        Redirect::redirectToPreviousPage();
     }
 
 
@@ -87,7 +72,7 @@ class VotesController extends CoreController
 
     public function getCompatiblesSites(): array
     {
-        $file = Utils::getEnv()->getValue("DIR") . "App/Package/votes/minecraftSitesCompatibles.php";
+        $file = EnvManager::getInstance()->getValue("DIR") . "App/Package/votes/minecraftSitesCompatibles.php";
 
         if(!file_exists($file)) {
             return [];
@@ -102,17 +87,13 @@ class VotesController extends CoreController
         return $content;
     }
 
-
-
-
-
     #[Link("/site/list", Link::GET, [], "/cmw-admin/votes")]
     public function listSites(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.list");
 
-        $sites = $this->sitesModel->getSites();
-        $rewards = $this->rewardsModel->getRewards();
+        $sites = VotesSitesModel::getInstance()->getSites();
+        $rewards = VotesRewardsModel::getInstance()->getRewards();
         $compatiblesSites = $this->getCompatiblesSites();
 
         View::createAdminView('Votes', 'list_sites')
@@ -135,12 +116,12 @@ class VotesController extends CoreController
         [$title, $time, $idUnique, $url, $rewardsId] = Utils::filterInput("title", "time", "idUnique",
             "url", "reward");
 
-        $this->sitesModel->addSite($title, $time, $idUnique, $url, $rewardsId);
+       VotesSitesModel::getInstance()->addSite($title, $time, $idUnique, $url, $rewardsId);
 
-        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate("votes.toaster.site.add.success", ["name" => $title]));
 
-        header('location: ../site/list');
+        Redirect::redirectPreviousRoute();
     }
 
     #[Link("/site/list", Link::GET, [], "/cmw-admin/votes")]
@@ -148,7 +129,7 @@ class VotesController extends CoreController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.edit");
 
-        $votes = $this->sitesModel->getSiteById(filter_input(INPUT_POST, 'siteId'));
+        $votes = VotesSitesModel::getInstance()->getSiteById(filter_input(INPUT_POST, 'siteId'));
 
         View::createAdminView('Votes', 'list_sites')
             ->addVariableList(["votes" => $votes])
@@ -163,12 +144,12 @@ class VotesController extends CoreController
         [$siteId, $title, $time, $idUnique, $url, $rewardsId] = Utils::filterInput("siteId", "title", "time",
             "idUnique", "url", "reward");
 
-        $this->sitesModel->updateSite($siteId, $title, $time, $idUnique, $url, $rewardsId);
+        VotesSitesModel::getInstance()->updateSite($siteId, $title, $time, $idUnique, $url, $rewardsId);
 
-        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate("votes.toaster.site.edit.success", ["name" => $title]));
 
-        header('location: ../site/list/');
+        Redirect::redirectPreviousRoute();
     }
 
     #[Link("/site/delete/:id", Link::GET, ['id' => '[0-9]+'], "/cmw-admin/votes")]
@@ -176,14 +157,14 @@ class VotesController extends CoreController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.delete");
 
-        $title = $this->sitesModel->getSiteById($id)?->getTitle();
+        $title = VotesSitesModel::getInstance()->getSiteById($id)?->getTitle();
 
-        $this->sitesModel->deleteSite($id);
+        VotesSitesModel::getInstance()->deleteSite($id);
 
-        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate("votes.toaster.site.delete.success", ["name" => $title]));
 
-        header('location: ../list/');
+        Redirect::redirectPreviousRoute();
     }
 
     /**
@@ -196,7 +177,7 @@ class VotesController extends CoreController
 
         [$url, $siteId] = Utils::filterInput('url', 'site_id');
 
-        if (Utils::hasOneNullValue($url, $siteId)){
+        if (Utils::containsNullValue($url, $siteId)){
             print (json_encode(["status" => "0", "toaster" =>
                 ["type" => "error",
                     "title" => LangManager::translate("core.toaster.error"),
@@ -206,7 +187,7 @@ class VotesController extends CoreController
             return;
         }
 
-        if ($this->checkVotesModel->testSiteId($url, $siteId)){
+        if (CheckVotesModel::getInstance()->testSiteId($url, $siteId)){
             print (json_encode(["status" => "1", "toaster" =>
                 ["type" => "success",
                     "title" => LangManager::translate("core.toaster.success"),
@@ -231,9 +212,10 @@ class VotesController extends CoreController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.rewards.edit");
 
-        $rewards = $this->rewardsModel->getRewards();
+        $rewards = VotesRewardsModel::getInstance()->getRewards();
 
-        $minecraftServers = (new MinecraftModel())->getServers();
+        //TODO Check if package is installed
+        $minecraftServers = (new MinecraftModel())->getServers(); //TODO Change with getInstance()
 
         View::createAdminView('Votes', 'rewards')
             ->addVariableList(["rewards" => $rewards, "minecraftServers" => $minecraftServers])
@@ -281,19 +263,19 @@ class VotesController extends CoreController
                 break;
 
             case "none": //Error, redirect
-                Response::sendAlert("error", LangManager::translate("core.toaster.error"),
+                Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
                     LangManager::translate("core.toaster.internalError"));
-                header("location: ../rewards");
+                Redirect::redirectPreviousRoute();
                 break;
         }
 
         //Add reward
-        $this->rewardsModel->addReward($title, $action);
+        VotesRewardsModel::getInstance()->addReward($title, $action);
 
-        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate("votes.toaster.reward.add.success", ["name" => $title]));
 
-        header("location: ../rewards");
+        Redirect::redirectPreviousRoute();
     }
 
     #[Link("/rewards/delete/:id", Link::GET, ['id' => '[0-9]+'], "/cmw-admin/votes")]
@@ -301,15 +283,15 @@ class VotesController extends CoreController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.rewards.delete");
 
-        $title = $this->rewardsModel->getRewardById($id)?->getTitle();
+        $title = VotesRewardsModel::getInstance()->getRewardById($id)?->getTitle();
 
-        $this->rewardsModel->deleteReward($id);
+        VotesRewardsModel::getInstance()->deleteReward($id);
 
 
-        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate("votes.toaster.reward.delete.success", ["name" => $title]));
 
-        header('location: ../../rewards');
+        Redirect::redirectPreviousRoute();
     }
 
     #[Link("/rewards", Link::POST, [], "/cmw-admin/votes")]
@@ -348,18 +330,18 @@ class VotesController extends CoreController
                 break;
 
             case "none": //Error, redirect
-                Response::sendAlert("error", LangManager::translate("core.toaster.error"),
+                Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
                     LangManager::translate("core.toaster.internalError", ["name" => $title]));
-                header("location: ../votes/rewards");
+                Redirect::redirectPreviousRoute();
                 break;
         }
 
-        $this->rewardsModel->updateReward($rewardsId, $title, $action);
+       VotesRewardsModel::getInstance()->updateReward($rewardsId, $title, $action);
 
-        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate("votes.toaster.reward.edit.success", ["name" => $title]));
 
-        header('location: rewards');
+        Redirect::redirectPreviousRoute();
     }
 
     //Return the reward with a specific ID
@@ -375,7 +357,7 @@ class VotesController extends CoreController
             } catch (JsonException) {
             }
         } else {
-            echo $this->rewardsModel->getRewardById(filter_input(INPUT_POST, "id"))?->getAction();
+            echo VotesRewardsModel::getInstance()->getRewardById(filter_input(INPUT_POST, "id"))?->getAction();
         }
 
     }
@@ -387,14 +369,14 @@ class VotesController extends CoreController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.stats");
 
-        $stats = $this->statsModel;
+        $stats = VotesStatsModel::getInstance();
 
         $all = $stats->statsVotes("all");
         $month = $stats->statsVotes("month");
         $week = $stats->statsVotes("week");
         $day = $stats->statsVotes("day");
 
-        $listSites = $this->sitesModel->getSites();
+        $listSites = VotesSitesModel::getInstance()->getSites();
 
         $actualTop = $stats->getActualTopNoLimit();
         $globalTop = $stats->getGlobalTopNoLimit();
@@ -403,9 +385,12 @@ class VotesController extends CoreController
         $previous3Months = $stats->get3PreviousMonthsVotes();
 
         View::createAdminView('Votes', 'stats')
-            ->addScriptBefore("Admin/Resources/Vendors/chart/chart.min.js","App/Package/votes/Views/Resources/Js/main.js")
-            ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css","Admin/Resources/Assets/Css/Pages/simple-datatables.css")
-            ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js","Admin/Resources/Assets/Js/Pages/simple-datatables.js")
+            ->addScriptBefore("Admin/Resources/Vendors/chart/chart.min.js",
+                "App/Package/votes/Views/Resources/Js/main.js")
+            ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css",
+                "Admin/Resources/Assets/Css/Pages/simple-datatables.css")
+            ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js",
+                "Admin/Resources/Assets/Js/Pages/simple-datatables.js")
             ->addVariableList(["stats" => $stats, "all" => $all, "month" => $month, "week" => $week, "day" => $day,
                 "listSites" => $listSites, "actualTop" => $actualTop,
                 "globalTop" => $globalTop, "previousTop" => $previousTop, "previous3Months" => $previous3Months])
@@ -422,10 +407,10 @@ class VotesController extends CoreController
     #[Link('/vote', Link::GET)]
     public function votesPublic(): void
     {
-        $sites = $this->sitesModel->getSites();
+        $sites = VotesSitesModel::getInstance()->getSites();
 
-        $topCurrent = $this->statsModel->getActualTop();
-        $topGlobal = $this->statsModel->getGlobalTop();
+        $topCurrent = VotesStatsModel::getInstance()->getActualTop();
+        $topGlobal = VotesStatsModel::getInstance()->getGlobalTop();
 
         //Include the Public view file ("Public/Themes/$themePath/Views/Votes/main.view.php")
         $view = new View('Votes', 'main');
@@ -441,22 +426,23 @@ class VotesController extends CoreController
     {
         try {
             //First, check if the player can vote.
-            if ($this->checkVotesModel->isVoteSend($this->sitesModel->getSiteById($id)?->getUrl(), $this->sitesModel->getSiteById($id)?->getIdUnique(), Utils::getClientIp())) {
+            if (CheckVotesModel::getInstance()->isVoteSend(VotesSitesModel::getInstance()->getSiteById($id)?->getUrl(),
+                VotesSitesModel::getInstance()->getSiteById($id)?->getIdUnique(), Website::getClientIp())) {
 
                 //Check if the player has a vote stored
-                if ($this->votesModel->playerHasAVoteStored(UsersModel::getCurrentUser()?->getId(), $id)) {
+                if (VotesModel::getInstance()->playerHasAVoteStored(UsersModel::getCurrentUser()?->getId(), $id)) {
 
                     //Check if we can validate this vote
-                    if ($this->votesModel->validateThisVote(UsersModel::getCurrentUser()?->getId(), $id)) {
-                        $this->votesModel->storeVote(UsersModel::getCurrentUser()?->getId(), $id);
-                        $this->rewardsModel->selectReward(UsersModel::getCurrentUser()?->getId(), $id);
+                    if (VotesModel::getInstance()->validateThisVote(UsersModel::getCurrentUser()?->getId(), $id)) {
+                        VotesModel::getInstance()->storeVote(UsersModel::getCurrentUser()?->getId(), $id);
+                        VotesRewardsModel::getInstance()->selectReward(UsersModel::getCurrentUser()?->getId(), $id);
 
-                        if ($this->configModel->getConfig()?->isEnableApi() &&
-                            json_decode($this->rewardsModel->getRewardById($id)?->getAction(), false, 512,
+                        if (VotesConfigModel::getInstance()->getConfig()?->isEnableApi() &&
+                            json_decode(VotesRewardsModel::getInstance()->getRewardById($id)?->getAction(), false, 512,
                                 JSON_THROW_ON_ERROR)->type === "minecraft-commands") {
                             $this->sendRewardsToCmwLink($id);
                             // TODO config to toggle this feature
-                            $this->sendVoteToCmwLink($id, $this->sitesModel->getSiteById($id)?->getTitle());
+                            $this->sendVoteToCmwLink($id, VotesSitesModel::getInstance()->getSiteById($id)?->getTitle());
                         }
 
                         $this->returnData("send", true);
@@ -465,11 +451,11 @@ class VotesController extends CoreController
                     }
 
                 } else { //The player don't have any vote for this website.
-                    $this->votesModel->storeVote(UsersModel::getCurrentUser()?->getId(), $id);
-                    $this->rewardsModel->selectReward(UsersModel::getCurrentUser()?->getId(), $id);
+                    VotesModel::getInstance()->storeVote(UsersModel::getCurrentUser()?->getId(), $id);
+                    VotesRewardsModel::getInstance()->selectReward(UsersModel::getCurrentUser()?->getId(), $id);
 
-                    if ($this->configModel->getConfig()?->isEnableApi() &&
-                        json_decode($this->rewardsModel->getRewardById($id)?->getAction(), false, 512,
+                    if (VotesConfigModel::getInstance()->getConfig()?->isEnableApi() &&
+                        json_decode(VotesRewardsModel::getInstance()->getRewardById($id)?->getAction(), false, 512,
                             JSON_THROW_ON_ERROR)->type === "minecraft-commands") {
                         $this->sendRewardsToCmwLink($id);
                     }
@@ -488,11 +474,12 @@ class VotesController extends CoreController
     public function sendRewardsToCmwLink(int $rewardId): void
     {
         try {
-            foreach (json_decode($this->rewardsModel->getRewardById($rewardId)?->getAction(), false, 512, JSON_THROW_ON_ERROR)->servers as $serverId) {
+            foreach (json_decode(VotesRewardsModel::getInstance()->getRewardById($rewardId)?->getAction(), false, 512, JSON_THROW_ON_ERROR)->servers as $serverId) {
+                // TODO Check if package is installed
                 $server = (new MinecraftModel())->getServerById($serverId);
                 $currentUser = UsersModel::getCurrentUser()?->getPseudo();
 
-                $cmd = json_decode($this->rewardsModel->getRewardById($rewardId)?->getAction(), false, 512, JSON_THROW_ON_ERROR)->commands;
+                $cmd = json_decode(VotesRewardsModel::getInstance()->getRewardById($rewardId)?->getAction(), false, 512, JSON_THROW_ON_ERROR)->commands;
                 $cmd = str_replace("{player}", $currentUser, $cmd);
                 $cmd = base64_encode($cmd);
 
@@ -508,10 +495,11 @@ class VotesController extends CoreController
     public function sendVoteToCmwLink(int $rewardId, string $siteName): void
     {
         try {
-            foreach (json_decode($this->rewardsModel->getRewardById($rewardId)?->getAction(), false, 512, JSON_THROW_ON_ERROR)->servers as $serverId) {
-                $rewardName = base64_encode($this->rewardsModel->getRewardById($rewardId)?->getTitle());
+            foreach (json_decode(VotesRewardsModel::getInstance()->getRewardById($rewardId)?->getAction(), false, 512, JSON_THROW_ON_ERROR)->servers as $serverId) {
+                $rewardName = base64_encode(VotesRewardsModel::getInstance()->getRewardById($rewardId)?->getTitle());
                 $siteName = base64_encode($siteName);
 
+                // TODO Check if package is installed
                 $server = (new MinecraftModel())->getServerById($serverId);
                 $currentUser = UsersModel::getCurrentUser()?->getPseudo();
 
@@ -540,7 +528,7 @@ class VotesController extends CoreController
     #[Link('/vote/geturl/:id', Link::GET, ["id" => "[0-9]+"])]
     public function votesGetWebsiteUrlPublic(Request $request, int $id): void
     {
-        print $this->sitesModel->getSiteById($id)?->getUrl();
+        print VotesSitesModel::getInstance()->getSiteById($id)?->getUrl();
     }
 
 }

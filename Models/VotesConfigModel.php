@@ -5,6 +5,7 @@ namespace CMW\Model\Votes;
 
 use CMW\Entity\Votes\VotesConfigEntity;
 use CMW\Manager\Database\DatabaseManager;
+use CMW\Manager\Package\AbstractModel;
 
 
 /**
@@ -13,19 +14,39 @@ use CMW\Manager\Database\DatabaseManager;
  * @author Teyir
  * @version 1.0
  */
-class VotesConfigModel extends DatabaseManager
+class VotesConfigModel extends AbstractModel
 {
-    //Config
-
-
-
     //Get the config
+    public function updateConfig(int $topShow, int $reset, int $autoTopRewardActive, string $autoTopReward, bool $enableApi): ?VotesConfigEntity
+    {
+        $info = array(
+            "top_show" => $topShow,
+            "reset" => $reset,
+            "auto_top_reward_active" => $autoTopRewardActive,
+            "auto_top_reward" => $autoTopReward,
+            "enable_api" => $enableApi
+        );
+
+        $sql = "UPDATE cmw_votes_config SET votes_config_top_show=:top_show, votes_config_reset=:reset,
+                            votes_config_auto_top_reward_active=:auto_top_reward_active, 
+                            votes_config_auto_top_reward=:auto_top_reward, votes_config_enable_api = :enable_api";
+
+        $db = DatabaseManager::getInstance();
+        $req = $db->prepare($sql);
+        if ($req->execute($info)) {
+            return $this->getConfig();
+        }
+
+        return null;
+    }
+
+    //Update the config
+
     public function getConfig(): ?VotesConfigEntity
     {
-
         $sql = "SELECT * FROM cmw_votes_config LIMIT 1";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $res = $db->prepare($sql);
 
 
@@ -42,29 +63,5 @@ class VotesConfigModel extends DatabaseManager
             $res['votes_config_auto_top_reward'],
             $res['votes_config_enable_api']
         );
-    }
-
-    //Update the config
-    public function updateConfig(int $topShow, int $reset, int $autoTopRewardActive, string $autoTopReward, bool $enableApi): ?VotesConfigEntity
-    {
-        $info = array(
-            "top_show" => $topShow,
-            "reset" => $reset,
-            "auto_top_reward_active" => $autoTopRewardActive,
-            "auto_top_reward" => $autoTopReward,
-            "enable_api" => $enableApi
-        );
-
-        $sql = "UPDATE cmw_votes_config SET votes_config_top_show=:top_show, votes_config_reset=:reset,
-                            votes_config_auto_top_reward_active=:auto_top_reward_active, 
-                            votes_config_auto_top_reward=:auto_top_reward, votes_config_enable_api = :enable_api";
-
-        $db = self::getInstance();
-        $req = $db->prepare($sql);
-        if ($req->execute($info)) {
-            return $this->getConfig();
-        }
-
-        return null;
     }
 }

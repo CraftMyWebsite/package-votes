@@ -11,7 +11,7 @@ $description = LangManager::translate("votes.dashboard.desc");
 ?>
 <div class="d-flex flex-wrap justify-content-between">
     <h3><i class="fa-solid fa-award"></i> <span
-                class="m-lg-auto"><?= LangManager::translate("votes.dashboard.title.rewards") ?></span></h3>
+            class="m-lg-auto"><?= LangManager::translate("votes.dashboard.title.rewards") ?></span></h3>
 </div>
 
 <section class="row">
@@ -123,17 +123,21 @@ $description = LangManager::translate("votes.dashboard.desc");
                                                 <select name="reward_type" class="form-control"
                                                         onchange="updateReward(this, <?= $reward->getRewardsId() ?>)"
                                                         required>
-                                                    <option value="none" <?= json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->type === NULL ? "selected" : "" ?>>
+                                                    <option
+                                                        value="none" <?= json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->type === NULL ? "selected" : "" ?>>
                                                         <?= LangManager::translate("votes.dashboard.rewards.add.placeholder.type_select") ?>
                                                     </option>
-                                                    <option value="votepoints" <?= json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->type === "votepoints" ? "selected" : "" ?>>
+                                                    <option
+                                                        value="votepoints" <?= json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->type === "votepoints" ? "selected" : "" ?>>
                                                         <?= LangManager::translate("votes.dashboard.rewards.votepoints.name") ?>
                                                     </option>
-                                                    <option value="votepoints-random" <?= json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->type === "votepoints-random" ? "selected" : "" ?>>
+                                                    <option
+                                                        value="votepoints-random" <?= json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->type === "votepoints-random" ? "selected" : "" ?>>
                                                         <?= LangManager::translate("votes.dashboard.rewards.votepoints.name") ?>
                                                         <?= LangManager::translate("votes.dashboard.rewards.votepoints.random") ?>
                                                     </option>
-                                                    <option value="minecraft-commands" <?= json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->type === "minecraft-commands" ? "selected" : "" ?>>
+                                                    <option
+                                                        value="minecraft-commands" <?= json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->type === "minecraft-commands" ? "selected" : "" ?>>
                                                         <?= LangManager::translate("votes.dashboard.rewards.minecraft.commands") ?>
                                                     </option>
                                                 </select>
@@ -143,10 +147,11 @@ $description = LangManager::translate("votes.dashboard.desc");
                                                  class="mt-3">
                                                 <?php if (json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->type === "votepoints"): ?>
                                                     <div class="form-group position-relative has-icon-left">
-                                                        <input value="<?= json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->amount ?>"
-                                                               placeholder="<?= LangManager::translate("votes.dashboard.rewards.add.placeholder.amount") ?>"
-                                                               type="number" name="amount" class="form-control"
-                                                               required="true">
+                                                        <input
+                                                            value="<?= json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->amount ?>"
+                                                            placeholder="<?= LangManager::translate("votes.dashboard.rewards.add.placeholder.amount") ?>"
+                                                            type="number" name="amount" class="form-control"
+                                                            required="true">
                                                         <div class="form-control-icon">
                                                             <i class="fas fa-coins"></i>
                                                         </div>
@@ -157,19 +162,21 @@ $description = LangManager::translate("votes.dashboard.desc");
                                                             <div class="col-sm-6">
                                                                 <div class="form-group">
                                                                     <label><?= LangManager::translate("votes.dashboard.rewards.add.placeholder.amount_minimum") ?></label>
-                                                                    <input placeholder="<?= LangManager::translate("votes.dashboard.rewards.add.placeholder.amount_minimum") ?>"
-                                                                           value="<?= json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->amount->min ?>"
-                                                                           type="number" name="amount-min"
-                                                                           class="form-control" required>
+                                                                    <input
+                                                                        placeholder="<?= LangManager::translate("votes.dashboard.rewards.add.placeholder.amount_minimum") ?>"
+                                                                        value="<?= json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->amount->min ?>"
+                                                                        type="number" name="amount-min"
+                                                                        class="form-control" required>
                                                                 </div>
                                                             </div>
                                                             <div class="col-sm-6">
                                                                 <div class="form-group">
                                                                     <label><?= LangManager::translate("votes.dashboard.rewards.add.placeholder.amount_maximum") ?></label>
-                                                                    <input placeholder="<?= LangManager::translate("votes.dashboard.rewards.add.placeholder.amount_maximum") ?>"
-                                                                           value="<?= json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->amount->max ?>"
-                                                                           type="number" name="amount-max"
-                                                                           class="form-control" required>
+                                                                    <input
+                                                                        placeholder="<?= LangManager::translate("votes.dashboard.rewards.add.placeholder.amount_maximum") ?>"
+                                                                        value="<?= json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->amount->max ?>"
+                                                                        type="number" name="amount-max"
+                                                                        class="form-control" required>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -180,10 +187,11 @@ $description = LangManager::translate("votes.dashboard.desc");
                                                             <div class="col-sm-6">
                                                                 <div class="form-group">
                                                                     <label><?= LangManager::translate("votes.dashboard.rewards.minecraft.commands") ?></label>
-                                                                    <input value="<?= json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->commands ?>"
-                                                                           placeholder="<?= LangManager::translate("votes.dashboard.rewards.minecraft.placeholder.commands") ?>"
-                                                                           type="text" name="minecraft-commands"
-                                                                           class="form-control" required>
+                                                                    <input
+                                                                        value="<?= json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->commands ?>"
+                                                                        placeholder="<?= LangManager::translate("votes.dashboard.rewards.minecraft.placeholder.commands") ?>"
+                                                                        type="text" name="minecraft-commands"
+                                                                        class="form-control" required>
                                                                 </div>
                                                             </div>
                                                             <div class="col-sm-6">
@@ -193,7 +201,8 @@ $description = LangManager::translate("votes.dashboard.desc");
                                                                             class="form-control" required multiple>
 
                                                                         <?php foreach ($minecraftServers as $minecraftServer): ?>
-                                                                            <option value="<?= $minecraftServer->getServerId() ?>"
+                                                                            <option
+                                                                                value="<?= $minecraftServer->getServerId() ?>"
                                                                                 <?php foreach (json_decode($reward->getAction(), false, 512, JSON_THROW_ON_ERROR)->servers as $srvId) {
                                                                                     echo ((int)$srvId === $minecraftServer->getServerId()) ? "selected" : "";
                                                                                 } ?>
@@ -213,12 +222,14 @@ $description = LangManager::translate("votes.dashboard.desc");
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
                                             <i class="bx bx-x d-block d-sm-none"></i>
-                                            <span class="d-none d-sm-block"><?= LangManager::translate("core.btn.close") ?></span>
+                                            <span
+                                                class="d-none d-sm-block"><?= LangManager::translate("core.btn.close") ?></span>
                                         </button>
                                         <button type="submit" form="serveredit-<?= $reward->getRewardsId() ?>"
                                                 class="btn btn-success ml-1" data-bs-dismiss="modal">
                                             <i class="bx bx-check d-block d-sm-none"></i>
-                                            <span class="d-none d-sm-block"><?= LangManager::translate("core.btn.save") ?></span>
+                                            <span
+                                                class="d-none d-sm-block"><?= LangManager::translate("core.btn.save") ?></span>
                                         </button>
                                     </div>
                                 </div>
@@ -238,12 +249,14 @@ $description = LangManager::translate("votes.dashboard.desc");
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
                                             <i class="bx bx-x d-block d-sm-none"></i>
-                                            <span class="d-none d-sm-block"><?= LangManager::translate("core.btn.close") ?></span>
+                                            <span
+                                                class="d-none d-sm-block"><?= LangManager::translate("core.btn.close") ?></span>
                                         </button>
                                         <a href="rewards/delete/<?= $reward->getRewardsId() ?>"
                                            class="btn btn-danger ml-1">
                                             <i class="bx bx-check d-block d-sm-none"></i>
-                                            <span class="d-none d-sm-block"><?= LangManager::translate("core.btn.delete") ?></span>
+                                            <span
+                                                class="d-none d-sm-block"><?= LangManager::translate("core.btn.delete") ?></span>
                                         </a>
                                         </form>
                                     </div>

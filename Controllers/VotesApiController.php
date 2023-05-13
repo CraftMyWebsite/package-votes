@@ -2,11 +2,11 @@
 
 namespace CMW\Controller\Votes;
 
-use CMW\Controller\Core\CoreController;
 use CMW\Manager\Api\APIManager;
+use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Requests\Request;
+use CMW\Manager\Router\Link;
 use CMW\Model\Votes\VotesStatsModel;
-use CMW\Router\Link;
 use JetBrains\PhpStorm\ExpectedValues;
 
 
@@ -16,9 +16,8 @@ use JetBrains\PhpStorm\ExpectedValues;
  * @author Teyir
  * @version 1.0
  */
-class VotesApiController extends CoreController
+class VotesApiController extends AbstractController
 {
-
     private const usernameRegex = "^[a-zA-Z0-9_]{2,16}$";
 
     #[Link("/getVotePoints/:pseudo", Link::GET, ["pseudo" => self::usernameRegex], scope: "/api/votes")]
@@ -108,5 +107,4 @@ class VotesApiController extends CoreController
         $toReturn = APIManager::createResponse(data: $votes);
         print($toReturn);
     }
-
 }

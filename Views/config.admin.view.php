@@ -10,7 +10,8 @@ $description = LangManager::translate("votes.dashboard.desc");
 ?>
 
 <div class="d-flex flex-wrap justify-content-between">
-    <h3><i class="fa-solid fa-gears"></i> <span class="m-lg-auto"><?= LangManager::translate("votes.dashboard.title.config") ?></span></h3>
+    <h3><i class="fa-solid fa-gears"></i> <span
+            class="m-lg-auto"><?= LangManager::translate("votes.dashboard.title.config") ?></span></h3>
 </div>
 
 <section class="row">
@@ -24,7 +25,8 @@ $description = LangManager::translate("votes.dashboard.desc");
                     <?php (new SecurityManager())->insertHiddenToken() ?>
                     <h6><?= LangManager::translate("votes.dashboard.config.placeholder.top_show") ?> :</h6>
                     <div class="form-group position-relative has-icon-left">
-                        <input type="text" class="form-control" name="topShow" value="<?= $config->getTopShow() ?>" required autocomplete="off"
+                        <input type="text" class="form-control" name="topShow" value="<?= $config->getTopShow() ?>"
+                               required autocomplete="off"
                                placeholder="<?= LangManager::translate("votes.dashboard.config.placeholder.top_show") ?>">
                         <div class="form-control-icon">
                             <i class="fas fa-trophy"></i>
@@ -45,42 +47,43 @@ $description = LangManager::translate("votes.dashboard.desc");
                     <h6><?= LangManager::translate("votes.dashboard.config.placeholder.enable_api") ?> :</h6>
                     <div class="form-group position-relative">
                         <select name="api" class="form-control" required>
-                                    <option value="1" <?= $config->isEnableApi() ? "selected" : "" ?>>
-                                        <?= LangManager::translate("votes.dashboard.config.enable_api.1") ?>
-                                    </option>
+                            <option value="1" <?= $config->isEnableApi() ? "selected" : "" ?>>
+                                <?= LangManager::translate("votes.dashboard.config.enable_api.1") ?>
+                            </option>
 
-                                    <option value="0" <?= !$config->isEnableApi() ? "selected" : "" ?>>
-                                        <?= LangManager::translate("votes.dashboard.config.enable_api.0") ?></option>
-                                </select>
+                            <option value="0" <?= !$config->isEnableApi() ? "selected" : "" ?>>
+                                <?= LangManager::translate("votes.dashboard.config.enable_api.0") ?></option>
+                        </select>
                     </div>
                     <input type="number" name="autoTopRewardActive" value="1" hidden>
                     <!-- /!\ JSON function /!\-->
-                        <input type="text" name="autoTopReward" value='cc le JSON' hidden>
+                    <input type="text" name="autoTopReward" value='cc le JSON' hidden>
 
-                        <!-- Récompenses automatique (mensuel)
+                    <!-- Récompenses automatique (mensuel)
 
-                            <input type="checkbox" name="toggleAutoReward" value="checkbox" onchange="showMe('showAutoReward')" /> Activer les récompenses automatique
+                        <input type="checkbox" name="toggleAutoReward" value="checkbox" onchange="showMe('showAutoReward')" /> Activer les récompenses automatique
 
-                            <div id="showAutoReward" style="display:none;">
-                                Cc me voilà
-                            </div>
+                        <div id="showAutoReward" style="display:none;">
+                            Cc me voilà
+                        </div>
 
-                            <script type="text/javascript">
+                        <script type="text/javascript">
 
-                                function showMe (box) {
-                                    var chboxs = document.getElementById("showAutoReward").style.display;
-                                    var vis = "none";
-                                    if(chboxs=="none"){
-                                        vis = "block"; }
-                                    if(chboxs=="block"){
-                                        vis = "none"; }
-                                    document.getElementById(box).style.display = vis;
-                                }
+                            function showMe (box) {
+                                var chboxs = document.getElementById("showAutoReward").style.display;
+                                var vis = "none";
+                                if(chboxs=="none"){
+                                    vis = "block"; }
+                                if(chboxs=="block"){
+                                    vis = "none"; }
+                                document.getElementById(box).style.display = vis;
+                            }
 
-                            </script>
-                        -->
+                        </script>
+                    -->
                     <div class="text-center">
-                        <button type="submit" class="btn btn-primary"><?= LangManager::translate("core.btn.save") ?></button>
+                        <button type="submit"
+                                class="btn btn-primary"><?= LangManager::translate("core.btn.save") ?></button>
                     </div>
                 </form>
             </div>

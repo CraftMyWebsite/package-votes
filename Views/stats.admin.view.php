@@ -17,7 +17,7 @@ $description = LangManager::translate("votes.dashboard.desc");
 ?>
 <div class="d-flex flex-wrap justify-content-between">
     <h3><i class="fas fa-chart-area"></i> <span
-                class="m-lg-auto"><?= LangManager::translate("votes.dashboard.title.stats") ?></span></h3>
+            class="m-lg-auto"><?= LangManager::translate("votes.dashboard.title.stats") ?></span></h3>
 </div>
 
 <section class="row">
@@ -29,28 +29,28 @@ $description = LangManager::translate("votes.dashboard.desc");
             <div class="card-body">
                 <div class="alert alert-primary text-center">
                     <h4 class="alert-heading"><span
-                                style="font-size: smaller;"><?= LangManager::translate("votes.dashboard.stats.day") ?> :</span> <?= number_format(count($day)) ?>
+                            style="font-size: smaller;"><?= LangManager::translate("votes.dashboard.stats.day") ?> :</span> <?= number_format(count($day)) ?>
                         <span class=""
                               style="text-transform: lowercase;font-size: smaller;"><?= LangManager::translate("votes.votes") ?></span>
                     </h4>
                 </div>
                 <div class="alert alert-primary text-center">
                     <h4 class="alert-heading"><span
-                                style="font-size: smaller;"><?= LangManager::translate("votes.dashboard.stats.week") ?> : </span><?= number_format(count($week)) ?>
+                            style="font-size: smaller;"><?= LangManager::translate("votes.dashboard.stats.week") ?> : </span><?= number_format(count($week)) ?>
                         <span class=""
                               style="text-transform: lowercase;font-size: smaller;"><?= LangManager::translate("votes.votes") ?></span>
                     </h4>
                 </div>
                 <div class="alert alert-primary text-center">
                     <h4 class="alert-heading"><span
-                                style="font-size: smaller;"><?= LangManager::translate("votes.dashboard.stats.month") ?> :</span> <?= number_format(count($month)) ?>
+                            style="font-size: smaller;"><?= LangManager::translate("votes.dashboard.stats.month") ?> :</span> <?= number_format(count($month)) ?>
                         <span class=""
                               style="text-transform: lowercase;font-size: smaller;"><?= LangManager::translate("votes.votes") ?></span>
                     </h4>
                 </div>
                 <div class="alert alert-primary">
                     <h4 class="alert-heading text-center"><span
-                                style="font-size: smaller;"><?= LangManager::translate("votes.dashboard.stats.totals") ?></span>
+                            style="font-size: smaller;"><?= LangManager::translate("votes.dashboard.stats.totals") ?></span>
                         : <?= number_format(count($all)) ?> <span class=""
                                                                   style="text-transform: lowercase;font-size: smaller;"><?= LangManager::translate("votes.votes") ?></span>
                     </h4>

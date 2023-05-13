@@ -4,6 +4,7 @@ namespace CMW\Model\Votes;
 
 use CMW\Entity\Votes\VotesSitesEntity;
 use CMW\Manager\Database\DatabaseManager;
+use CMW\Manager\Package\AbstractModel;
 
 /**
  * Class @VotesSitesModel
@@ -11,7 +12,7 @@ use CMW\Manager\Database\DatabaseManager;
  * @author Teyir
  * @version 1.0
  */
-class VotesSitesModel extends DatabaseManager
+class VotesSitesModel extends AbstractModel
 {
 
     //Add a new Website
@@ -27,7 +28,7 @@ class VotesSitesModel extends DatabaseManager
 
         $sql = "INSERT INTO cmw_votes_sites (votes_sites_title, votes_sites_time, votes_sites_id_unique, 
                              votes_sites_url, votes_sites_rewards_id) VALUES (:title, :time, :id_unique, :url, :rewards_id)";
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
@@ -39,35 +40,12 @@ class VotesSitesModel extends DatabaseManager
     }
 
     //Get all sites
-    public function getSites(): array
-    {
-        $sql = "SELECT * FROM cmw_votes_sites";
-        $db = self::getInstance();
 
-        $res = $db->prepare($sql);
-
-        if (!$res->execute()) {
-            return array();
-        }
-
-        $toReturn = array();
-
-        while ($site = $res->fetch()) {
-            $toReturn[] = $this->getSiteById($site["votes_sites_id"]);
-        }
-
-        return $toReturn;
-    }
-
-
-    //Get a website
     public function getSiteById(int $id): ?VotesSitesEntity
     {
-
-
         $sql = "SELECT * FROM cmw_votes_sites WHERE votes_sites_id=:id";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $res = $db->prepare($sql);
 
 
@@ -90,7 +68,31 @@ class VotesSitesModel extends DatabaseManager
         );
     }
 
+
+    //Get a website
+
+    public function getSites(): array
+    {
+        $sql = "SELECT * FROM cmw_votes_sites";
+        $db = DatabaseManager::getInstance();
+
+        $res = $db->prepare($sql);
+
+        if (!$res->execute()) {
+            return array();
+        }
+
+        $toReturn = array();
+
+        while ($site = $res->fetch()) {
+            $toReturn[] = $this->getSiteById($site["votes_sites_id"]);
+        }
+
+        return $toReturn;
+    }
+
     //Edit a website
+
     public function updateSite(int $siteId, string $title, int $time, string $idUnique, string $url, int $rewardsId): ?VotesSitesEntity
     {
         $info = array(
@@ -106,7 +108,7 @@ class VotesSitesModel extends DatabaseManager
                            votes_sites_id_unique=:id_unique, votes_sites_url=:url, votes_sites_rewards_id=:rewards_id 
                        WHERE votes_sites_id=:id";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
         if ($req->execute($info)) {
             return $this->getSiteById($siteId);
@@ -120,7 +122,7 @@ class VotesSitesModel extends DatabaseManager
     {
         $sql = "DELETE FROM cmw_votes_sites WHERE votes_sites_id=:id";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
         $req->execute(array("id" => $id));
     }

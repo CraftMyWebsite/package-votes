@@ -1,5 +1,5 @@
 <?php
-header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Origin: *'); // Why ?
 
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Security\SecurityManager;
@@ -63,10 +63,12 @@ $description = LangManager::translate("votes.dashboard.desc");
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="reward"><?= LangManager::translate("votes.dashboard.add_site.placeholder.rewards") ?></label>
+                                <label
+                                    for="reward"><?= LangManager::translate("votes.dashboard.add_site.placeholder.rewards") ?></label>
                                 <select name="reward" class="form-control" required>
                                     <?php foreach ($rewards as $reward) : ?>
-                                        <option value="<?= $reward?->getRewardsId() ?>"><?= $reward->getTitle() ?></option>
+                                        <option
+                                            value="<?= $reward?->getRewardsId() ?>"><?= $reward->getTitle() ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>

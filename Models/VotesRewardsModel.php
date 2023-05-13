@@ -4,6 +4,7 @@ namespace CMW\Model\Votes;
 
 use CMW\Entity\Votes\VotesRewardsEntity;
 use CMW\Manager\Database\DatabaseManager;
+use CMW\Manager\Package\AbstractModel;
 use Exception;
 use JsonException;
 
@@ -13,9 +14,8 @@ use JsonException;
  * @author Teyir
  * @version 1.0
  */
-class VotesRewardsModel extends DatabaseManager
+class VotesRewardsModel extends AbstractModel
 {
-
     public function addReward(string $title, string $action): ?VotesRewardsEntity
     {
         $var = array(
@@ -25,7 +25,7 @@ class VotesRewardsModel extends DatabaseManager
 
         $sql = "INSERT INTO cmw_votes_rewards (votes_rewards_title, votes_rewards_action) VALUES (:title, :action)";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
@@ -40,13 +40,13 @@ class VotesRewardsModel extends DatabaseManager
 
     public function getRewardById(?int $id): ?VotesRewardsEntity
     {
-        if($id === null){
+        if ($id === null) {
             return null;
         }
 
         $sql = "SELECT * FROM cmw_votes_rewards WHERE votes_rewards_rewards_id=:rewards_id";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $res = $db->prepare($sql);
 
         if (!$res->execute(array("rewards_id" => $id))) {
@@ -71,7 +71,7 @@ class VotesRewardsModel extends DatabaseManager
 
         $sql = "DELETE FROM cmw_votes_rewards WHERE votes_rewards_rewards_id=:rewards_id";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
         $req->execute($var);
     }
@@ -87,7 +87,7 @@ class VotesRewardsModel extends DatabaseManager
         $sql = "UPDATE cmw_votes_rewards SET votes_rewards_title=:title, votes_rewards_action=:action 
                          WHERE votes_rewards_rewards_id=:rewards_id";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
         if ($req->execute($var)) {
             return $this->getRewardById($rewardsId);
@@ -109,7 +109,7 @@ class VotesRewardsModel extends DatabaseManager
                         ON cmw_votes_sites.votes_sites_rewards_id = cmw_votes_rewards.votes_rewards_rewards_id 
                     WHERE cmw_votes_sites.votes_sites_id =:id LIMIT 1;";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
@@ -156,7 +156,7 @@ class VotesRewardsModel extends DatabaseManager
                             WHERE votes_votepoints_id_user=:id_user";
 
         }
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
         $req->execute($var);
     }
@@ -169,7 +169,7 @@ class VotesRewardsModel extends DatabaseManager
 
         $sql = "SELECT votes_votepoints_id_user FROM cmw_votes_votepoints WHERE votes_votepoints_id_user=:id_user";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
@@ -180,6 +180,21 @@ class VotesRewardsModel extends DatabaseManager
         }
 
         return false;
+    }
+
+    public function setLog(int $userId, int $rewardsId): void
+    {
+        $var = array(
+            "user_id" => $userId,
+            "reward_id" => $rewardsId
+        );
+
+        $sql = "INSERT INTO cmw_votes_logs_rewards (votes_logs_rewards_user_id, votes_logs_rewards_reward_id) 
+                    VALUES (:user_id, :reward_id)";
+
+        $db = DatabaseManager::getInstance();
+        $req = $db->prepare($sql);
+        $req->execute($var);
     }
 
     public function giveRewardVotePointsRandom(int $userId, int $min, int $max): void
@@ -207,31 +222,15 @@ class VotesRewardsModel extends DatabaseManager
 
         }
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
         $req->execute($var);
     }
-
-    public function setLog(int $userId, int $rewardsId): void
-    {
-        $var = array(
-            "user_id" => $userId,
-            "reward_id" => $rewardsId
-        );
-
-        $sql = "INSERT INTO cmw_votes_logs_rewards (votes_logs_rewards_user_id, votes_logs_rewards_reward_id) 
-                    VALUES (:user_id, :reward_id)";
-
-        $db = self::getInstance();
-        $req = $db->prepare($sql);
-        $req->execute($var);
-    }
-
 
     public function getRewards(): array
     {
         $sql = "SELECT * FROM cmw_votes_rewards";
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
 
         $res = $db->prepare($sql);
 

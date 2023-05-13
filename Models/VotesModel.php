@@ -3,7 +3,8 @@
 namespace CMW\Model\Votes;
 
 use CMW\Manager\Database\DatabaseManager;
-use CMW\Utils\Utils;
+use CMW\Manager\Package\AbstractModel;
+use CMW\Utils\Website;
 use PDO;
 
 /**
@@ -12,19 +13,19 @@ use PDO;
  * @author Teyir
  * @version 1.0
  */
-class VotesModel extends DatabaseManager
+class VotesModel extends AbstractModel
 {
     public function storeVote(int $idUser, string $idSite): void
     {
         $var = array(
             "id_user" => $idUser,
-            "ip" => Utils::getClientIp(),
+            "ip" => Website::getClientIp(),
             "id_site" => $idSite
         );
 
         $sql = "INSERT INTO cmw_votes_votes (votes_id_user, votes_ip, votes_id_site) VALUES (:id_user, :ip, :id_site)";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
         $req->execute($var);
     }
@@ -44,7 +45,7 @@ class VotesModel extends DatabaseManager
         $sql = "SELECT * FROM `cmw_votes_votes` WHERE votes_id_user = :idUser AND votes_id_site = :idSite 
                 ORDER BY votes_date DESC LIMIT 1";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {

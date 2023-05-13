@@ -2,7 +2,7 @@
 
 namespace CMW\Model\Votes;
 
-use CMW\Manager\Database\DatabaseManager;
+use CMW\Manager\Package\AbstractModel;
 use JsonException;
 
 /**
@@ -11,7 +11,7 @@ use JsonException;
  * @author Teyir
  * @version 1.0
  */
-class CheckVotesModel extends DatabaseManager
+class CheckVotesModel extends AbstractModel
 {
 
     /**
