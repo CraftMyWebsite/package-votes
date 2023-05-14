@@ -15,7 +15,14 @@ use CMW\Manager\Package\AbstractModel;
 class VotesSitesModel extends AbstractModel
 {
 
-    //Add a new Website
+    /**
+     * @param string $title
+     * @param int $time
+     * @param string $idUnique
+     * @param string $url
+     * @param int $rewardsId
+     * @return \CMW\Entity\Votes\VotesSitesEntity|null
+     */
     public function addSite(string $title, int $time, string $idUnique, string $url, int $rewardsId): ?VotesSitesEntity
     {
         $var = array(
@@ -39,8 +46,11 @@ class VotesSitesModel extends AbstractModel
         return null;
     }
 
-    //Get all sites
 
+    /**
+     * @param int $id
+     * @return \CMW\Entity\Votes\VotesSitesEntity|null
+     */
     public function getSiteById(int $id): ?VotesSitesEntity
     {
         $sql = "SELECT * FROM cmw_votes_sites WHERE votes_sites_id=:id";
@@ -69,11 +79,12 @@ class VotesSitesModel extends AbstractModel
     }
 
 
-    //Get a website
-
+    /**
+     * @return VotesSitesEntity[]
+     */
     public function getSites(): array
     {
-        $sql = "SELECT * FROM cmw_votes_sites";
+        $sql = "SELECT votes_sites_id FROM cmw_votes_sites";
         $db = DatabaseManager::getInstance();
 
         $res = $db->prepare($sql);
@@ -91,8 +102,16 @@ class VotesSitesModel extends AbstractModel
         return $toReturn;
     }
 
-    //Edit a website
 
+    /**
+     * @param int $siteId
+     * @param string $title
+     * @param int $time
+     * @param string $idUnique
+     * @param string $url
+     * @param int $rewardsId
+     * @return \CMW\Entity\Votes\VotesSitesEntity|null
+     */
     public function updateSite(int $siteId, string $title, int $time, string $idUnique, string $url, int $rewardsId): ?VotesSitesEntity
     {
         $info = array(
@@ -117,7 +136,10 @@ class VotesSitesModel extends AbstractModel
         return null;
     }
 
-    //Delete a site
+    /**
+     * @param int $id
+     * @return void
+     */
     public function deleteSite(int $id): void
     {
         $sql = "DELETE FROM cmw_votes_sites WHERE votes_sites_id=:id";

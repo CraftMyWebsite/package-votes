@@ -96,7 +96,7 @@ class CheckVotesModel extends AbstractModel
         }
 
         if (self::checkUrl($url, 'serveursminecraft.org')) {
-            return self::checkStatusCode("https://www.serveursminecraft.org/serveur/$siteId", 200);
+            return self::checkStatusCode("https://www.serveursminecraft.org/serveur/$siteId", 200, false);
         }
 
         if (self::checkUrl($url, 'liste-serveurs-minecraft.org')) {
@@ -114,7 +114,6 @@ class CheckVotesModel extends AbstractModel
         if (self::checkUrl($url, 'serveurs-minecraft.org')) {
             return self::checkPlainData("https://www.serveurs-minecraft.org/api/is_online.php?id=$siteId&format=json", 1);
         }
-
 
         return false;
     }
@@ -163,13 +162,15 @@ class CheckVotesModel extends AbstractModel
     /**
      * @param string $url
      * @param int $expectedValue
+     * @param bool $checkSSL
      * @return bool
      * @des Return status code
      */
-    public static function checkStatusCode(string $url, int $expectedValue): bool
+    public static function checkStatusCode(string $url, int $expectedValue, bool $checkSSL = true): bool
     {
         $handle = curl_init($url);
         curl_setopt($handle,  CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, $checkSSL);
         $response = curl_exec($handle);
         $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
         curl_close($handle);
