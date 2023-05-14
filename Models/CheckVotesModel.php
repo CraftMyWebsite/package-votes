@@ -23,6 +23,22 @@ class CheckVotesModel extends AbstractModel
      */
     public function isVoteSend(string $url, string $idUnique, string $ipPlayer): bool
     {
+
+        //TODO CHANGE -------------------------
+        // ---------------
+        // ---------------
+        // ---------------
+        // ---------------
+        // ---------------
+        // ---------------
+        // ---------------
+        // ---------------
+        // ---------------
+        // ---------------
+        // ---------------
+
+        $ipPlayer = '82.120.57.219';
+
         //List of all websites:
 
         if (self::checkUrl($url, 'serveur-prive.net')) {

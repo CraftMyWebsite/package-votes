@@ -35,14 +35,14 @@ class VotesModel extends AbstractModel
         return count($this->getPlayerLastStoredVote($idUser, $idSite)) >= 1;
     }
 
-    private function getPlayerLastStoredVote(int $idUser, int $idSite): array
+    public function getPlayerLastStoredVote(int $idUser, int $idSite): array
     {
         $var = array(
             "idUser" => $idUser,
             "idSite" => $idSite
         );
 
-        $sql = "SELECT * FROM `cmw_votes_votes` WHERE votes_id_user = :idUser AND votes_id_site = :idSite 
+        $sql = "SELECT votes_id, votes_date FROM `cmw_votes_votes` WHERE votes_id_user = :idUser AND votes_id_site = :idSite 
                 ORDER BY votes_date DESC LIMIT 1";
 
         $db = DatabaseManager::getInstance();

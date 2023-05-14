@@ -1,5 +1,7 @@
 <?php
 
+use CMW\Controller\Core\ThemeController;
+use CMW\Manager\Env\EnvManager;
 use CMW\Model\Users\UsersModel;
 
 $title = "Mon-Serveur | Voter";
@@ -64,12 +66,20 @@ $description = "Votez pour le serveur et gagnez des récompenses uniques!";
                                                         class="fas fa-stopwatch"></i><?= $site->getTimeFormatted() ?></span>
                                         </div>
                                     </div>
-                                    <div class="package__buttons package__buttons--outBasket">
-                                        <a onclick="sendVote('<?= $site->getSiteId() ?>')"
+                                    <?php if($site->isAvailable()): ?>
+                                    <div>
+                                        <a onclick="sendVote('<?= $site->getSiteId() ?>', this)"
                                            type="button" rel="noopener noreferrer"
                                            class="btn btn--primary cursorAura">Voter
                                         </a>
                                     </div>
+                                    <?php else: ?>
+                                        <div>
+                                            <a class="btn btn--primary cursorAura">
+                                                Nouveau vote dans <?= $site->getTimeRemainingFormatted() ?>
+                                            </a>
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
                             <?php endforeach; ?>
 
@@ -168,3 +178,7 @@ $description = "Votez pour le serveur et gagnez des récompenses uniques!";
         </div>
     </div>
 </section>
+<link rel="stylesheet" href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'Admin/Resources/Vendors/Izitoast/iziToast.min.css' ?>">
+<script src="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'Admin/Resources/Vendors/Izitoast/iziToast.min.js' ?>"></script>
+<script src="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'App/Package/Votes/Views/Resources/Js/VotesStatus.js' ?>"></script>
+<script src="<?= ThemeController::getCurrentTheme()->getPath() . 'Views/Votes/Resources/Js/VotesLogic.js' ?>"></script>

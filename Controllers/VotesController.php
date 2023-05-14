@@ -455,11 +455,11 @@ class VotesController extends AbstractController
                     VotesModel::getInstance()->storeVote(UsersModel::getCurrentUser()?->getId(), $id);
                     VotesRewardsModel::getInstance()->selectReward(UsersModel::getCurrentUser()?->getId(), $id);
 
-                    if (VotesConfigModel::getInstance()->getConfig()?->isEnableApi() &&
-                        json_decode(VotesRewardsModel::getInstance()->getRewardById($id)?->getAction(), false, 512,
-                            JSON_THROW_ON_ERROR)->type === "minecraft-commands") {
-                        $this->sendRewardsToCmwLink($id);
-                    }
+//                    if (VotesConfigModel::getInstance()->getConfig()?->isEnableApi() &&
+//                        json_decode(VotesRewardsModel::getInstance()->getRewardById($id)?->getAction(), false, 512,
+//                            JSON_THROW_ON_ERROR)->type === "minecraft-commands") {
+//                        $this->sendRewardsToCmwLink($id);
+//                    }
 
                     $this->returnData("send", true);
                 }

@@ -3,7 +3,13 @@
 namespace CMW\Entity\Votes;
 
 use CMW\Controller\Core\CoreController;
+use CMW\Controller\Users\UsersController;
 use CMW\Manager\Env\EnvManager;
+use CMW\Model\Core\CoreModel;
+use CMW\Model\Users\UsersModel;
+use CMW\Model\Votes\CheckVotesModel;
+use CMW\Model\Votes\VotesModel;
+use CMW\Utils\Website;
 
 class VotesSitesEntity
 {
@@ -106,6 +112,49 @@ class VotesSitesEntity
     public function getSendLink(): string
     {
         return EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . "vote/send/" . $this->siteId;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAvailable(): bool
+    {
+        $targetVote = $this->getTimeRemaining();
+
+        if ($targetVote === null){
+            return true;
+        }
+
+        $currentDate = time();
+
+        return $currentDate > $targetVote;
+    }
+
+    /**
+     * @return int|null
+     * @desc Return {@see time()} or {@see null} if we don't have time
+     */
+    public function getTimeRemaining(): ?int
+    {
+        if (VotesModel::getInstance()->getPlayerLastStoredVote(UsersModel::getLoggedUser(), $this->siteId) === []){
+            return null;
+        }
+
+        $votesDate = VotesModel::getInstance()->getPlayerLastStoredVote(UsersModel::getLoggedUser(), $this->siteId)['votes_date'];
+
+        if ($votesDate === null){
+            return null;
+        }
+
+       return strtotime($votesDate . " + $this->time minutes");
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTimeRemainingFormatted(): ?string
+    {
+        return date(CoreModel::getInstance()->fetchOption("dateFormat"), $this->getTimeRemaining());
     }
 
 }
