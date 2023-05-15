@@ -13,6 +13,14 @@
         "Statistiques": "votes/stats",
         "Muliplicateur": "votes/boost/",
         "VoteShop": "votes/voteshop"
+      },
+      "urls_submenu_en": {
+        "Configuration": "votes/config",
+        "Manage sites": "votes/site/list",
+        "Rewards": "votes/rewards",
+        "Stats": "votes/stats",
+        "Muliplicateur": "votes/boost/",
+        "VoteShop": "votes/voteshop"
       }
     }
   ],
