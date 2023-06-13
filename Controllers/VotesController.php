@@ -45,6 +45,9 @@ class VotesController extends AbstractController
 
         $config = VotesConfigModel::getInstance()->getConfig();
 
+        $this->sendVoteToCmwLink(1, 'Pute');
+        $this->sendRewardsToCmwLink(1);
+
         View::createAdminView('Votes', 'config')
             ->addVariableList(["config" => $config])
             ->view();
