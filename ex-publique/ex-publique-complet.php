@@ -35,7 +35,7 @@ $description = "Votez pour le serveur et gagnez des récompenses uniques!";
                                 <br>
 
                                 <strong>Connectez-vous</strong> dès maintenant en cliquant <a
-                                        href="<?= getenv('PATH_SUBFOLDER') ?>login">ici</a>
+                                        href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>login">ici</a>
                             </p>
 
 
