@@ -390,7 +390,7 @@ class VotesController extends AbstractController
 
         View::createAdminView('Votes', 'stats')
             ->addScriptBefore("Admin/Resources/Vendors/Chart/chart.min.js",
-                "App/Package/votes/Views/Resources/Js/main.js")
+                "App/Package/Votes/Views/Resources/Js/main.js")
             ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css",
                 "Admin/Resources/Assets/Css/Pages/simple-datatables.css")
             ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js",
