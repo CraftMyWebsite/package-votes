@@ -136,11 +136,11 @@ class VotesSitesEntity
      */
     public function getTimeRemaining(): ?int
     {
-        if (VotesModel::getInstance()->getPlayerLastStoredVote(UsersModel::getLoggedUser(), $this->siteId) === []){
+        if (VotesModel::getInstance()->getPlayerLastStoredVote(UsersModel::getCurrentUser()?->getId(), $this->siteId) === []){
             return null;
         }
 
-        $votesDate = VotesModel::getInstance()->getPlayerLastStoredVote(UsersModel::getLoggedUser(), $this->siteId)['votes_date'];
+        $votesDate = VotesModel::getInstance()->getPlayerLastStoredVote(UsersModel::getCurrentUser()?->getId(), $this->siteId)['votes_date'];
 
         if ($votesDate === null){
             return null;

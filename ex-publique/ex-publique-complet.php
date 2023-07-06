@@ -1,6 +1,7 @@
 <?php
 
 use CMW\Controller\Core\ThemeController;
+use CMW\Controller\Users\UsersController;
 use CMW\Manager\Env\EnvManager;
 use CMW\Model\Users\UsersModel;
 
@@ -17,7 +18,7 @@ $description = "Votez pour le serveur et gagnez des récompenses uniques!";
     <div class="container">
         <div class="content">
 
-            <?php if (usersModel::getLoggedUser() === -1): ?>
+            <?php if (UsersController::isUserLogged()): ?>
                 <!-- Si le joueur n'est pas connecté -->
                 <div class="panel">
                     <div class="panel__heading">
