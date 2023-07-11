@@ -6,7 +6,8 @@ CREATE TABLE IF NOT EXISTS `cmw_votes_rewards`
     PRIMARY KEY (`votes_rewards_rewards_id`),
     UNIQUE KEY `rewards_id` (`votes_rewards_rewards_id`)
 ) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `cmw_votes_sites`
 (
@@ -22,7 +23,8 @@ CREATE TABLE IF NOT EXISTS `cmw_votes_sites`
     CONSTRAINT `fk_cmw_votes_rewards` FOREIGN KEY (`votes_sites_rewards_id`)
         REFERENCES `cmw_votes_rewards` (`votes_rewards_rewards_id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
 
 
 CREATE TABLE IF NOT EXISTS `cmw_votes_votes`
@@ -40,7 +42,8 @@ CREATE TABLE IF NOT EXISTS `cmw_votes_votes`
     CONSTRAINT `cmw_votes_votes_ibfk_2` FOREIGN KEY (`votes_id_site`)
         REFERENCES `cmw_votes_sites` (`votes_sites_id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
 
 
 CREATE TABLE IF NOT EXISTS `cmw_votes_config`
@@ -51,7 +54,8 @@ CREATE TABLE IF NOT EXISTS `cmw_votes_config`
     `votes_config_auto_top_reward`        TEXT       NULL COMMENT 'Récompenses automatiques pour les x premiers (JSON)',
     `votes_config_enable_api`             TINYINT(1) NOT NULL
 ) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
 
 
 CREATE TABLE IF NOT EXISTS `cmw_votes_logs_rewards`
@@ -68,7 +72,8 @@ CREATE TABLE IF NOT EXISTS `cmw_votes_logs_rewards`
     CONSTRAINT `cmw_votes_logs_rewards_ibfk_2` FOREIGN KEY (`votes_logs_rewards_user_id`)
         REFERENCES `cmw_users` (`user_id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `cmw_votes_votepoints`
 (
@@ -80,7 +85,8 @@ CREATE TABLE IF NOT EXISTS `cmw_votes_votepoints`
     CONSTRAINT `cmw_votes_votepoints_ibfk_1` FOREIGN KEY (`votes_votepoints_id_user`)
         REFERENCES `cmw_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
 
 
 #Generate Default config
