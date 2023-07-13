@@ -237,7 +237,7 @@ $description = LangManager::translate("votes.dashboard.desc");
     //Get months
     function getLast3Months() {
 
-        const monthNames = <?= LangManager::translate("core.months") ?>
+        const monthNames = <?= LangManager::translate("core.months.list") ?>
 
         const today = new Date();
         let toReturn = [];
@@ -255,7 +255,7 @@ $description = LangManager::translate("votes.dashboard.desc");
         data: {
             labels: getLast3Months(),
             datasets: [{
-                label: "Votes du mois",
+                label: <?= LangManager::translate('votes.dashboard.stats.monthlyVotes', forJs: true) ?>,
                 data: <?= json_encode($previous3Months, JSON_THROW_ON_ERROR) ?>,
                 backgroundColor: "#6B48FF",
                 borderColor: "#6B48FF",
