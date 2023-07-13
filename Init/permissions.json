@@ -6,5 +6,6 @@
   "votes.site.delete",
   "votes.rewards.edit",
   "votes.rewards.add",
-  "votes.rewards.delete"
+  "votes.rewards.delete",
+  "votes.boost"
 ]

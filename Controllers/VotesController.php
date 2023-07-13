@@ -28,7 +28,7 @@ use JsonException;
 
 /**
  * Class: @VotesController
- * @package votes
+ * @package Votes
  * @author Teyir
  * @version 1.0
  */

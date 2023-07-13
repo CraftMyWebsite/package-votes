@@ -11,7 +11,7 @@
         "Gestion des sites": "votes/site/list",
         "Récompenses": "votes/rewards",
         "Statistiques": "votes/stats",
-        "Muliplicateur": "votes/boost/",
+        "Muliplicateur": "votes/boost",
         "VoteShop": "votes/voteshop"
       },
       "urls_submenu_en": {
@@ -19,7 +19,7 @@
         "Manage sites": "votes/site/list",
         "Rewards": "votes/rewards",
         "Stats": "votes/stats",
-        "Muliplicateur": "votes/boost/",
+        "Multiplier": "votes/boost",
         "VoteShop": "votes/voteshop"
       }
     }
@@ -33,7 +33,7 @@
   ],
 
 
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": "Teyir",
 
   "isGame": false,
