@@ -115,6 +115,10 @@ class VotesController extends AbstractController
         [$title, $time, $idUnique, $url, $rewardsId] = Utils::filterInput("title", "time", "idUnique",
             "url", "reward");
 
+        if ($rewardsId === '0'){
+            $rewardsId = null;
+        }
+
        VotesSitesModel::getInstance()->addSite($title, $time, $idUnique, $url, $rewardsId);
 
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
@@ -144,6 +148,10 @@ class VotesController extends AbstractController
 
         [$siteId, $title, $time, $idUnique, $url, $rewardsId] = Utils::filterInput("siteId", "title", "time",
             "idUnique", "url", "reward");
+
+        if ($rewardsId === '0'){
+            $rewardsId = null;
+        }
 
         VotesSitesModel::getInstance()->updateSite($siteId, $title, $time, $idUnique, $url, $rewardsId);
 

@@ -71,6 +71,9 @@ $description = LangManager::translate("votes.dashboard.desc");
                     </h6>
                     <div class="form-group position-relative">
                         <select name="reward" class="form-control" required>
+                            <option <?= is_null($rewards) ? 'selected' : '' ?> value="0">
+                                <?= LangManager::translate("votes.dashboard.list_sites.noreward") ?>
+                            </option>
                             <?php foreach ($rewards as $reward) : ?>
                                 <option value="<?= $reward?->getRewardsId() ?>"><?= $reward->getTitle() ?></option>
                             <?php endforeach; ?>
@@ -188,12 +191,11 @@ $description = LangManager::translate("votes.dashboard.desc");
                                             <h6><?= LangManager::translate("votes.dashboard.add_site.input.rewards") ?>
                                                 :</h6>
                                             <div class="form-group position-relative">
-                                                <select name="reward" class="form-control" required>
-                                                    <!-- If the reward was delete we set a default placeholder -->
-                                                    <?php if ($site->getRewards() === NULL): ?>
-                                                        <option
-                                                            selected><?= LangManager::translate("votes.dashboard.list_sites.noreward") ?></option>
-                                                    <?php endif; ?>
+                                                <select name="reward" class="form-control">
+                                                    <option <?= $site->getRewards() === NULL ? 'selected' : '' ?> value="0">
+                                                        <?= LangManager::translate("votes.dashboard.list_sites.noreward") ?>
+                                                    </option>
+
                                                     <!-- Get all rewards -->
                                                     <?php foreach ($rewards as $reward) : ?>
                                                         <option

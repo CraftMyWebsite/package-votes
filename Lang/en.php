@@ -69,7 +69,7 @@ return [
             "tooltip" => [
                 "rewards" => "Choose the reward you previously configured. Click on the icon to go directly to the rewards configuration page"
             ],
-            "noreward" => "You don't have any rewards"
+            "noreward" => "No rewards"
         ],
 
         "config" => [
@@ -100,6 +100,7 @@ return [
             "top_current" => "Top voters of the current month",
             "top_totals" => "Top total voters",
             "top_pastMonth" => "Previous month's top voters",
+            "monthlyVotes" => "Monthly votes",
         ],
 
         "rewards" => [

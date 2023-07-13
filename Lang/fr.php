@@ -69,7 +69,7 @@ return [
             "tooltip" => [
                 "rewards" => "Choisis la récompense que tu as précédemment configuré. Clique sur l'icône pour accéder directement sur la page de configuration des récompenses"
             ],
-            "noreward" => "Vous ne possédez aucune récompense"
+            "noreward" => "Pas de récompenses"
         ],
 
         "config" => [
@@ -100,6 +100,7 @@ return [
             "top_current" => "Top voteurs du mois en cours",
             "top_totals" => "Top voteurs du totaux",
             "top_pastMonth" => "Top voteurs du mois précédent",
+            "monthlyVotes" => "Votes du mois",
         ],
 
         "rewards" => [

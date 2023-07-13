@@ -20,10 +20,10 @@ class VotesSitesModel extends AbstractModel
      * @param int $time
      * @param string $idUnique
      * @param string $url
-     * @param int $rewardsId
+     * @param ?int $rewardsId
      * @return \CMW\Entity\Votes\VotesSitesEntity|null
      */
-    public function addSite(string $title, int $time, string $idUnique, string $url, int $rewardsId): ?VotesSitesEntity
+    public function addSite(string $title, int $time, string $idUnique, string $url, ?int $rewardsId): ?VotesSitesEntity
     {
         $var = array(
             'title' => $title,
@@ -109,10 +109,10 @@ class VotesSitesModel extends AbstractModel
      * @param int $time
      * @param string $idUnique
      * @param string $url
-     * @param int $rewardsId
+     * @param ?int $rewardsId
      * @return \CMW\Entity\Votes\VotesSitesEntity|null
      */
-    public function updateSite(int $siteId, string $title, int $time, string $idUnique, string $url, int $rewardsId): ?VotesSitesEntity
+    public function updateSite(int $siteId, string $title, int $time, string $idUnique, string $url, ?int $rewardsId): ?VotesSitesEntity
     {
         $info = array(
             "id" => $siteId,
