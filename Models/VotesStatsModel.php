@@ -164,22 +164,35 @@ class VotesStatsModel extends AbstractModel
      */
     public function getActualTop(): array
     {
-
         if (DatabaseManager::isMariadb()) {
             $sql = "SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) AS votes, cmw_users.user_id AS userId FROM cmw_votes_votes
-                    JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user
-                    WHERE MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE())
-                    GROUP BY userId
-                    ORDER BY COUNT(cmw_votes_votes.votes_id) DESC ";
+                    JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user";
         } else {
             $sql = "SELECT COUNT(cmw_votes_votes.votes_id) AS votes, cmw_users.user_id AS userId FROM cmw_votes_votes
-                    JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user
-                    WHERE MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE())
-                    GROUP BY userId
-                    ORDER BY COUNT(cmw_votes_votes.votes_id) DESC ";
+                    JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user";
         }
 
-        $sql .= "LIMIT " . (new VotesConfigModel())->getConfig()?->getTopShow();
+        $conf = VotesConfigModel::getInstance()->getConfig();
+
+        if ($conf === null){
+            $reset = 0;
+        } else {
+            $reset = $conf->getReset();
+        }
+
+        switch ($reset){
+            case 1:
+                $sql .= " WHERE MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE())";
+                break;
+            case 2:
+                $sql .= " WHERE WEEK(cmw_votes_votes.votes_date) = WEEK(CURRENT_DATE())";
+                break;
+        }
+
+        $sql .= " GROUP BY userId
+                  ORDER BY COUNT(cmw_votes_votes.votes_id) DESC ";
+
+        $sql .= "LIMIT " . $conf?->getTopShow();
 
         $db = DatabaseManager::getInstance();
         $res = $db->prepare($sql);
@@ -188,12 +201,12 @@ class VotesStatsModel extends AbstractModel
             return array();
         }
 
-        $toReturn = array();
+        $toReturn = [];
 
         while ($stats = $res->fetch()) {
             $toReturn[] = new VotesPlayerStatsEntity(
                 $stats['votes'],
-                (new UsersModel())->getUserById($stats['userId'])
+                UsersModel::getInstance()->getUserById($stats['userId'])
             );
         }
 

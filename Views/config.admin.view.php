@@ -11,7 +11,7 @@ $description = LangManager::translate("votes.dashboard.desc");
 
 <div class="d-flex flex-wrap justify-content-between">
     <h3><i class="fa-solid fa-gears"></i> <span
-            class="m-lg-auto"><?= LangManager::translate("votes.dashboard.title.config") ?></span></h3>
+                class="m-lg-auto"><?= LangManager::translate("votes.dashboard.title.config") ?></span></h3>
 </div>
 
 <section class="row">
@@ -35,13 +35,15 @@ $description = LangManager::translate("votes.dashboard.desc");
                     <h6><?= LangManager::translate("votes.dashboard.config.placeholder.reset") ?> :</h6>
                     <div class="form-group position-relative">
                         <select name="reset" class="form-control" required>
-                            <option value="<?= $config->getReset() ?>" selected>
-                                <?= ($config->getReset() === 0) ? LangManager::translate("votes.dashboard.config.reset.0") :
-                                    LangManager::translate("votes.dashboard.config.reset.1") ?>
+                            <option value="0" <?= $config->getReset() === 0 ? 'selected' : '' ?>>
+                                <?= LangManager::translate("votes.dashboard.config.reset.0") ?>
                             </option>
-                            <option value="<?= ($config->getReset() === 1) ? 0 : 1 ?>">
-                                <?= ($config->getReset() === 1) ? LangManager::translate("votes.dashboard.config.reset.0") :
-                                    LangManager::translate("votes.dashboard.config.reset.1") ?></option>
+                            <option value="1" <?= $config->getReset() === 1 ? 'selected' : '' ?>>
+                                <?= LangManager::translate("votes.dashboard.config.reset.1") ?>
+                            </option>
+                            <option value="2" <?= $config->getReset() === 2 ? 'selected' : '' ?>>
+                                <?= LangManager::translate("votes.dashboard.config.reset.2") ?>
+                            </option>
                         </select>
                     </div>
                     <h6><?= LangManager::translate("votes.dashboard.config.placeholder.enable_api") ?> :</h6>

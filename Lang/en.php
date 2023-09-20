@@ -76,6 +76,7 @@ return [
             "reset" => [
                 "0" => "No vote reset set",
                 "1" => "Monthly",
+                "2" => "Weekly",
             ],
             "enable_api" => [
                 "0" => "Disable local API",
