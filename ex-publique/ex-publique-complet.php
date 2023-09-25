@@ -3,7 +3,6 @@
 use CMW\Controller\Core\ThemeController;
 use CMW\Controller\Users\UsersController;
 use CMW\Manager\Env\EnvManager;
-use CMW\Model\Users\UsersModel;
 
 $title = "Mon-Serveur | Voter";
 $description = "Votez pour le serveur et gagnez des récompenses uniques!";
@@ -36,7 +35,7 @@ $description = "Votez pour le serveur et gagnez des récompenses uniques!";
                                 <br>
 
                                 <strong>Connectez-vous</strong> dès maintenant en cliquant <a
-                                        href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>login">ici</a>
+                                    href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>login">ici</a>
                             </p>
 
 
@@ -64,16 +63,16 @@ $description = "Votez pour le serveur et gagnez des récompenses uniques!";
                                         <div class="package__tags">
                                             <span class="tag tag--left tag--700">1 à 3 VotePoints</span>
                                             <span class="tag tag--danger"><i
-                                                        class="fas fa-stopwatch"></i><?= $site->getTimeFormatted() ?></span>
+                                                    class="fas fa-stopwatch"></i><?= $site->getTimeFormatted() ?></span>
                                         </div>
                                     </div>
-                                    <?php if($site->isAvailable()): ?>
-                                    <div>
-                                        <a onclick="sendVote('<?= $site->getSiteId() ?>', this)"
-                                           type="button" rel="noopener noreferrer"
-                                           class="btn btn--primary cursorAura">Voter
-                                        </a>
-                                    </div>
+                                    <?php if ($site->isAvailable()): ?>
+                                        <div>
+                                            <a onclick="sendVote('<?= $site->getSiteId() ?>', this)"
+                                               type="button" rel="noopener noreferrer"
+                                               class="btn btn--primary cursorAura">Voter
+                                            </a>
+                                        </div>
                                     <?php else: ?>
                                         <div>
                                             <a class="btn btn--primary cursorAura">
@@ -179,7 +178,10 @@ $description = "Votez pour le serveur et gagnez des récompenses uniques!";
         </div>
     </div>
 </section>
-<link rel="stylesheet" href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'Admin/Resources/Vendors/Izitoast/iziToast.min.css' ?>">
-<script src="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'Admin/Resources/Vendors/Izitoast/iziToast.min.js' ?>"></script>
-<script src="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'App/Package/Votes/Views/Resources/Js/VotesStatus.js' ?>"></script>
+<link rel="stylesheet"
+      href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'Admin/Resources/Vendors/Izitoast/iziToast.min.css' ?>">
+<script
+    src="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'Admin/Resources/Vendors/Izitoast/iziToast.min.js' ?>"></script>
+<script
+    src="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'App/Package/Votes/Views/Resources/Js/VotesStatus.js' ?>"></script>
 <script src="<?= ThemeController::getCurrentTheme()->getPath() . 'Views/Votes/Resources/Js/VotesLogic.js' ?>"></script>

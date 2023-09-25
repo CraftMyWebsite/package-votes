@@ -17,11 +17,11 @@ class VotesModel extends AbstractModel
 {
     public function storeVote(int $idUser, string $idSite): void
     {
-        $var = array(
+        $var = [
             "id_user" => $idUser,
             "ip" => Website::getClientIp(),
-            "id_site" => $idSite
-        );
+            "id_site" => $idSite,
+        ];
 
         $sql = "INSERT INTO cmw_votes_votes (votes_id_user, votes_ip, votes_id_site) VALUES (:id_user, :ip, :id_site)";
 
@@ -37,10 +37,10 @@ class VotesModel extends AbstractModel
 
     public function getPlayerLastStoredVote(int $idUser, int $idSite): array
     {
-        $var = array(
+        $var = [
             "idUser" => $idUser,
-            "idSite" => $idSite
-        );
+            "idSite" => $idSite,
+        ];
 
         $sql = "SELECT votes_id, votes_date FROM `cmw_votes_votes` WHERE votes_id_user = :idUser AND votes_id_site = :idSite 
                 ORDER BY votes_date DESC LIMIT 1";

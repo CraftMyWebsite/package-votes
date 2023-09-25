@@ -4,8 +4,15 @@ class VotesStatus {
         this.button = button
     }
 
-    startVoteSendLogic(){}
-    voteNotSendLogic() {}
-    voteAlreadyVotedLogic() {}
-    voteSendLogic() {}
+    startVoteSendLogic() {
+    }
+
+    voteNotSendLogic() {
+    }
+
+    voteAlreadyVotedLogic() {
+    }
+
+    voteSendLogic() {
+    }
 }

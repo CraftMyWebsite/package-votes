@@ -25,13 +25,13 @@ class VotesSitesModel extends AbstractModel
      */
     public function addSite(string $title, int $time, string $idUnique, string $url, ?int $rewardsId): ?VotesSitesEntity
     {
-        $var = array(
+        $var = [
             'title' => $title,
             'time' => $time,
             'id_unique' => $idUnique,
             'url' => $url,
-            'rewards_id' => $rewardsId
-        );
+            'rewards_id' => $rewardsId,
+        ];
 
         $sql = "INSERT INTO cmw_votes_sites (votes_sites_title, votes_sites_time, votes_sites_id_unique, 
                              votes_sites_url, votes_sites_rewards_id) VALUES (:title, :time, :id_unique, :url, :rewards_id)";
@@ -59,7 +59,7 @@ class VotesSitesModel extends AbstractModel
         $res = $db->prepare($sql);
 
 
-        if (!$res->execute(array("id" => $id))) {
+        if (!$res->execute(["id" => $id])) {
             return null;
         }
 
@@ -90,10 +90,10 @@ class VotesSitesModel extends AbstractModel
         $res = $db->prepare($sql);
 
         if (!$res->execute()) {
-            return array();
+            return [];
         }
 
-        $toReturn = array();
+        $toReturn = [];
 
         while ($site = $res->fetch()) {
             $toReturn[] = $this->getSiteById($site["votes_sites_id"]);
@@ -114,14 +114,14 @@ class VotesSitesModel extends AbstractModel
      */
     public function updateSite(int $siteId, string $title, int $time, string $idUnique, string $url, ?int $rewardsId): ?VotesSitesEntity
     {
-        $info = array(
+        $info = [
             "id" => $siteId,
             "title" => $title,
             "time" => $time,
             "id_unique" => $idUnique,
             "url" => $url,
-            "rewards_id" => $rewardsId
-        );
+            "rewards_id" => $rewardsId,
+        ];
 
         $sql = "UPDATE cmw_votes_sites SET votes_sites_title=:title, votes_sites_time=:time, 
                            votes_sites_id_unique=:id_unique, votes_sites_url=:url, votes_sites_rewards_id=:rewards_id 
@@ -146,6 +146,6 @@ class VotesSitesModel extends AbstractModel
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
-        $req->execute(array("id" => $id));
+        $req->execute(["id" => $id]);
     }
 }

@@ -24,18 +24,14 @@
       }
     }
   ],
-
   "description": [
     {
       "fr": "Intégrez un système de votes complet pour votre site.",
       "en": "Add a brand new vote system to your website"
     }
   ],
-
-
   "version": "0.0.4",
   "author": "Teyir",
-
   "isGame": false,
   "isCore": false
 }

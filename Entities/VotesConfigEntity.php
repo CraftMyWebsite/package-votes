@@ -10,6 +10,7 @@ class VotesConfigEntity
     private int $autoTopRewardActive;
     private ?string $autoTopReward;
     private bool $enableApi;
+    private bool $needLogin;
 
     /**
      * @param int $topShow
@@ -17,14 +18,16 @@ class VotesConfigEntity
      * @param int $autoTopRewardActive
      * @param string|null $autoTopReward
      * @param bool $enableApi
+     * @param bool $needLogin
      */
-    public function __construct(int $topShow, int $reset, int $autoTopRewardActive, ?string $autoTopReward, bool $enableApi)
+    public function __construct(int $topShow, int $reset, int $autoTopRewardActive, ?string $autoTopReward, bool $enableApi, bool $needLogin)
     {
         $this->topShow = $topShow;
         $this->reset = $reset;
         $this->autoTopRewardActive = $autoTopRewardActive;
         $this->autoTopReward = $autoTopReward;
         $this->enableApi = $enableApi;
+        $this->needLogin = $needLogin;
     }
 
     /**
@@ -67,4 +70,8 @@ class VotesConfigEntity
         return $this->enableApi;
     }
 
+    public function isNeedLogin(): bool
+    {
+        return $this->needLogin;
+    }
 }

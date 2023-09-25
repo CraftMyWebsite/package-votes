@@ -11,7 +11,7 @@ $description = LangManager::translate("votes.dashboard.desc");
 
 <div class="d-flex flex-wrap justify-content-between">
     <h3><i class="fa-solid fa-gears"></i> <span
-                class="m-lg-auto"><?= LangManager::translate("votes.dashboard.title.config") ?></span></h3>
+            class="m-lg-auto"><?= LangManager::translate("votes.dashboard.title.config") ?></span></h3>
 </div>
 
 <section class="row">
@@ -57,6 +57,15 @@ $description = LangManager::translate("votes.dashboard.desc");
                                 <?= LangManager::translate("votes.dashboard.config.enable_api.0") ?></option>
                         </select>
                     </div>
+
+                    <div class="form-group position-relative">
+                        <label class="form-check-label" for="needLogin">
+                            <?= LangManager::translate("votes.dashboard.config.needLogin") ?>
+                        </label>
+                        <input class="form-check-input" type="checkbox" id="needLogin" name="needLogin"
+                            <?= $config->isNeedLogin() ? 'checked' : '' ?>>
+                    </div>
+
                     <input type="number" name="autoTopRewardActive" value="1" hidden>
                     <!-- /!\ JSON function /!\-->
                     <input type="text" name="autoTopReward" value='cc le JSON' hidden>

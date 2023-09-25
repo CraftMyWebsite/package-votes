@@ -54,7 +54,7 @@ return [
             "sitescomp" => [
                 "modal_title" => "Liste des sites de votes compatibles",
                 "websites_title" => "Sites de vote Minecraft",
-                "request" => "Demande d'ajouts de nouveaux sites"
+                "request" => "Demande d'ajouts de nouveaux sites",
             ],
         ],
 
@@ -63,13 +63,13 @@ return [
             "del_site" => [
                 "modal" => [
                     "title" => "Suppression du site",
-                    "body" => "Êtes-vous certains de vouloir supprimer ce site ?"
+                    "body" => "Êtes-vous certains de vouloir supprimer ce site ?",
                 ],
             ],
             "tooltip" => [
-                "rewards" => "Choisis la récompense que tu as précédemment configuré. Clique sur l'icône pour accéder directement sur la page de configuration des récompenses"
+                "rewards" => "Choisis la récompense que tu as précédemment configuré. Clique sur l'icône pour accéder directement sur la page de configuration des récompenses",
             ],
-            "noreward" => "Pas de récompenses"
+            "noreward" => "Pas de récompenses",
         ],
 
         "config" => [
@@ -80,13 +80,14 @@ return [
             ],
             "enable_api" => [
                 "0" => "Désactiver l'api locale",
-                "1" => "Activer l'api locale"
+                "1" => "Activer l'api locale",
             ],
             "placeholder" => [
                 "reset" => "Mode de reset des votes",
                 "top_show" => "Nombre de voteurs à afficher",
-                "enable_api" => "Activer l'api du site"
+                "enable_api" => "Activer l'api du site",
             ],
+            "needLogin" => "Connexion requise",
         ],
 
         "stats" => [
@@ -114,8 +115,8 @@ return [
                 "commands" => "Commandes Minecraft",
                 "servers" => "Serveurs",
                 "placeholder" => [
-                    "commands" => "Commande(s), séparez vos commandes avec '|'"
-                ]
+                    "commands" => "Commande(s), séparez vos commandes avec '|'",
+                ],
             ],
             "add" => [
                 "title" => "Ajouter une récompense",
@@ -133,34 +134,34 @@ return [
             ],
             "del" => [
                 "body" => "Êtes-vous certains de vouloir supprimer cette récompense ?",
-                "title" => "Suppression de la récompense"
+                "title" => "Suppression de la récompense",
             ],
         ],
     ],
     "toaster" => [
         "site" => [
             "add" => [
-                "success" => "Site <b>%name%</b> ajouté avec succès"
+                "success" => "Site <b>%name%</b> ajouté avec succès",
             ],
             "edit" => [
-                "success" => "Site <b>%name%</b> modifié avec succès"
+                "success" => "Site <b>%name%</b> modifié avec succès",
             ],
             "delete" => [
-                "success" => "Site <b>%name%</b> supprimé avec succès"
+                "success" => "Site <b>%name%</b> supprimé avec succès",
             ],
             "test_id" => [
                 "success" => "Id unique validé !",
                 "error" => "Id unique non validé !",
-                "empty_input" => "Merci de remplir tous les champs !"
+                "empty_input" => "Merci de remplir tous les champs !",
             ],
         ],
         "reward" => [
             "add" => [
-                "success" => "Récompense <b>%name%</b> ajoutée avec succès"
+                "success" => "Récompense <b>%name%</b> ajoutée avec succès",
             ],
             "delete" => [
-                "success" => "Récompense <b>%name%</b> supprimée avec succès"
-            ]
+                "success" => "Récompense <b>%name%</b> supprimée avec succès",
+            ],
         ],
     ],
 ];

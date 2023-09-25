@@ -18,10 +18,10 @@ class VotesRewardsModel extends AbstractModel
 {
     public function addReward(string $title, string $action): ?VotesRewardsEntity
     {
-        $var = array(
+        $var = [
             'title' => $title,
-            'action' => $action
-        );
+            'action' => $action,
+        ];
 
         $sql = "INSERT INTO cmw_votes_rewards (votes_rewards_title, votes_rewards_action) VALUES (:title, :action)";
 
@@ -49,7 +49,7 @@ class VotesRewardsModel extends AbstractModel
         $db = DatabaseManager::getInstance();
         $res = $db->prepare($sql);
 
-        if (!$res->execute(array("rewards_id" => $id))) {
+        if (!$res->execute(["rewards_id" => $id])) {
             return null;
         }
 
@@ -65,9 +65,9 @@ class VotesRewardsModel extends AbstractModel
 
     public function deleteReward($id): void
     {
-        $var = array(
-            "rewards_id" => $id
-        );
+        $var = [
+            "rewards_id" => $id,
+        ];
 
         $sql = "DELETE FROM cmw_votes_rewards WHERE votes_rewards_rewards_id=:rewards_id";
 
@@ -78,11 +78,11 @@ class VotesRewardsModel extends AbstractModel
 
     public function updateReward(int $rewardsId, string $title, string $action): ?VotesRewardsEntity
     {
-        $var = array(
+        $var = [
             "rewards_id" => $rewardsId,
             "title" => $title,
-            "action" => $action
-        );
+            "action" => $action,
+        ];
 
         $sql = "UPDATE cmw_votes_rewards SET votes_rewards_title=:title, votes_rewards_action=:action 
                          WHERE votes_rewards_rewards_id=:rewards_id";
@@ -99,9 +99,9 @@ class VotesRewardsModel extends AbstractModel
     public function selectReward(int $userId, int $idSite): void
     {
         //Select the reward action, rewards_id and id site with the site id
-        $var = array(
-            "id" => $idSite
-        );
+        $var = [
+            "id" => $idSite,
+        ];
 
         $sql = "SELECT cmw_votes_sites.votes_sites_rewards_id, cmw_votes_sites.votes_sites_id, 
                     cmw_votes_rewards.votes_rewards_action FROM cmw_votes_sites 
@@ -141,10 +141,10 @@ class VotesRewardsModel extends AbstractModel
     public function giveRewardVotePoints(int $userId, int $amount): void
     {
         //If the player has never got a reward
-        $var = array(
+        $var = [
             "id_user" => $userId,
-            "amount" => $amount
-        );
+            "amount" => $amount,
+        ];
         if ($this->detectFirstVotePointsReward($userId)) {
 
             $sql = "INSERT INTO cmw_votes_votepoints (votes_votepoints_id_user, votes_votepoints_amount) 
@@ -163,9 +163,9 @@ class VotesRewardsModel extends AbstractModel
 
     public function detectFirstVotePointsReward(int $userId): bool
     {
-        $var = array(
-            "id_user" => $userId
-        );
+        $var = [
+            "id_user" => $userId,
+        ];
 
         $sql = "SELECT votes_votepoints_id_user FROM cmw_votes_votepoints WHERE votes_votepoints_id_user=:id_user";
 
@@ -184,10 +184,10 @@ class VotesRewardsModel extends AbstractModel
 
     public function setLog(int $userId, int $rewardsId): void
     {
-        $var = array(
+        $var = [
             "user_id" => $userId,
-            "reward_id" => $rewardsId
-        );
+            "reward_id" => $rewardsId,
+        ];
 
         $sql = "INSERT INTO cmw_votes_logs_rewards (votes_logs_rewards_user_id, votes_logs_rewards_reward_id) 
                     VALUES (:user_id, :reward_id)";
@@ -206,10 +206,10 @@ class VotesRewardsModel extends AbstractModel
         }
 
         //If the player has never got a reward
-        $var = array(
+        $var = [
             "id_user" => $userId,
-            "amount" => $amount
-        );
+            "amount" => $amount,
+        ];
         if ($this->detectFirstVotePointsReward($userId)) {
 
             $sql = "INSERT INTO cmw_votes_votepoints (votes_votepoints_id_user, votes_votepoints_amount) 
@@ -235,10 +235,10 @@ class VotesRewardsModel extends AbstractModel
         $res = $db->prepare($sql);
 
         if (!$res->execute()) {
-            return array();
+            return [];
         }
 
-        $toReturn = array();
+        $toReturn = [];
 
         while ($reward = $res->fetch()) {
             $toReturn[] = $this->getRewardById($reward["votes_rewards_rewards_id"]);

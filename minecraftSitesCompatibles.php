@@ -9,5 +9,5 @@ return [
     "liste-serveurs-minecraft.org" => "https://liste-serveurs-minecraft.org",
     "serveur-minecraft.com" => "https://serveur-minecraft.com",
     "liste-serveurs-minecraft.com" => "https://www.liste-minecraft-serveurs.com",
-    "serveurs-minecraft.org" => "https://www.serveurs-minecraft.org"
+    "serveurs-minecraft.org" => "https://www.serveurs-minecraft.org",
 ];

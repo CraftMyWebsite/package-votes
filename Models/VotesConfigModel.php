@@ -16,16 +16,15 @@ use CMW\Manager\Package\AbstractModel;
  */
 class VotesConfigModel extends AbstractModel
 {
-    //Get the config
     public function updateConfig(int $topShow, int $reset, int $autoTopRewardActive, string $autoTopReward, bool $enableApi): ?VotesConfigEntity
     {
-        $info = array(
+        $info = [
             "top_show" => $topShow,
             "reset" => $reset,
             "auto_top_reward_active" => $autoTopRewardActive,
             "auto_top_reward" => $autoTopReward,
-            "enable_api" => $enableApi
-        );
+            "enable_api" => $enableApi,
+        ];
 
         $sql = "UPDATE cmw_votes_config SET votes_config_top_show=:top_show, votes_config_reset=:reset,
                             votes_config_auto_top_reward_active=:auto_top_reward_active, 
@@ -39,8 +38,6 @@ class VotesConfigModel extends AbstractModel
 
         return null;
     }
-
-    //Update the config
 
     public function getConfig(): ?VotesConfigEntity
     {
@@ -61,7 +58,8 @@ class VotesConfigModel extends AbstractModel
             $res['votes_config_reset'],
             $res['votes_config_auto_top_reward_active'],
             $res['votes_config_auto_top_reward'],
-            $res['votes_config_enable_api']
+            $res['votes_config_enable_api'],
+            $res['votes_config_need_login']
         );
     }
 }

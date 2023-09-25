@@ -90,7 +90,8 @@ CREATE TABLE IF NOT EXISTS `cmw_votes_votepoints`
 
 
 #Generate Default config
-INSERT INTO cmw_votes_config (votes_config_top_show, votes_config_reset, votes_config_auto_top_reward_active, votes_config_auto_top_reward, votes_config_enable_api)
-SELECT 10, 1, 0, null, 1
+INSERT INTO cmw_votes_config (votes_config_top_show, votes_config_reset, votes_config_auto_top_reward_active,
+                              votes_config_auto_top_reward, votes_config_enable_api)
+SELECT 10, 1, 0, NULL, 1
 WHERE NOT EXISTS (SELECT 1 FROM cmw_votes_config);
 

@@ -3,7 +3,7 @@ const sendVote = async (siteId, button) => {
 
     let voteLogic = new VotesLogic(siteId, button)
 
-    if (lastWebsiteOpened !== siteId){
+    if (lastWebsiteOpened !== siteId) {
         voteLogic.startVoteSendLogic()
 
         openWebsite(siteId)
@@ -32,7 +32,7 @@ const sendVote = async (siteId, button) => {
 }
 
 const openWebsite = (siteId) => {
-  fetch(`vote/geturl/${siteId}`)
-      .then(x => x.text())
-      .then(url => window.open(url));
+    fetch(`vote/geturl/${siteId}`)
+        .then(x => x.text())
+        .then(url => window.open(url));
 }

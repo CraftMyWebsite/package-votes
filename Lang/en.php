@@ -54,7 +54,7 @@ return [
             "sitescomp" => [
                 "modal_title" => "List of compatible voting sites",
                 "websites_title" => "Minecraft Voting Sites",
-                "request" => "Request for additions of new sites"
+                "request" => "Request for additions of new sites",
             ],
         ],
 
@@ -63,13 +63,13 @@ return [
             "del_site" => [
                 "modal" => [
                     "title" => "Delete the site",
-                    "body" => "Are you sure you want to delete this site?"
+                    "body" => "Are you sure you want to delete this site?",
                 ],
             ],
             "tooltip" => [
-                "rewards" => "Choose the reward you previously configured. Click on the icon to go directly to the rewards configuration page"
+                "rewards" => "Choose the reward you previously configured. Click on the icon to go directly to the rewards configuration page",
             ],
-            "noreward" => "No rewards"
+            "noreward" => "No rewards",
         ],
 
         "config" => [
@@ -80,13 +80,14 @@ return [
             ],
             "enable_api" => [
                 "0" => "Disable local API",
-                "1" => "Enable local API"
+                "1" => "Enable local API",
             ],
             "placeholder" => [
                 "reset" => "Voting reset mode",
                 "top_show" => "Number of voters to display",
-                "enable_api" => "Activate the site's API"
+                "enable_api" => "Activate the site's API",
             ],
+            "needLogin" => "User need to be logged",
         ],
 
         "stats" => [
@@ -114,8 +115,8 @@ return [
                 "commands" => "Minecraft Commands",
                 "servers" => "Servers",
                 "placeholder" => [
-                    "commands" => "Order(s), separate your orders with '|'"
-                ]
+                    "commands" => "Order(s), separate your orders with '|'",
+                ],
             ],
             "add" => [
                 "title" => "Add a reward",
@@ -133,34 +134,34 @@ return [
             ],
             "del" => [
                 "body" => "Are you sure you want to remove this reward?",
-                "title" => "Removal of reward"
+                "title" => "Removal of reward",
             ],
         ],
     ],
     "toaster" => [
         "site" => [
             "add" => [
-                "success" => "Site <b>%name%</b> successfully added"
+                "success" => "Site <b>%name%</b> successfully added",
             ],
             "edit" => [
-                "success" => "Site <b>%name%</b> successfully modified"
+                "success" => "Site <b>%name%</b> successfully modified",
             ],
             "delete" => [
-                "success" => "Site <b>%name%</b> successfully deleted"
+                "success" => "Site <b>%name%</b> successfully deleted",
             ],
             "test_id" => [
                 "success" => "Unique id validate !",
                 "error" => "Unique id not validate",
-                "empty_input" => "Please fill in all the inputs !"
+                "empty_input" => "Please fill in all the inputs !",
             ],
         ],
         "reward" => [
             "add" => [
-                "success" => "Récompense <b>%name%</b> successfully added"
+                "success" => "Récompense <b>%name%</b> successfully added",
             ],
             "delete" => [
-                "success" => "Récompense <b>%name%</b> successfully deleted"
-            ]
+                "success" => "Récompense <b>%name%</b> successfully deleted",
+            ],
         ],
     ],
 ];

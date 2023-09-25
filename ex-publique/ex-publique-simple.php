@@ -16,7 +16,7 @@ $description = "Votez pour votre serveur préféré !";
                     <h3><?= $site->getTitle() ?></h3>
                     <div class="package__tags">
                         <span class="tag tag--danger"><i
-                                    class="fas fa-stopwatch"></i><?= $site->getTimeFormatted() ?></span>
+                                class="fas fa-stopwatch"></i><?= $site->getTimeFormatted() ?></span>
                     </div>
                 </div>
                 <div class="package__buttons package__buttons--outBasket">

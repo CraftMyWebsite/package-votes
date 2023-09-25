@@ -27,7 +27,7 @@ class CheckVotesModel extends AbstractModel
         //List of all websites:
 
         if (self::checkUrl($url, 'serveur-prive.net')) {
-            return self::checkJsonData("https://serveur-prive.net/api/vote/json/$idUnique/$ipPlayer",'status', 1);
+            return self::checkJsonData("https://serveur-prive.net/api/vote/json/$idUnique/$ipPlayer", 'status', 1);
         }
 
         if (self::checkUrl($url, 'serveur-minecraft-vote.fr')) {
@@ -68,6 +68,65 @@ class CheckVotesModel extends AbstractModel
 
     /**
      * @param string $url
+     * @param $siteName
+     * @return bool
+     */
+    public static function checkUrl(string $url, $siteName): bool
+    {
+        return strpos($url, $siteName);
+    }
+
+    /**
+     * @param string $url
+     * @param string $valueIndex
+     * @param mixed $expectedValue
+     * @return bool
+     * @desc Return json array
+     */
+    public static function checkJsonData(string $url, string $valueIndex, mixed $expectedValue): bool
+    {
+        /* IGNORE HTTP ERROR */
+        $context = stream_context_create([
+            'http' => ['ignore_errors' => true],
+        ]);
+
+        $result = @file_get_contents($url, false, $context);
+
+        try {
+            if ($result && ($result = json_decode($result, true, 512, JSON_THROW_ON_ERROR))
+                && $result[$valueIndex] == $expectedValue) {
+                return true;
+            }
+        } catch (JsonException) {
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string $url
+     * @param mixed $expectedValue
+     * @return bool
+     */
+    public static function checkPlainData(string $url, mixed $expectedValue): bool
+    {
+        $context = stream_context_create([
+            'http' => ['ignore_errors' => true],
+        ]);
+        return @file_get_contents($url, false, $context) == $expectedValue;
+    }
+
+    public static function containData(string $url, mixed $expectedData): bool
+    {
+        $context = stream_context_create([
+            'http' => ['ignore_errors' => true],
+        ]);
+
+        return strpos(@file_get_contents($url, false, $context), $expectedData);
+    }
+
+    /**
+     * @param string $url
      * @param string $siteId
      * @return bool
      * @desc Check if siteId is good
@@ -75,13 +134,13 @@ class CheckVotesModel extends AbstractModel
     public function testSiteId(string $url, string $siteId): bool
     {
         /* IGNORE HTTP ERROR */
-        $context = stream_context_create(array(
-            'http' => array('ignore_errors' => true),
-        ));
+        $context = stream_context_create([
+            'http' => ['ignore_errors' => true],
+        ]);
 
         //List of all websites:
         if (self::checkUrl($url, 'serveur-prive.net')) {
-            return self::checkJsonData("https://serveur-prive.net/api/stats/json/$siteId/position",'status', 1);
+            return self::checkJsonData("https://serveur-prive.net/api/stats/json/$siteId/position", 'status', 1);
         }
 
         if (self::checkUrl($url, 'serveur-minecraft-vote.fr')) {
@@ -121,47 +180,6 @@ class CheckVotesModel extends AbstractModel
 
     /**
      * @param string $url
-     * @param string $valueIndex
-     * @param mixed $expectedValue
-     * @return bool
-     * @desc Return json array
-     */
-    public static function checkJsonData(string $url, string $valueIndex, mixed $expectedValue): bool
-    {
-        /* IGNORE HTTP ERROR */
-        $context = stream_context_create(array(
-            'http' => array('ignore_errors' => true),
-        ));
-
-        $result = @file_get_contents($url, false, $context);
-
-        try {
-            if ($result && ($result = json_decode($result, true, 512, JSON_THROW_ON_ERROR))
-                && $result[$valueIndex] == $expectedValue) {
-                return true;
-            }
-        } catch (JsonException) {
-        }
-
-        return false;
-    }
-
-    /**
-     * @param string $url
-     * @param mixed $expectedValue
-     * @return bool
-     */
-    public static function checkPlainData(string $url, mixed $expectedValue): bool
-    {
-        $context = stream_context_create(array(
-            'http' => array('ignore_errors' => true),
-        ));
-        return @file_get_contents($url, false, $context) == $expectedValue;
-    }
-
-
-    /**
-     * @param string $url
      * @param int $expectedValue
      * @param bool $checkSSL
      * @return bool
@@ -170,32 +188,13 @@ class CheckVotesModel extends AbstractModel
     public static function checkStatusCode(string $url, int $expectedValue, bool $checkSSL = true): bool
     {
         $handle = curl_init($url);
-        curl_setopt($handle,  CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($handle, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, $checkSSL);
         $response = curl_exec($handle);
         $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
         curl_close($handle);
 
         return (int)$httpCode === $expectedValue;
-    }
-
-    public static function containData(string $url, mixed $expectedData): bool
-    {
-        $context = stream_context_create(array(
-            'http' => array('ignore_errors' => true),
-        ));
-
-        return strpos(@file_get_contents($url, false, $context), $expectedData);
-    }
-
-    /**
-     * @param string $url
-     * @param $siteName
-     * @return bool
-     */
-    public static function checkUrl(string $url, $siteName): bool
-    {
-        return strpos($url, $siteName);
     }
 
 

@@ -71,10 +71,10 @@ class VotesStatsModel extends AbstractModel
             }
 
 
-            $var = array(
+            $var = [
                 "range_start" => $rangeStart,
-                "range_finish" => $rangeFinish
-            );
+                "range_finish" => $rangeFinish,
+            ];
 
             $sql = "SELECT * FROM cmw_votes_votes WHERE votes_date BETWEEN (:range_start) AND (:range_finish)";
 
@@ -92,9 +92,9 @@ class VotesStatsModel extends AbstractModel
 
     public function statsVotesSitesTotaux(string $title): int
     {
-        $var = array(
-            "title" => $title
-        );
+        $var = [
+            "title" => $title,
+        ];
 
         $sql = 'SELECT cmw_votes_votes.votes_id, cmw_votes_sites.votes_sites_title FROM cmw_votes_votes 
                     JOIN cmw_votes_sites ON cmw_votes_votes.votes_id_site = cmw_votes_sites.votes_sites_id 
@@ -117,11 +117,11 @@ class VotesStatsModel extends AbstractModel
         $rangeStart = date("Y-m-d 00:00:00", strtotime("first day of this month"));
         $rangeFinish = date("Y-m-d 00:00:00", strtotime("last day of this month"));
 
-        $var = array(
+        $var = [
             "title" => $title,
             "range_start" => $rangeStart,
-            "range_finish" => $rangeFinish
-        );
+            "range_finish" => $rangeFinish,
+        ];
 
         $sql = 'SELECT cmw_votes_votes.votes_id, cmw_votes_sites.votes_sites_title FROM cmw_votes_votes 
                     JOIN cmw_votes_sites ON cmw_votes_votes.votes_id_site = cmw_votes_sites.votes_sites_id 
@@ -174,13 +174,13 @@ class VotesStatsModel extends AbstractModel
 
         $conf = VotesConfigModel::getInstance()->getConfig();
 
-        if ($conf === null){
+        if ($conf === null) {
             $reset = 0;
         } else {
             $reset = $conf->getReset();
         }
 
-        switch ($reset){
+        switch ($reset) {
             case 1:
                 $sql .= " WHERE MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE())";
                 break;
@@ -198,7 +198,7 @@ class VotesStatsModel extends AbstractModel
         $res = $db->prepare($sql);
 
         if (!$res->execute()) {
-            return array();
+            return [];
         }
 
         $toReturn = [];
@@ -235,10 +235,10 @@ class VotesStatsModel extends AbstractModel
         $res = $db->prepare($sql);
 
         if (!$res->execute()) {
-            return array();
+            return [];
         }
 
-        $toReturn = array();
+        $toReturn = [];
 
         while ($stats = $res->fetch()) {
             $toReturn[] = new VotesPlayerStatsEntity(
@@ -277,10 +277,10 @@ class VotesStatsModel extends AbstractModel
         $res = $db->prepare($sql);
 
         if (!$res->execute()) {
-            return array();
+            return [];
         }
 
-        $toReturn = array();
+        $toReturn = [];
 
         while ($stats = $res->fetch()) {
             $toReturn[] = new VotesPlayerStatsEntity(
@@ -315,10 +315,10 @@ class VotesStatsModel extends AbstractModel
         $res = $db->prepare($sql);
 
         if (!$res->execute()) {
-            return array();
+            return [];
         }
 
-        $toReturn = array();
+        $toReturn = [];
 
         while ($stats = $res->fetch()) {
             $toReturn[] = new VotesPlayerStatsEntity(
@@ -351,10 +351,10 @@ class VotesStatsModel extends AbstractModel
         $res = $db->prepare($sql);
 
         if (!$res->execute()) {
-            return array();
+            return [];
         }
 
-        $toReturn = array();
+        $toReturn = [];
 
         while ($stats = $res->fetch()) {
             $toReturn[] = new VotesPlayerStatsEntity(
@@ -386,10 +386,10 @@ class VotesStatsModel extends AbstractModel
         $res = $db->prepare($sql);
 
         if (!$res->execute()) {
-            return array();
+            return [];
         }
 
-        $toReturn = array();
+        $toReturn = [];
 
         while ($stats = $res->fetch()) {
             $toReturn[] = new VotesPlayerStatsEntity(
@@ -423,10 +423,10 @@ class VotesStatsModel extends AbstractModel
         $res = $db->prepare($sql);
 
         if (!$res->execute()) {
-            return array();
+            return [];
         }
 
-        $toReturn = array();
+        $toReturn = [];
 
         while ($stats = $res->fetch()) {
             $toReturn[] = new VotesPlayerStatsEntity(
@@ -440,7 +440,7 @@ class VotesStatsModel extends AbstractModel
 
     public function get3PreviousMonthsVotes(): array
     {
-        $toReturn = array();
+        $toReturn = [];
 
         $sqlCurrent = "SELECT COUNT(votes_id) AS votes FROM cmw_votes_votes WHERE MONTH(votes_date) = MONTH(CURRENT_DATE())";
         $sqlPrevious = "SELECT COUNT(votes_id) AS votes FROM cmw_votes_votes WHERE MONTH(votes_date) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH)";

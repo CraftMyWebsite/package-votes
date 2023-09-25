@@ -192,7 +192,8 @@ $description = LangManager::translate("votes.dashboard.desc");
                                                 :</h6>
                                             <div class="form-group position-relative">
                                                 <select name="reward" class="form-control">
-                                                    <option <?= $site->getRewards() === NULL ? 'selected' : '' ?> value="0">
+                                                    <option <?= $site->getRewards() === NULL ? 'selected' : '' ?>
+                                                        value="0">
                                                         <?= LangManager::translate("votes.dashboard.list_sites.noreward") ?>
                                                     </option>
 

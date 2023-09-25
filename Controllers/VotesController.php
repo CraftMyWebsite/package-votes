@@ -2,6 +2,7 @@
 
 namespace CMW\Controller\Votes;
 
+use CMW\Controller\Core\PackageController;
 use CMW\Controller\Users\UsersController;
 use CMW\Manager\Api\APIManager;
 use CMW\Manager\Env\EnvManager;
@@ -11,6 +12,7 @@ use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Requests\Request;
 use CMW\Manager\Router\Link;
+use CMW\Manager\Views\View;
 use CMW\Model\Minecraft\MinecraftModel;
 use CMW\Model\Users\UsersModel;
 use CMW\Model\Votes\CheckVotesModel;
@@ -21,7 +23,6 @@ use CMW\Model\Votes\VotesSitesModel;
 use CMW\Model\Votes\VotesStatsModel;
 use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
-use CMW\Manager\Views\View;
 use CMW\Utils\Website;
 use JsonException;
 
@@ -58,7 +59,9 @@ class VotesController extends AbstractController
         [$topShow, $reset, $autoTopRewardActive, $autoTopReward, $enableApi] = Utils::filterInput("topShow",
             "reset", "autoTopRewardActive", "autoTopReward", "api");
 
-        VotesConfigModel::getInstance()->updateConfig($topShow, $reset, $autoTopRewardActive, $autoTopReward, $enableApi);
+        $needLogin = isset($_POST['needLogin']) ? 1 : 0;
+
+        VotesConfigModel::getInstance()->updateConfig($topShow, $reset, $autoTopRewardActive, $autoTopReward, $enableApi, $needLogin);
 
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.config.success"));
@@ -68,23 +71,6 @@ class VotesController extends AbstractController
 
 
     /* ///////////////////// SITES /////////////////////*/
-
-    public function getCompatiblesSites(): array
-    {
-        $file = EnvManager::getInstance()->getValue("DIR") . "App/Package/Votes/minecraftSitesCompatibles.php";
-
-        if(!file_exists($file)) {
-            return [];
-        }
-
-        $content = include $file;
-
-        if(!is_array($content)){
-            return [];
-        }
-
-        return $content;
-    }
 
     #[Link("/site/list", Link::GET, [], "/cmw-admin/votes")]
     public function listSites(): void
@@ -107,6 +93,23 @@ class VotesController extends AbstractController
             ->view();
     }
 
+    public function getCompatiblesSites(): array
+    {
+        $file = EnvManager::getInstance()->getValue("DIR") . "App/Package/Votes/minecraftSitesCompatibles.php";
+
+        if (!file_exists($file)) {
+            return [];
+        }
+
+        $content = include $file;
+
+        if (!is_array($content)) {
+            return [];
+        }
+
+        return $content;
+    }
+
     #[Link("/site/list", Link::POST, [], "/cmw-admin/votes")]
     public function addSiteAdminPost(): void
     {
@@ -115,11 +118,11 @@ class VotesController extends AbstractController
         [$title, $time, $idUnique, $url, $rewardsId] = Utils::filterInput("title", "time", "idUnique",
             "url", "reward");
 
-        if ($rewardsId === '0'){
+        if ($rewardsId === '0') {
             $rewardsId = null;
         }
 
-       VotesSitesModel::getInstance()->addSite($title, $time, $idUnique, $url, $rewardsId);
+        VotesSitesModel::getInstance()->addSite($title, $time, $idUnique, $url, $rewardsId);
 
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate("votes.toaster.site.add.success", ["name" => $title]));
@@ -149,7 +152,7 @@ class VotesController extends AbstractController
         [$siteId, $title, $time, $idUnique, $url, $rewardsId] = Utils::filterInput("siteId", "title", "time",
             "idUnique", "url", "reward");
 
-        if ($rewardsId === '0'){
+        if ($rewardsId === '0') {
             $rewardsId = null;
         }
 
@@ -186,29 +189,29 @@ class VotesController extends AbstractController
 
         [$url, $siteId] = Utils::filterInput('url', 'site_id');
 
-        if (Utils::containsNullValue($url, $siteId)){
+        if (Utils::containsNullValue($url, $siteId)) {
             print (json_encode(["status" => "0", "toaster" =>
                 ["type" => "error",
                     "title" => LangManager::translate("core.toaster.error"),
-                    "content" => LangManager::translate("votes.toaster.site.test_id.empty_input")
-                ]
+                    "content" => LangManager::translate("votes.toaster.site.test_id.empty_input"),
+                ],
             ], JSON_THROW_ON_ERROR));
             return;
         }
 
-        if (CheckVotesModel::getInstance()->testSiteId($url, $siteId)){
+        if (CheckVotesModel::getInstance()->testSiteId($url, $siteId)) {
             print (json_encode(["status" => "1", "toaster" =>
                 ["type" => "success",
                     "title" => LangManager::translate("core.toaster.success"),
-                    "content" => LangManager::translate("votes.toaster.site.test_id.success")
-                ]
+                    "content" => LangManager::translate("votes.toaster.site.test_id.success"),
+                ],
             ], JSON_THROW_ON_ERROR));
         } else {
             print (json_encode(["status" => "0", "toaster" =>
                 ["type" => "error",
                     "title" => LangManager::translate("core.toaster.error"),
-                    "content" => LangManager::translate("votes.toaster.site.test_id.error")
-                ]
+                    "content" => LangManager::translate("votes.toaster.site.test_id.error"),
+                ],
             ], JSON_THROW_ON_ERROR));
         }
     }
@@ -223,15 +226,17 @@ class VotesController extends AbstractController
 
         $rewards = VotesRewardsModel::getInstance()->getRewards();
 
-        //TODO Check if package is installed
-        $minecraftServers = (new MinecraftModel())->getServers(); //TODO Change with getInstance()
+        if (PackageController::isInstalled("Minecraft")) {
+            $minecraftServers = MinecraftModel::getInstance()->getServers();
+        } else {
+            $minecraftServers = [];
+        }
 
         View::createAdminView('Votes', 'rewards')
             ->addVariableList(["rewards" => $rewards, "minecraftServers" => $minecraftServers])
             ->addScriptBefore("App/Package/Votes/Views/Resources/Js/reward.js")
-            ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css","Admin/Resources/Assets/Css/Pages/simple-datatables.css")
-            ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js","Admin/Resources/Assets/Js/Pages/simple-datatables.js")
-
+            ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css", "Admin/Resources/Assets/Css/Pages/simple-datatables.css")
+            ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js", "Admin/Resources/Assets/Js/Pages/simple-datatables.js")
             ->view();
     }
 
@@ -248,25 +253,25 @@ class VotesController extends AbstractController
         switch ($rewardType) {
             case "votepoints":
                 try {
-                    $action = json_encode(array("type" => "votepoints", "amount" => filter_input(INPUT_POST, "amount")), JSON_THROW_ON_ERROR);
+                    $action = json_encode(["type" => "votepoints", "amount" => filter_input(INPUT_POST, "amount")], JSON_THROW_ON_ERROR);
                 } catch (JsonException) {
                 }
                 break;
 
             case "votepoints-random":
                 try {
-                    $action = json_encode(array("type" => "votepoints-random",
-                        "amount" => array(
+                    $action = json_encode(["type" => "votepoints-random",
+                        "amount" => [
                             "min" => filter_input(INPUT_POST, "amount-min"),
-                            "max" => filter_input(INPUT_POST, "amount-max"))), JSON_THROW_ON_ERROR);
+                            "max" => filter_input(INPUT_POST, "amount-max")]], JSON_THROW_ON_ERROR);
                 } catch (JsonException) {
                 }
                 break;
             case "minecraft-commands":
                 try {
-                    $action = json_encode(array("type" => "minecraft-commands",
+                    $action = json_encode(["type" => "minecraft-commands",
                         "commands" => filter_input(INPUT_POST, "minecraft-commands"),
-                        "servers" => $_POST['minecraft-servers']), JSON_THROW_ON_ERROR);
+                        "servers" => $_POST['minecraft-servers']], JSON_THROW_ON_ERROR);
                 } catch (JsonException) {
                 }
                 break;
@@ -315,25 +320,25 @@ class VotesController extends AbstractController
         switch ($rewardType) {
             case "votepoints":
                 try {
-                    $action = json_encode(array("type" => "votepoints", "amount" => filter_input(INPUT_POST, "amount")), JSON_THROW_ON_ERROR);
+                    $action = json_encode(["type" => "votepoints", "amount" => filter_input(INPUT_POST, "amount")], JSON_THROW_ON_ERROR);
                 } catch (JsonException) {
                 }
                 break;
 
             case "votepoints-random":
                 try {
-                    $action = json_encode(array("type" => "votepoints-random",
-                        "amount" => array(
+                    $action = json_encode(["type" => "votepoints-random",
+                        "amount" => [
                             "min" => filter_input(INPUT_POST, "amount-min"),
-                            "max" => filter_input(INPUT_POST, "amount-max"))), JSON_THROW_ON_ERROR);
+                            "max" => filter_input(INPUT_POST, "amount-max")]], JSON_THROW_ON_ERROR);
                 } catch (JsonException) {
                 }
                 break;
             case "minecraft-commands":
                 try {
-                    $action = json_encode(array("type" => "minecraft-commands",
+                    $action = json_encode(["type" => "minecraft-commands",
                         "commands" => filter_input(INPUT_POST, "minecraft-commands"),
-                        "servers" => $_POST['minecraft-servers']), JSON_THROW_ON_ERROR);
+                        "servers" => $_POST['minecraft-servers']], JSON_THROW_ON_ERROR);
                 } catch (JsonException) {
                 }
                 break;
@@ -345,7 +350,7 @@ class VotesController extends AbstractController
                 break;
         }
 
-       VotesRewardsModel::getInstance()->updateReward($rewardsId, $title, $action);
+        VotesRewardsModel::getInstance()->updateReward($rewardsId, $title, $action);
 
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate("votes.toaster.reward.edit.success", ["name" => $title]));
@@ -362,7 +367,7 @@ class VotesController extends AbstractController
         /* Error section */
         if (empty(filter_input(INPUT_POST, "id"))) {
             try {
-                echo json_encode(array("response" => "ERROR-EMPTY_ID"), JSON_THROW_ON_ERROR);
+                echo json_encode(["response" => "ERROR-EMPTY_ID"], JSON_THROW_ON_ERROR);
             } catch (JsonException) {
             }
         } else {
@@ -433,18 +438,26 @@ class VotesController extends AbstractController
     #[Link('/vote/send/:id', Link::GET, ["id" => "[0-9]+"])]
     public function votesWebsitePublic(Request $request, int $id): void
     {
+
+        $userId = UsersModel::getCurrentUser()?->getId();
+
+        if ($userId === null) {
+            echo "User not Found.";
+            return;
+        }
+
         try {
             //First, check if the player can vote.
             if (CheckVotesModel::getInstance()->isVoteSend(VotesSitesModel::getInstance()->getSiteById($id)?->getUrl(),
                 VotesSitesModel::getInstance()->getSiteById($id)?->getIdUnique(), Website::getClientIp())) {
 
                 //Check if the player has a vote stored
-                if (VotesModel::getInstance()->playerHasAVoteStored(UsersModel::getCurrentUser()?->getId(), $id)) {
+                if (VotesModel::getInstance()->playerHasAVoteStored($userId, $id)) {
 
                     //Check if we can validate this vote
-                    if (VotesModel::getInstance()->validateThisVote(UsersModel::getCurrentUser()?->getId(), $id)) {
-                        VotesModel::getInstance()->storeVote(UsersModel::getCurrentUser()?->getId(), $id);
-                        VotesRewardsModel::getInstance()->selectReward(UsersModel::getCurrentUser()?->getId(), $id);
+                    if (VotesModel::getInstance()->validateThisVote($userId, $id)) {
+                        VotesModel::getInstance()->storeVote($userId, $id);
+                        VotesRewardsModel::getInstance()->selectReward($userId, $id);
 
                         if (VotesConfigModel::getInstance()->getConfig()?->isEnableApi() &&
                             json_decode(VotesRewardsModel::getInstance()->getRewardById($id)?->getAction(), false, 512,
@@ -460,8 +473,8 @@ class VotesController extends AbstractController
                     }
 
                 } else { //The player don't have any vote for this website.
-                    VotesModel::getInstance()->storeVote(UsersModel::getCurrentUser()?->getId(), $id);
-                    VotesRewardsModel::getInstance()->selectReward(UsersModel::getCurrentUser()?->getId(), $id);
+                    VotesModel::getInstance()->storeVote($userId, $id);
+                    VotesRewardsModel::getInstance()->selectReward($userId, $id);
 
 //                    if (VotesConfigModel::getInstance()->getConfig()?->isEnableApi() &&
 //                        json_decode(VotesRewardsModel::getInstance()->getRewardById($id)?->getAction(), false, 512,
@@ -484,8 +497,12 @@ class VotesController extends AbstractController
     {
         try {
             foreach (json_decode(VotesRewardsModel::getInstance()->getRewardById($rewardId)?->getAction(), false, 512, JSON_THROW_ON_ERROR)->servers as $serverId) {
-                // TODO Check if package is installed
-                $server = (new MinecraftModel())->getServerById($serverId);
+
+                if (!PackageController::isInstalled("Minecraft")) {
+                    return; //TODO Throw error ?
+                }
+
+                $server = MinecraftModel::getInstance()->getServerById($serverId);
                 $currentUser = UsersModel::getCurrentUser()?->getPseudo();
 
                 $cmd = json_decode(VotesRewardsModel::getInstance()->getRewardById($rewardId)?->getAction(), false, 512, JSON_THROW_ON_ERROR)->commands;
@@ -508,8 +525,11 @@ class VotesController extends AbstractController
                 $rewardName = base64_encode(VotesRewardsModel::getInstance()->getRewardById($rewardId)?->getTitle());
                 $siteName = base64_encode($siteName);
 
-                // TODO Check if package is installed
-                $server = (new MinecraftModel())->getServerById($serverId);
+                if (!PackageController::isInstalled("Minecraft")) {
+                    return; //TODO Throw error ?
+                }
+
+                $server = MinecraftModel::getInstance()->getServerById($serverId);
                 $currentUser = UsersModel::getCurrentUser()?->getPseudo();
 
                 echo APIManager::getRequest("http://{$server?->getServerIp()}:{$server?->getServerCMWLPort()}/votes/send/validate/$currentUser/$siteName/$rewardName",

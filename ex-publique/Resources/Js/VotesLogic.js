@@ -1,4 +1,4 @@
-class VotesLogic extends VotesStatus{
+class VotesLogic extends VotesStatus {
     constructor(siteId, button) {
         super(siteId, button);
     }
@@ -11,7 +11,7 @@ class VotesLogic extends VotesStatus{
                 titleSize: '16',
                 messageSize: '14',
                 icon: 'fa-solid fa-check',
-                title  : "Votes",
+                title: "Votes",
                 message: "Vous avez déjà voté",
                 color: "#41435F",
                 iconColor: '#22E445',
