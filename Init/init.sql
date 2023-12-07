@@ -52,7 +52,8 @@ CREATE TABLE IF NOT EXISTS `cmw_votes_config`
     `votes_config_reset`                  INT(1)     NOT NULL DEFAULT '1' COMMENT '1 = reset tous les mois\r\n0 = pas de reset mensuel',
     `votes_config_auto_top_reward_active` INT(1)     NULL     DEFAULT '0' COMMENT '0 = pas de récompenses automatiques\r\n1 = récompenses automatiques activés',
     `votes_config_auto_top_reward`        TEXT       NULL COMMENT 'Récompenses automatiques pour les x premiers (JSON)',
-    `votes_config_enable_api`             TINYINT(1) NOT NULL
+    `votes_config_enable_api`             TINYINT(1) NOT NULL,
+    `votes_config_need_login`             TINYINT(1) NOT NULL DEFAULT '0'
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
