@@ -51,7 +51,7 @@ class Package implements IPackageConfig
                     new PackageSubMenuType(
                         title: 'Gestion des sites',
                         permission: 'votes.site.list',
-                        url: 'votes/sites/list',
+                        url: 'votes/site/list',
                     ),
                     new PackageSubMenuType(
                         title: 'Récompenses',
@@ -90,7 +90,7 @@ class Package implements IPackageConfig
                     new PackageSubMenuType(
                         title: 'Manage sites',
                         permission: 'votes.site.list',
-                        url: 'votes/sites/list',
+                        url: 'votes/site/list',
                     ),
                     new PackageSubMenuType(
                         title: 'Rewards',
