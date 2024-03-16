@@ -431,7 +431,8 @@ class VotesController extends AbstractController
 
         $view->addVariableList(["sites" => $sites,
             "topCurrent" => $topCurrent, "topGlobal" => $topGlobal]);
-        $view->addScriptAfter("App/Package/Votes/Views/Resources/Js/public.js");
+        $view->addStyle("Admin/Resources/Vendors/Izitoast/iziToast.min.css");
+        $view->addScriptAfter("Admin/Resources/Vendors/Izitoast/iziToast.min.js","App/Package/Votes/Views/Resources/Js/public.js","App/Package/Votes/Views/Resources/Js/VotesStatus.js","App/Package/Votes/Views/Resources/Js/VotesLogic.js" );
         $view->view();
     }
 
