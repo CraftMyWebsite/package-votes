@@ -3,6 +3,7 @@
 use CMW\Controller\Core\ThemeController;
 use CMW\Controller\Users\UsersController;
 use CMW\Manager\Env\EnvManager;
+use CMW\Manager\Theme\ThemeManager;
 
 $title = "Mon-Serveur | Voter";
 $description = "Votez pour le serveur et gagnez des récompenses uniques!";
@@ -184,4 +185,4 @@ $description = "Votez pour le serveur et gagnez des récompenses uniques!";
     src="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'Admin/Resources/Vendors/Izitoast/iziToast.min.js' ?>"></script>
 <script
     src="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'App/Package/Votes/Views/Resources/Js/VotesStatus.js' ?>"></script>
-<script src="<?= ThemeController::getCurrentTheme()->getPath() . 'Views/Votes/Resources/Js/VotesLogic.js' ?>"></script>
+<script src="<?= ThemeManager::getInstance()->getCurrentTheme()->name() . 'Views/Votes/Resources/Js/VotesLogic.js' ?>"></script>
