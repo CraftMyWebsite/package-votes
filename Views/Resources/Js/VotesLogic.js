@@ -9,23 +9,24 @@ class VotesLogic extends VotesStatus{
         buttonElement.style.backgroundColor = 'red';
         iziToast.show(
             {
-                titleSize: '16',
-                messageSize: '14',
+                titleSize: '14',
+                messageSize: '12',
                 icon: 'fa-solid fa-xmark',
                 title  : "Votes",
                 message: "Vous avez déjà voté",
-                color: "#41435F",
-                iconColor: '#e42222',
-                titleColor: '#e42222',
-                messageColor: '#fff',
+                color: "#ab1b1b",
+                iconColor: '#ffffff',
+                titleColor: '#ffffff',
+                messageColor: '#ffffff',
                 balloon: false,
-                close: false,
-                position: 'bottomRight',
-                timeout: 5000,
+                close: true,
+                pauseOnHover: true,
+                position: 'topCenter',
+                timeout: 4000,
                 animateInside: false,
-                progressBar: false,
-                transitionIn: 'fadeInLeft',
-                transitionOut: 'fadeOutRight',
+                progressBar: true,
+                transitionIn: 'fadeInDown',
+                transitionOut: 'fadeOut',
             });
     }
 
