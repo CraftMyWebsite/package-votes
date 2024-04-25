@@ -1,6 +1,6 @@
 <?php
 
-namespace CMW\Implementation\Votes;
+namespace CMW\Implementation\Votes\Core;
 
 use CMW\Interface\Core\IDashboardElements;
 use CMW\Manager\Env\EnvManager;

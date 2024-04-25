@@ -1,6 +1,6 @@
 <?php
 
-namespace CMW\Implementation\Votes;
+namespace CMW\Implementation\Votes\Shop;
 
 use CMW\Controller\Shop\Admin\Payment\ShopPaymentsController;
 use CMW\Controller\Votes\VotesPaymentController;

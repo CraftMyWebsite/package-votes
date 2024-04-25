@@ -1,6 +1,6 @@
 <?php
 
-namespace CMW\Implementation\Votes;
+namespace CMW\Implementation\Votes\Shop;
 
 use CMW\Interface\Shop\IPriceTypeMethod;
 use CMW\Model\Shop\Payment\ShopPaymentMethodSettingsModel;
