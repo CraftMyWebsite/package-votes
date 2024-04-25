@@ -489,6 +489,30 @@ class VotesStatsModel extends AbstractModel
     }
 
     /**
+     * @param int $userId
+     * @return int
+     */
+    public function getVotePointByUserId(int $userId): int
+    {
+        $sql = "SELECT votes_votepoints_amount FROM cmw_votes_votepoints WHERE votes_votepoints_id_user = :user";
+
+        $db = DatabaseManager::getInstance();
+        $req = $db->prepare($sql);
+
+        if (!$req->execute(["user" => $userId])) {
+            return 0;
+        }
+
+        $res = $req->fetch();
+
+        if(!$res){
+            return 0;
+        }
+
+        return $res['votes_votepoints_amount'] ?? 0;
+    }
+
+    /**
      * @param int|string $user
      * @return int
      */

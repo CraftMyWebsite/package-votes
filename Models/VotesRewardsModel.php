@@ -157,6 +157,20 @@ class VotesRewardsModel extends AbstractModel
         $req->execute($params);
     }
 
+    /**
+     * @param int $userId
+     * @param int $amount
+     * @return bool
+     */
+    public function removeRewardVotePoints(int $userId , int $amount): bool
+    {
+        $sql = "UPDATE cmw_votes_votepoints SET votes_votepoints_amount = votes_votepoints_amount - :amount WHERE votes_votepoints_id_user = :user_id;";
+
+        $db = DatabaseManager::getInstance();
+
+        return $db->prepare($sql)->execute(array("amount" => $amount, "user_id" => $userId));
+    }
+
     public function setLog(int $userId, int $rewardsId): void
     {
         $var = [
