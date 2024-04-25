@@ -140,46 +140,21 @@ class VotesRewardsModel extends AbstractModel
 
     public function giveRewardVotePoints(int $userId, int $amount): void
     {
-        //If the player has never got a reward
-        $var = [
-            "id_user" => $userId,
-            "amount" => $amount,
+        $sql = "INSERT INTO cmw_votes_votepoints (votes_votepoints_id_user, votes_votepoints_amount)
+            VALUES (:id_user, :amount)
+            ON DUPLICATE KEY UPDATE
+            votes_votepoints_amount = votes_votepoints_amount + :amount_on_update";
+
+        $params = [
+            'id_user' => $userId,
+            'amount' => $amount,
+            'amount_on_update' => $amount
         ];
-        if ($this->detectFirstVotePointsReward($userId)) {
-
-            $sql = "INSERT INTO cmw_votes_votepoints (votes_votepoints_id_user, votes_votepoints_amount) 
-                        VALUES (:id_user, :amount)";
-
-        } else { //If the player has already got a reward
-
-            $sql = "UPDATE cmw_votes_votepoints SET votes_votepoints_amount = votes_votepoints_amount+:amount
-                            WHERE votes_votepoints_id_user=:id_user";
-
-        }
-        $db = DatabaseManager::getInstance();
-        $req = $db->prepare($sql);
-        $req->execute($var);
-    }
-
-    public function detectFirstVotePointsReward(int $userId): bool
-    {
-        $var = [
-            "id_user" => $userId,
-        ];
-
-        $sql = "SELECT votes_votepoints_id_user FROM cmw_votes_votepoints WHERE votes_votepoints_id_user=:id_user";
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
-        if ($req->execute($var)) {
-            $lines = $req->fetchAll();
-
-            return count($lines) <= 0;
-
-        }
-
-        return false;
+        $req->execute($params);
     }
 
     public function setLog(int $userId, int $rewardsId): void
@@ -201,30 +176,25 @@ class VotesRewardsModel extends AbstractModel
     {
         try {
             $amount = random_int($min, $max);
-        } catch (Exception) {
+        } catch (Exception $e) {
             $amount = $max;
         }
 
-        //If the player has never got a reward
-        $var = [
-            "id_user" => $userId,
-            "amount" => $amount,
+        $sql = "INSERT INTO cmw_votes_votepoints (votes_votepoints_id_user, votes_votepoints_amount)
+            VALUES (:id_user, :amount)
+            ON DUPLICATE KEY UPDATE
+            votes_votepoints_amount = votes_votepoints_amount + :amount_on_update";
+
+        $params = [
+            'id_user' => $userId,
+            'amount' => $amount,
+            'amount_on_update' => $amount
         ];
-        if ($this->detectFirstVotePointsReward($userId)) {
-
-            $sql = "INSERT INTO cmw_votes_votepoints (votes_votepoints_id_user, votes_votepoints_amount) 
-                        VALUES (:id_user, :amount)";
-
-        } else { //If the player has already got a reward
-
-            $sql = "UPDATE cmw_votes_votepoints SET votes_votepoints_amount = votes_votepoints_amount+:amount 
-                            WHERE votes_votepoints_id_user=:id_user";
-
-        }
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
-        $req->execute($var);
+
+        $req->execute($params);
     }
 
     public function getRewards(): array
