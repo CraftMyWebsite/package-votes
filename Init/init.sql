@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `cmw_votes_logs_rewards`
 CREATE TABLE IF NOT EXISTS `cmw_votes_votepoints`
 (
     `votes_votepoints_id`      INT(11) NOT NULL AUTO_INCREMENT,
-    `votes_votepoints_id_user` INT(11) NOT NULL,
+    `votes_votepoints_id_user` INT(11) NOT NULL UNIQUE,
     `votes_votepoints_amount`  INT(11) NOT NULL,
     PRIMARY KEY (`votes_votepoints_id`),
     UNIQUE KEY `id_user` (`votes_votepoints_id_user`),
