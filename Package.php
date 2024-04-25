@@ -63,16 +63,6 @@ class Package implements IPackageConfig
                         permission: 'votes.todo', //TODO PERMS
                         url: 'votes/stats',
                     ),
-                    new PackageSubMenuType(
-                        title: 'Multiplicateur',
-                        permission: 'votes.boost',
-                        url: 'votes/boost',
-                    ),
-                    new PackageSubMenuType(
-                        title: 'VoteShop',
-                        permission: 'votes.todo', //TODO PERMS
-                        url: 'votes/voteshop',
-                    ),
                 ]
             ),
             new PackageMenuType(
@@ -101,16 +91,6 @@ class Package implements IPackageConfig
                         title: 'Statistics',
                         permission: 'votes.todo', //TODO PERMS
                         url: 'votes/stats',
-                    ),
-                    new PackageSubMenuType(
-                        title: 'Multiplier',
-                        permission: 'votes.boost',
-                        url: 'votes/boost',
-                    ),
-                    new PackageSubMenuType(
-                        title: 'VoteShop',
-                        permission: 'votes.todo', //TODO PERMS
-                        url: 'votes/voteshop',
                     ),
                 ]
             ),
