@@ -2,10 +2,8 @@
 
 namespace CMW\Controller\Votes;
 
-use CMW\Controller\Core\PackageController;
 use CMW\Controller\Users\UsersController;
 use CMW\Interface\Votes\IRewardMethod;
-use CMW\Manager\Api\APIManager;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
@@ -15,7 +13,6 @@ use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Requests\Request;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
-use CMW\Model\Minecraft\MinecraftModel;
 use CMW\Model\Users\UsersModel;
 use CMW\Model\Votes\CheckVotesModel;
 use CMW\Model\Votes\VotesConfigModel;
@@ -97,7 +94,7 @@ class VotesController extends AbstractController
 
     public function getCompatiblesSites(): array
     {
-        $file = EnvManager::getInstance()->getValue("DIR") . "App/Package/Votes/minecraftSitesCompatibles.php";
+        $file = EnvManager::getInstance()->getValue("DIR") . "App/Package/Votes/SitesCompatibles.php";
 
         if (!file_exists($file)) {
             return [];
@@ -228,14 +225,8 @@ class VotesController extends AbstractController
 
         $rewards = VotesRewardsModel::getInstance()->getRewards();
 
-        if (PackageController::isInstalled("Minecraft")) {
-            $minecraftServers = MinecraftModel::getInstance()->getServers();
-        } else {
-            $minecraftServers = [];
-        }
-
         View::createAdminView('Votes', 'rewards')
-            ->addVariableList(["rewards" => $rewards, "minecraftServers" => $minecraftServers, "rewardMethods" => $this->getRewardMethods()])
+            ->addVariableList(["rewards" => $rewards, "rewardMethods" => $this->getRewardMethods()])
             ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css", "Admin/Resources/Assets/Css/Pages/simple-datatables.css")
             ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js", "Admin/Resources/Assets/Js/Pages/simple-datatables.js")
             ->view();
@@ -249,7 +240,7 @@ class VotesController extends AbstractController
         $rewardType = filter_input(INPUT_POST, "reward_type_selected");
         $title = filter_input(INPUT_POST, "title");
 
-        $advancedAction = VotesController::getInstance()->getRewardByVarName($rewardType)->execRewardActionLogic();
+        $advancedAction = VotesController::getInstance()->getRewardMethodByVarName($rewardType)->execRewardActionLogic();
         if (!is_null($advancedAction)) {
             $action = $advancedAction;
         } else {
@@ -280,52 +271,38 @@ class VotesController extends AbstractController
         Redirect::redirectPreviousRoute();
     }
 
-    #[Link("/rewards", Link::POST, [], "/cmw-admin/votes")]
-    public function editRewardPost(): void
+    #[Link("/rewards/edit/:id", Link::GET, [], "/cmw-admin/votes")]
+    public function votesRewardsEdit(Request $request, int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.rewards.edit");
 
-        [$rewardsId, $rewardType, $title] = Utils::filterInput("reward_id", "reward_type", "title");
+        $rewards = VotesRewardsModel::getInstance()->getRewardById($id);
 
-        $action = "";
-        //Define the reward action
-        switch ($rewardType) {
-            case "votepoints":
-                try {
-                    $action = json_encode(["type" => "votepoints", "amount" => filter_input(INPUT_POST, "amount")], JSON_THROW_ON_ERROR);
-                } catch (JsonException) {
-                }
-                break;
+        View::createAdminView('Votes', 'editRewards')
+            ->addVariableList(["rewards" => $rewards, "rewardMethods" => $this->getRewardMethods()])
+            ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css", "Admin/Resources/Assets/Css/Pages/simple-datatables.css")
+            ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js", "Admin/Resources/Assets/Js/Pages/simple-datatables.js")
+            ->view();
+    }
 
-            case "votepoints-random":
-                try {
-                    $action = json_encode(["type" => "votepoints-random",
-                        "amount" => [
-                            "min" => filter_input(INPUT_POST, "amount-min"),
-                            "max" => filter_input(INPUT_POST, "amount-max")]], JSON_THROW_ON_ERROR);
-                } catch (JsonException) {
-                }
-                break;
-            case "minecraft-commands":
-                try {
-                    $action = json_encode(["type" => "minecraft-commands",
-                        "commands" => filter_input(INPUT_POST, "minecraft-commands"),
-                        "servers" => $_POST['minecraft-servers']], JSON_THROW_ON_ERROR);
-                } catch (JsonException) {
-                }
-                break;
+    #[Link("/rewards/edit/:id", Link::POST, [], "/cmw-admin/votes")]
+    public function editRewardPost(Request $request, int $id): void
+    {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.rewards.edit");
 
-            case "none": //Error, redirect
-                Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
-                    LangManager::translate("core.toaster.internalError", ["name" => $title]));
-                Redirect::redirectPreviousRoute();
-                break;
+        $rewardType = filter_input(INPUT_POST, "reward_type_selected");
+        $title = filter_input(INPUT_POST, "title");
+
+        $advancedAction = VotesController::getInstance()->getRewardMethodByVarName($rewardType)->execRewardActionLogic();
+        if (!is_null($advancedAction)) {
+            $action = $advancedAction;
+        } else {
+            $action = filter_input(INPUT_POST, $rewardType);
         }
 
-        VotesRewardsModel::getInstance()->updateReward($rewardsId, $title, $action);
+        VotesRewardsModel::getInstance()->updateReward($id, $title, $action, $rewardType);
 
-        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
-            LangManager::translate("votes.toaster.reward.edit.success", ["name" => $title]));
+        Flash::send(Alert::SUCCESS, "Votes", "Récompenses modifié !");
 
         Redirect::redirectPreviousRoute();
     }
@@ -420,7 +397,7 @@ class VotesController extends AbstractController
      * @param string $varName
      * @return \CMW\Interface\Votes\IRewardMethod|null
      */
-    public function getRewardByVarName(string $varName): ?IRewardMethod
+    public function getRewardMethodByVarName(string $varName): ?IRewardMethod
     {
         foreach ($this->getRewardMethods() as $rewardMethod) {
             if ($rewardMethod->varName() === $varName){
@@ -438,7 +415,7 @@ class VotesController extends AbstractController
             $reward = VotesSitesModel::getInstance()->getSiteById($id)?->getRewards() ?? null;
             if (!is_null($reward)) {
                 $site = VotesSitesModel::getInstance()->getSiteById($id);
-                $this->getRewardByVarName($reward->getVarName())->execReward($reward, $site, $userId);
+                $this->getRewardMethodByVarName($reward->getVarName())->execReward($reward, $site, $userId);
             } else {
                 Flash::send(Alert::SUCCESS, "Votes", "Merci pour votre vote !");
                 Redirect::redirect("vote");
@@ -474,7 +451,7 @@ class VotesController extends AbstractController
                         VotesModel::getInstance()->storeVote($userId, $id);
                         if (!is_null($reward)) {
                             $site = VotesSitesModel::getInstance()->getSiteById($id);
-                            $this->getRewardByVarName($reward->getVarName())->execReward($reward, $site, $userId);
+                            $this->getRewardMethodByVarName($reward->getVarName())->execReward($reward, $site, $userId);
                         }
                         $this->returnData("send", true);
                     } else {
@@ -486,7 +463,7 @@ class VotesController extends AbstractController
 
                     if (!is_null($reward)) {
                         $site = VotesSitesModel::getInstance()->getSiteById($id);
-                        $this->getRewardByVarName($reward->getVarName())->execReward($reward, $site, $userId);
+                        $this->getRewardMethodByVarName($reward->getVarName())->execReward($reward, $site, $userId);
                     }
 
                     $this->returnData("send", true);

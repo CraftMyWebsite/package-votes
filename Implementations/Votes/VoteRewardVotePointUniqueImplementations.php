@@ -32,7 +32,7 @@ class VoteRewardVotePointUniqueImplementations implements IRewardMethod
         return "votePoints";
     }
 
-    public function includeRewardConfigWidgets(): void
+    public function includeRewardConfigWidgets(?int $rewardId): void
     {
         $varName = $this->varName();
         require_once EnvManager::getInstance()->getValue("DIR") . "App/Package/Votes/Views/Elements/votePointUnique.config.inc.view.php";

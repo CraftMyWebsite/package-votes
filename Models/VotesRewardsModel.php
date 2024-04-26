@@ -16,29 +16,6 @@ use JsonException;
  */
 class VotesRewardsModel extends AbstractModel
 {
-    public function addReward(string $title, string $action, string $varName): ?VotesRewardsEntity
-    {
-        $var = [
-            'title' => $title,
-            'action' => $action,
-            'varName' => $varName
-        ];
-
-        $sql = "INSERT INTO cmw_votes_rewards (votes_rewards_title, votes_rewards_action, votes_rewards_var_name) VALUES (:title, :action, :varName)";
-
-        $db = DatabaseManager::getInstance();
-        $req = $db->prepare($sql);
-
-        if ($req->execute($var)) {
-            $id = $db->lastInsertId();
-            return $this->getRewardById($id);
-        }
-
-        return null;
-    }
-
-    //Get a reward
-
     public function getRewardById(?int $id): ?VotesRewardsEntity
     {
         if ($id === null) {
@@ -78,15 +55,37 @@ class VotesRewardsModel extends AbstractModel
         $req->execute($var);
     }
 
-    public function updateReward(int $rewardsId, string $title, string $action): ?VotesRewardsEntity
+    public function addReward(string $title, string $action, string $varName): ?VotesRewardsEntity
+    {
+        $var = [
+            'title' => $title,
+            'action' => $action,
+            'varName' => $varName
+        ];
+
+        $sql = "INSERT INTO cmw_votes_rewards (votes_rewards_title, votes_rewards_action, votes_rewards_var_name) VALUES (:title, :action, :varName)";
+
+        $db = DatabaseManager::getInstance();
+        $req = $db->prepare($sql);
+
+        if ($req->execute($var)) {
+            $id = $db->lastInsertId();
+            return $this->getRewardById($id);
+        }
+
+        return null;
+    }
+
+    public function updateReward(int $rewardsId, string $title, string $action, string $varName): ?VotesRewardsEntity
     {
         $var = [
             "rewards_id" => $rewardsId,
             "title" => $title,
             "action" => $action,
+            'varName' => $varName
         ];
 
-        $sql = "UPDATE cmw_votes_rewards SET votes_rewards_title=:title, votes_rewards_action=:action 
+        $sql = "UPDATE cmw_votes_rewards SET votes_rewards_title=:title, votes_rewards_action=:action, votes_rewards_var_name=:varName
                          WHERE votes_rewards_rewards_id=:rewards_id";
 
         $db = DatabaseManager::getInstance();

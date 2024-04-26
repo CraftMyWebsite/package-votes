@@ -22,11 +22,12 @@ interface IRewardMethod
     public function varName(): string;
 
     /**
+     * @param ?int $rewardId
      * @return void
      * @desc Include the config widgets for the shop add items
      * @example require_once EnvManager::getInstance()->getValue("DIR") . "App/Package/Votes/Views/Elements/votePointUnique.config.inc.view.php";
      */
-    public function includeRewardConfigWidgets(): void;
+    public function includeRewardConfigWidgets(?int $rewardId): void;
 
     /**
      * @return ?string

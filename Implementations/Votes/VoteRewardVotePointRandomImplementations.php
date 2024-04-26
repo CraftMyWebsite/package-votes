@@ -32,7 +32,7 @@ class VoteRewardVotePointRandomImplementations implements IRewardMethod
         return "votePointsRandom";
     }
 
-    public function includeRewardConfigWidgets(): void
+    public function includeRewardConfigWidgets(?int $rewardId): void
     {
         $varName = $this->varName();
         require_once EnvManager::getInstance()->getValue("DIR") . "App/Package/Votes/Views/Elements/votePointRandom.config.inc.view.php";
