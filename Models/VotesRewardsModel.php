@@ -16,14 +16,15 @@ use JsonException;
  */
 class VotesRewardsModel extends AbstractModel
 {
-    public function addReward(string $title, string $action): ?VotesRewardsEntity
+    public function addReward(string $title, string $action, string $varName): ?VotesRewardsEntity
     {
         $var = [
             'title' => $title,
             'action' => $action,
+            'varName' => $varName
         ];
 
-        $sql = "INSERT INTO cmw_votes_rewards (votes_rewards_title, votes_rewards_action) VALUES (:title, :action)";
+        $sql = "INSERT INTO cmw_votes_rewards (votes_rewards_title, votes_rewards_action, votes_rewards_var_name) VALUES (:title, :action, :varName)";
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
@@ -57,6 +58,7 @@ class VotesRewardsModel extends AbstractModel
 
         return new VotesRewardsEntity(
             $res['votes_rewards_rewards_id'],
+            $res['votes_rewards_var_name'],
             $res['votes_rewards_title'],
             $res['votes_rewards_action']
         );
@@ -96,49 +98,7 @@ class VotesRewardsModel extends AbstractModel
         return null;
     }
 
-    public function selectReward(int $userId, int $idSite): void
-    {
-        //Select the reward action, rewards_id and id site with the site id
-        $var = [
-            "id" => $idSite,
-        ];
-
-        $sql = "SELECT cmw_votes_sites.votes_sites_rewards_id, cmw_votes_sites.votes_sites_id, 
-                    cmw_votes_rewards.votes_rewards_action FROM cmw_votes_sites 
-                    JOIN cmw_votes_rewards 
-                        ON cmw_votes_sites.votes_sites_rewards_id = cmw_votes_rewards.votes_rewards_rewards_id 
-                    WHERE cmw_votes_sites.votes_sites_id =:id LIMIT 1;";
-
-        $db = DatabaseManager::getInstance();
-        $req = $db->prepare($sql);
-
-        if ($req->execute($var)) {
-            $result = $req->fetch();
-            $rewardsId = $result['votes_sites_rewards_id'];
-            $action = $result['votes_rewards_action'];
-
-            //Detect type
-            try {
-                switch (json_decode($action, false, 512, JSON_THROW_ON_ERROR)->type) {
-
-                    case "votepoints":
-                        $this->giveRewardVotePoints($userId, json_decode($action, false, 512, JSON_THROW_ON_ERROR)->amount);
-                        $this->setLog($userId, $rewardsId);
-                        break;
-
-                    case "votepoints-random":
-                        $this->giveRewardVotePointsRandom($userId, json_decode($action, false, 512, JSON_THROW_ON_ERROR)->amount->min,
-                            json_decode($action, false, 512, JSON_THROW_ON_ERROR)->amount->min);
-                        $this->setLog($userId, $rewardsId);
-                        break;
-                }
-            } catch (JsonException) {
-                die("Internal Error. (selectReward() → VotesRewardsModel)");
-            }
-        }
-    }
-
-    public function giveRewardVotePoints(int $userId, int $amount): void
+    public function giveRewardVotePoints(int $userId, int $amount): bool
     {
         $sql = "INSERT INTO cmw_votes_votepoints (votes_votepoints_id_user, votes_votepoints_amount)
             VALUES (:id_user, :amount)
@@ -152,9 +112,8 @@ class VotesRewardsModel extends AbstractModel
         ];
 
         $db = DatabaseManager::getInstance();
-        $req = $db->prepare($sql);
 
-        $req->execute($params);
+        return $db->prepare($sql)->execute($params);
     }
 
     /**
@@ -186,7 +145,7 @@ class VotesRewardsModel extends AbstractModel
         $req->execute($var);
     }
 
-    public function giveRewardVotePointsRandom(int $userId, int $min, int $max): void
+    public function giveRewardVotePointsRandom(int $userId, int $min, int $max): int
     {
         try {
             $amount = random_int($min, $max);
@@ -206,9 +165,14 @@ class VotesRewardsModel extends AbstractModel
         ];
 
         $db = DatabaseManager::getInstance();
+
         $req = $db->prepare($sql);
 
-        $req->execute($params);
+        if ($req->execute($params)) {
+            return $amount;
+        }
+
+        return 0;
     }
 
     public function getRewards(): array

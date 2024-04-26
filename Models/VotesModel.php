@@ -67,7 +67,7 @@ class VotesModel extends AbstractModel
      */
     public function validateThisVote(int $idUser, int $idSite): bool
     {
-        $site = (new VotesSitesModel())->getSiteById($idSite);
+        $site = VotesSitesModel::getInstance()->getSiteById($idSite);
         $targetDate = strtotime($this->getPlayerLastStoredVote($idUser, $idSite)['votes_date'] . ' + ' . $site?->getTime() . ' minutes');
         $currentDate = time();
 

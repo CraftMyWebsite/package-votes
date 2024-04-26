@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS `cmw_votes_rewards`
 (
     `votes_rewards_rewards_id` INT(11)      NOT NULL AUTO_INCREMENT,
+    `votes_rewards_var_name`   VARCHAR(50)  NOT NULL,
     `votes_rewards_title`      VARCHAR(255) NOT NULL,
     `votes_rewards_action`     TEXT         NOT NULL,
     PRIMARY KEY (`votes_rewards_rewards_id`),

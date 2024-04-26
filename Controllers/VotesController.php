@@ -4,11 +4,13 @@ namespace CMW\Controller\Votes;
 
 use CMW\Controller\Core\PackageController;
 use CMW\Controller\Users\UsersController;
+use CMW\Interface\Votes\IRewardMethod;
 use CMW\Manager\Api\APIManager;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Loader\Loader;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Requests\Request;
 use CMW\Manager\Router\Link;
@@ -233,8 +235,7 @@ class VotesController extends AbstractController
         }
 
         View::createAdminView('Votes', 'rewards')
-            ->addVariableList(["rewards" => $rewards, "minecraftServers" => $minecraftServers])
-            ->addScriptBefore("App/Package/Votes/Views/Resources/Js/reward.js")
+            ->addVariableList(["rewards" => $rewards, "minecraftServers" => $minecraftServers, "rewardMethods" => $this->getRewardMethods()])
             ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css", "Admin/Resources/Assets/Css/Pages/simple-datatables.css")
             ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js", "Admin/Resources/Assets/Js/Pages/simple-datatables.js")
             ->view();
@@ -245,46 +246,17 @@ class VotesController extends AbstractController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.rewards.add");
 
-        $rewardType = filter_input(INPUT_POST, "reward_type");
+        $rewardType = filter_input(INPUT_POST, "reward_type_selected");
         $title = filter_input(INPUT_POST, "title");
 
-        $action = "";
-        //Define the reward action
-        switch ($rewardType) {
-            case "votepoints":
-                try {
-                    $action = json_encode(["type" => "votepoints", "amount" => filter_input(INPUT_POST, "amount")], JSON_THROW_ON_ERROR);
-                } catch (JsonException) {
-                }
-                break;
-
-            case "votepoints-random":
-                try {
-                    $action = json_encode(["type" => "votepoints-random",
-                        "amount" => [
-                            "min" => filter_input(INPUT_POST, "amount-min"),
-                            "max" => filter_input(INPUT_POST, "amount-max")]], JSON_THROW_ON_ERROR);
-                } catch (JsonException) {
-                }
-                break;
-            case "minecraft-commands":
-                try {
-                    $action = json_encode(["type" => "minecraft-commands",
-                        "commands" => filter_input(INPUT_POST, "minecraft-commands"),
-                        "servers" => $_POST['minecraft-servers']], JSON_THROW_ON_ERROR);
-                } catch (JsonException) {
-                }
-                break;
-
-            case "none": //Error, redirect
-                Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
-                    LangManager::translate("core.toaster.internalError"));
-                Redirect::redirectPreviousRoute();
-                break;
+        $advancedAction = VotesController::getInstance()->getRewardByVarName($rewardType)->execRewardActionLogic();
+        if (!is_null($advancedAction)) {
+            $action = $advancedAction;
+        } else {
+            $action = filter_input(INPUT_POST, $rewardType);
         }
 
-        //Add reward
-        VotesRewardsModel::getInstance()->addReward($title, $action);
+        VotesRewardsModel::getInstance()->addReward($title, $action, $rewardType);
 
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate("votes.toaster.reward.add.success", ["name" => $title]));
@@ -436,6 +408,47 @@ class VotesController extends AbstractController
         $view->view();
     }
 
+    /**
+     * @return \CMW\Interface\Votes\IRewardMethod[]
+     */
+    public function getRewardMethods(): array
+    {
+        return Loader::loadImplementations(IRewardMethod::class);
+    }
+
+    /**
+     * @param string $varName
+     * @return \CMW\Interface\Votes\IRewardMethod|null
+     */
+    public function getRewardByVarName(string $varName): ?IRewardMethod
+    {
+        foreach ($this->getRewardMethods() as $rewardMethod) {
+            if ($rewardMethod->varName() === $varName){
+                return $rewardMethod;
+            }
+        }
+        return null;
+    }
+
+    #[Link('/vote/testsend/:id', Link::GET, ["id" => "[0-9]+"])]
+    public function votesWebsiteTestPublic(Request $request, int $id): void
+    {
+        if (UsersController::isAdminLogged()) {
+            $userId = UsersModel::getCurrentUser()?->getId();
+            $reward = VotesSitesModel::getInstance()->getSiteById($id)?->getRewards() ?? null;
+            if (!is_null($reward)) {
+                $site = VotesSitesModel::getInstance()->getSiteById($id);
+                $this->getRewardByVarName($reward->getVarName())->execReward($reward, $site, $userId);
+            } else {
+                Flash::send(Alert::SUCCESS, "Votes", "Merci pour votre vote !");
+                Redirect::redirect("vote");
+            }
+        } else {
+            Flash::send(Alert::ERROR, "Votes", "Vous n'êtes pas en mesure de réaliser ce test !");
+            Redirect::redirect("vote");
+        }
+    }
+
     #[Link('/vote/send/:id', Link::GET, ["id" => "[0-9]+"])]
     public function votesWebsitePublic(Request $request, int $id): void
     {
@@ -447,6 +460,8 @@ class VotesController extends AbstractController
             return;
         }
 
+        $reward = VotesSitesModel::getInstance()->getSiteById($id)?->getRewards() ?? null;
+
         try {
             //First, check if the player can vote.
             if (CheckVotesModel::getInstance()->isVoteSend(VotesSitesModel::getInstance()->getSiteById($id)?->getUrl(),
@@ -454,20 +469,13 @@ class VotesController extends AbstractController
 
                 //Check if the player has a vote stored
                 if (VotesModel::getInstance()->playerHasAVoteStored($userId, $id)) {
-
                     //Check if we can validate this vote
                     if (VotesModel::getInstance()->validateThisVote($userId, $id)) {
                         VotesModel::getInstance()->storeVote($userId, $id);
-                        VotesRewardsModel::getInstance()->selectReward($userId, $id);
-
-                        if (VotesConfigModel::getInstance()->getConfig()?->isEnableApi() &&
-                            json_decode(VotesRewardsModel::getInstance()->getRewardById($id)?->getAction(), false, 512,
-                                JSON_THROW_ON_ERROR)->type === "minecraft-commands") {
-                            $this->sendRewardsToCmwLink($id);
-                            // TODO config to toggle this feature
-                            $this->sendVoteToCmwLink($id, VotesSitesModel::getInstance()->getSiteById($id)?->getTitle());
+                        if (!is_null($reward)) {
+                            $site = VotesSitesModel::getInstance()->getSiteById($id);
+                            $this->getRewardByVarName($reward->getVarName())->execReward($reward, $site, $userId);
                         }
-
                         $this->returnData("send", true);
                     } else {
                         $this->returnData("already_vote", true);
@@ -475,13 +483,11 @@ class VotesController extends AbstractController
 
                 } else { //The player don't have any vote for this website.
                     VotesModel::getInstance()->storeVote($userId, $id);
-                    VotesRewardsModel::getInstance()->selectReward($userId, $id);
 
-//                    if (VotesConfigModel::getInstance()->getConfig()?->isEnableApi() &&
-//                        json_decode(VotesRewardsModel::getInstance()->getRewardById($id)?->getAction(), false, 512,
-//                            JSON_THROW_ON_ERROR)->type === "minecraft-commands") {
-//                        $this->sendRewardsToCmwLink($id);
-//                    }
+                    if (!is_null($reward)) {
+                        $site = VotesSitesModel::getInstance()->getSiteById($id);
+                        $this->getRewardByVarName($reward->getVarName())->execReward($reward, $site, $userId);
+                    }
 
                     $this->returnData("send", true);
                 }
@@ -492,54 +498,6 @@ class VotesController extends AbstractController
         } catch (JsonException $e) {
             echo "Internal Error. " . $e;
         }
-    }
-
-    public function sendRewardsToCmwLink(int $rewardId): void
-    {
-        try {
-            foreach (json_decode(VotesRewardsModel::getInstance()->getRewardById($rewardId)?->getAction(), false, 512, JSON_THROW_ON_ERROR)->servers as $serverId) {
-
-                if (!PackageController::isInstalled("Minecraft")) {
-                    return; //TODO Throw error ?
-                }
-
-                $server = MinecraftModel::getInstance()->getServerById($serverId);
-                $currentUser = UsersModel::getCurrentUser()?->getPseudo();
-
-                $cmd = json_decode(VotesRewardsModel::getInstance()->getRewardById($rewardId)?->getAction(), false, 512, JSON_THROW_ON_ERROR)->commands;
-                $cmd = str_replace("{player}", $currentUser, $cmd);
-                $cmd = base64_encode($cmd);
-
-                echo APIManager::getRequest("http://{$server?->getServerIp()}:{$server?->getServerCMWLPort()}/votes/send/reward/$currentUser/$cmd",
-                    cmwlToken: $server?->getServerCMWToken());
-            }
-        } catch (JsonException $e) {
-            echo "Internal Error. " . $e;
-        }
-
-    }
-
-    public function sendVoteToCmwLink(int $rewardId, string $siteName): void
-    {
-        try {
-            foreach (json_decode(VotesRewardsModel::getInstance()->getRewardById($rewardId)?->getAction(), false, 512, JSON_THROW_ON_ERROR)->servers as $serverId) {
-                $rewardName = base64_encode(VotesRewardsModel::getInstance()->getRewardById($rewardId)?->getTitle());
-                $siteName = base64_encode($siteName);
-
-                if (!PackageController::isInstalled("Minecraft")) {
-                    return; //TODO Throw error ?
-                }
-
-                $server = MinecraftModel::getInstance()->getServerById($serverId);
-                $currentUser = UsersModel::getCurrentUser()?->getPseudo();
-
-                echo APIManager::getRequest("http://{$server?->getServerIp()}:{$server?->getServerCMWLPort()}/votes/send/validate/$currentUser/$siteName/$rewardName",
-                    cmwlToken: $server?->getServerCMWToken());
-            }
-        } catch (JsonException $e) {
-            echo "Internal Error. " . $e;
-        }
-
     }
 
     private function returnData(string $toReturn, bool $isFinal = false): void
