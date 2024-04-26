@@ -1,6 +1,6 @@
 <?php
 
-namespace CMW\Controller\Votes;
+namespace CMW\Controller\Votes\Admin;
 
 use CMW\Manager\Api\APIManager;
 use CMW\Manager\Package\AbstractController;
@@ -8,7 +8,6 @@ use CMW\Manager\Requests\Request;
 use CMW\Manager\Router\Link;
 use CMW\Model\Votes\VotesStatsModel;
 use JetBrains\PhpStorm\ExpectedValues;
-
 
 /**
  * Class: @VotesController

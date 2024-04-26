@@ -1,6 +1,6 @@
 <?php
 
-use CMW\Controller\Votes\VotesController;
+use CMW\Controller\Votes\Admin\VotesRewardsController;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Security\SecurityManager;
 
@@ -79,7 +79,7 @@ $description = LangManager::translate("votes.dashboard.desc");
                     <?php foreach ($rewards as $reward) : ?>
                         <tr>
                             <td><?= $reward->getTitle() ?></td>
-                            <td><?= VotesController::getInstance()->getRewardMethodByVarName($reward->getVarName())->name() ?></td>
+                            <td><?= VotesRewardsController::getInstance()->getRewardMethodByVarName($reward->getVarName())->name() ?></td>
                             <td>
                                 <a href="rewards/edit/<?= $reward->getRewardsId() ?>">
                                     <i class="text-primary me-3 fas fa-edit"></i>

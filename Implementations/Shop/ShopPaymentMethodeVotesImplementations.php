@@ -3,7 +3,7 @@
 namespace CMW\Implementation\Votes\Shop;
 
 use CMW\Controller\Shop\Admin\Payment\ShopPaymentsController;
-use CMW\Controller\Votes\VotesPaymentController;
+use CMW\Controller\Votes\Payment\VotesPaymentController;
 use CMW\Entity\Shop\Deliveries\ShopDeliveryUserAddressEntity;
 use CMW\Entity\Users\UserEntity;
 use CMW\Interface\Shop\IPaymentMethod;

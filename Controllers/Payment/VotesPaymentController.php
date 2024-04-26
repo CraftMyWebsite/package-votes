@@ -1,6 +1,6 @@
 <?php
 
-namespace CMW\Controller\Votes;
+namespace CMW\Controller\Votes\Payment;
 
 use CMW\Controller\Shop\Admin\Item\ShopItemsController;
 use CMW\Event\Shop\ShopPaymentCancelEvent;
