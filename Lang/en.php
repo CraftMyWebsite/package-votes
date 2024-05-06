@@ -164,4 +164,22 @@ return [
             ],
         ],
     ],
+
+    "permissions" => [
+        "votes" => [
+            "configuration" => "Manage votes configuration",
+            "site" => [
+                "list" => "Show vote websites",
+                "add" => "Add vote website",
+                "edit" => "Edit vote website",
+                "delete" => "Delete vote website",
+            ],
+            "rewards" => [
+                "edit" => "Edit rewards",
+                "add" => "Add rewards",
+                "delete" => "Delete rewards",
+            ],
+            "boost" => "Manage website boosts",
+        ],
+    ],
 ];

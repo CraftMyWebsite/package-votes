@@ -164,4 +164,22 @@ return [
             ],
         ],
     ],
+
+    "permissions" => [
+        "votes" => [
+            "configuration" => "Gérer les configurations des votes",
+            "site" => [
+                "list" => "Afficher les sites de vote",
+                "add" => "Ajouter un site de vote",
+                "edit" => "Modifier un site de vote",
+                "delete" => "Supprimer un site de vote",
+            ],
+            "rewards" => [
+                "edit" => "Modifier les récompenses",
+                "add" => "Ajouter une récompense",
+                "delete" => "Supprimer une récompense",
+            ],
+            "boost" => "Gérez les boosts de votes",
+        ],
+    ],
 ];
