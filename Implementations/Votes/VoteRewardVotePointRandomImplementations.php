@@ -2,6 +2,7 @@
 
 namespace CMW\Implementation\Votes\Votes;
 
+use CMW\Controller\Core\PackageController;
 use CMW\Controller\Votes\Rewards\VotePointRandomController;
 use CMW\Entity\Votes\VotesRewardsEntity;
 use CMW\Entity\Votes\VotesSitesEntity;
@@ -14,6 +15,11 @@ class VoteRewardVotePointRandomImplementations implements IRewardMethod
 {
     public function name(): string
     {
+
+        if (!PackageController::isInstalled("Shop")){
+            return "Points de votes aléatoires. (Nécessite le package Shop.)";
+        }
+
         $url = $_SERVER['REQUEST_URI'];
 
         if (str_contains($url, 'votes/rewards')) {
