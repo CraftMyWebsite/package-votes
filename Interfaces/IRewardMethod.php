@@ -2,7 +2,6 @@
 
 namespace CMW\Interface\Votes;
 
-use CMW\Entity\Users\UserEntity;
 use CMW\Entity\Votes\VotesRewardsEntity;
 use CMW\Entity\Votes\VotesSitesEntity;
 

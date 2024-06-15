@@ -3,6 +3,7 @@
 use CMW\Controller\Votes\Admin\VotesRewardsController;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Security\SecurityManager;
+use CMW\Utils\Log;
 
 $title = LangManager::translate("votes.dashboard.title.rewards");
 $description = LangManager::translate("votes.dashboard.desc");

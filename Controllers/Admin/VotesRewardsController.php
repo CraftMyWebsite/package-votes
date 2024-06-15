@@ -4,6 +4,7 @@ namespace CMW\Controller\Votes\Admin;
 
 use CMW\Controller\Users\UsersController;
 use CMW\Interface\Votes\IRewardMethod;
+use CMW\Manager\Filter\FilterManager;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
@@ -14,6 +15,7 @@ use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
 use CMW\Model\Votes\VotesRewardsModel;
 use CMW\Utils\Redirect;
+use JetBrains\PhpStorm\NoReturn;
 use JsonException;
 
 /**
@@ -25,7 +27,7 @@ use JsonException;
 class VotesRewardsController extends AbstractController
 {
     #[Link("/rewards", Link::GET, [], "/cmw-admin/votes")]
-    public function votesRewards(): void
+    private function votesRewards(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.rewards.edit");
 
@@ -38,19 +40,19 @@ class VotesRewardsController extends AbstractController
             ->view();
     }
 
-    #[Link("/rewards/add", Link::POST, [], "/cmw-admin/votes")]
-    public function addRewardPost(): void
+    #[NoReturn] #[Link("/rewards/add", Link::POST, [], "/cmw-admin/votes")]
+    private function addRewardPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.rewards.add");
 
-        $rewardType = filter_input(INPUT_POST, "reward_type_selected");
-        $title = filter_input(INPUT_POST, "title");
+        $rewardType = FilterManager::filterInputStringPost("reward_type_selected", 50);
+        $title = FilterManager::filterInputStringPost("title");
 
-        $advancedAction = $this->getRewardMethodByVarName($rewardType)->execRewardActionLogic();
+        $advancedAction = $this->getRewardMethodByVarName($rewardType)?->execRewardActionLogic();
         if (!is_null($advancedAction)) {
             $action = $advancedAction;
         } else {
-            $action = filter_input(INPUT_POST, $rewardType);
+            $action = $rewardType;
         }
 
         VotesRewardsModel::getInstance()->addReward($title, $action, $rewardType);
@@ -61,8 +63,8 @@ class VotesRewardsController extends AbstractController
         Redirect::redirectPreviousRoute();
     }
 
-    #[Link("/rewards/delete/:id", Link::GET, ['id' => '[0-9]+'], "/cmw-admin/votes")]
-    public function deleteRewardPostAdmin(Request $request, int $id): void
+    #[NoReturn] #[Link("/rewards/delete/:id", Link::GET, ['id' => '[0-9]+'], "/cmw-admin/votes")]
+    private function deleteRewardPostAdmin(Request $request, int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.rewards.delete");
 
@@ -78,7 +80,7 @@ class VotesRewardsController extends AbstractController
     }
 
     #[Link("/rewards/edit/:id", Link::GET, [], "/cmw-admin/votes")]
-    public function votesRewardsEdit(Request $request, int $id): void
+    private function votesRewardsEdit(Request $request, int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.rewards.edit");
 
@@ -91,19 +93,19 @@ class VotesRewardsController extends AbstractController
             ->view();
     }
 
-    #[Link("/rewards/edit/:id", Link::POST, [], "/cmw-admin/votes")]
-    public function editRewardPost(Request $request, int $id): void
+    #[NoReturn] #[Link("/rewards/edit/:id", Link::POST, [], "/cmw-admin/votes")]
+    private function editRewardPost(Request $request, int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.rewards.edit");
 
-        $rewardType = filter_input(INPUT_POST, "reward_type_selected");
-        $title = filter_input(INPUT_POST, "title");
+        $rewardType = FilterManager::filterInputStringPost("reward_type_selected", 50);
+        $title = FilterManager::filterInputStringPost("title");
 
-        $advancedAction = $this->getRewardMethodByVarName($rewardType)->execRewardActionLogic();
+        $advancedAction = $this->getRewardMethodByVarName($rewardType)?->execRewardActionLogic();
         if (!is_null($advancedAction)) {
             $action = $advancedAction;
         } else {
-            $action = filter_input(INPUT_POST, $rewardType);
+            $action = $rewardType;
         }
 
         VotesRewardsModel::getInstance()->updateReward($id, $title, $action, $rewardType);
@@ -115,7 +117,7 @@ class VotesRewardsController extends AbstractController
 
     //Return the reward with a specific ID
     #[Link("/rewards/get", Link::POST, [], "/cmw-admin/votes", secure: false)]
-    public function getReward(): void
+    private function getReward(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.rewards.edit");
 
@@ -146,7 +148,7 @@ class VotesRewardsController extends AbstractController
     public function getRewardMethodByVarName(string $varName): ?IRewardMethod
     {
         foreach ($this->getRewardMethods() as $rewardMethod) {
-            if ($rewardMethod->varName() === $varName){
+            if ($rewardMethod->varName() === $varName) {
                 return $rewardMethod;
             }
         }
