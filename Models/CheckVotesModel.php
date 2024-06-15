@@ -48,7 +48,7 @@ class CheckVotesModel extends AbstractModel
         }
 
         if (self::checkUrl($url, 'liste-serveurs-minecraft.org')) {
-            return self::containData("https://api.liste-serveurs-minecraft.org/vote/vote_verification.php?server_id=$idUnique&ip=$ipPlayer&duration=5", 1);
+            return self::checkPlainData("https://api.liste-serveurs-minecraft.org/vote/vote_verification.php?server_id=$idUnique&ip=$ipPlayer&duration=5", "1");
         }
 
         if (self::checkUrl($url, 'serveur-minecraft.com')) {
