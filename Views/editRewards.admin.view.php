@@ -34,7 +34,7 @@ $description = LangManager::translate("votes.dashboard.desc");
                             <i class="fas fa-heading"></i>
                         </div>
                     </div>
-                    <h6>Type de récompenses :</h6>
+                    <h6><?= LangManager::translate("votes.dashboard.rewards.add.placeholder.type") ?></h6>
                     <select class="form-select" name="reward_type_selected" required>
                         <?php foreach ($rewardMethods as $rewardMethod): ?>
                             <option value="<?= $rewardMethod->varName() ?>" <?= $rewardMethod->varName() === $rewards->getVarName() ? "selected" : "" ?>><?= $rewardMethod->name() ?></option>

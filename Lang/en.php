@@ -110,6 +110,9 @@ return [
                 "name" => "Vote points",
                 "fixed" => " Unique",
                 "random" => " Random",
+                "nameaff" => "Display name",
+                "icon" => "Icon :",
+                "save" => "Save",
             ],
             "minecraft" => [
                 "commands" => "Minecraft Commands",

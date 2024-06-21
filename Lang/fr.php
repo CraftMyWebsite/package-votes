@@ -110,6 +110,9 @@ return [
                 "name" => "Points de vote",
                 "fixed" => "Unique",
                 "random" => "Aléatoires",
+                "nameaff" => "Nom d'affichage",
+                "icon" => "Icon :",
+                "save" => "Sauvegarder",
             ],
             "minecraft" => [
                 "commands" => "Commandes Minecraft",
@@ -122,7 +125,7 @@ return [
                 "title" => "Ajouter une récompense",
                 "placeholder" => [
                     "title" => "Nom de récompense",
-                    "type" => "Type de récompense",
+                    "type" => "Type de récompense :",
                     "type_select" => "Choisissez une récompense",
                     "amount" => "Montant",
                     "amount_minimum" => "Montant minimum",

@@ -12,8 +12,8 @@ use CMW\Model\Shop\Payment\ShopPaymentMethodSettingsModel;
     <div class="row">
         <div class="col-12 col-md-6">
             <div class="form-group">
-                <label for="<?=$varName?>_name">Nom d'affichage :</label>
-                <input value="<?= ShopPaymentMethodSettingsModel::getInstance()->getSetting($varName.'_name') ?? "Points de votes" ?>"
+                <label for="<?=$varName?>_name"><?= LangManager::translate("votes.dashboard.rewards.votepoints.nameaff") ?></label>
+                <input value="<?= ShopPaymentMethodSettingsModel::getInstance()->getSetting($varName.'_name') ?? <?= LangManager::translate("votes.dashboard.rewards.votepoints.name") ?>
                        placeholder="Token"
                        type="text"
                        name="<?=$varName?>_name"
@@ -24,7 +24,7 @@ use CMW\Model\Shop\Payment\ShopPaymentMethodSettingsModel;
         </div>
         <div class="col-12 col-md-6">
             <div class="form-group">
-                <label for="<?=$varName?>_icon">Icon :</label>
+                <label for="<?=$varName?>_icon"><?= LangManager::translate("votes.dashboard.rewards.votepoints.icon") ?></label>
                 <input value="<?= ShopPaymentMethodSettingsModel::getInstance()->getSetting($varName.'_icon') ?? "fa-solid fa-coins" ?>"
                        placeholder="Token"
                        type="text"
@@ -36,6 +36,6 @@ use CMW\Model\Shop\Payment\ShopPaymentMethodSettingsModel;
         </div>
     </div>
     <div class="text-center">
-        <button type="submit" class="btn btn-primary">Sauvegarder</button>
+        <button type="submit" class="btn btn-primary"><?= LangManager::translate("votes.dashboard.rewards.votepoints.save") ?></button>
     </div>
 </form>
