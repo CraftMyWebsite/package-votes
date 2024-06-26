@@ -38,12 +38,11 @@ class VotesStatsController extends AbstractController
         $previous3Months = $stats->get3PreviousMonthsVotes();
 
         View::createAdminView('Votes', 'stats')
-            ->addScriptBefore("Admin/Resources/Vendors/Chart/chart.min.js",
+            ->addScriptBefore("Admin/Resources/Vendors/Apexcharts/Js/apexcharts.js",
                 "App/Package/Votes/Views/Resources/Js/main.js")
-            ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css",
-                "Admin/Resources/Assets/Css/Pages/simple-datatables.css")
+            ->addStyle("Admin/Resources/Assets/Css/simple-datatables.css")
             ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js",
-                "Admin/Resources/Assets/Js/Pages/simple-datatables.js")
+                "Admin/Resources/Vendors/Simple-datatables/config-datatables.js")
             ->addVariableList(["stats" => $stats, "all" => $all, "month" => $month, "week" => $week, "day" => $day,
                 "listSites" => $listSites, "actualTop" => $actualTop,
                 "globalTop" => $globalTop, "previousTop" => $previousTop, "previous3Months" => $previous3Months])

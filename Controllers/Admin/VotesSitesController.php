@@ -36,13 +36,9 @@ class VotesSitesController extends AbstractController
 
         View::createAdminView('Votes', 'list_sites')
             ->addVariableList(["sites" => $sites, "rewards" => $rewards, "compatiblesSites" => $compatiblesSites])
-            ->addStyle("Admin/Resources/Vendors/Izitoast/iziToast.min.css",
-                "Admin/Resources/Vendors/Simple-datatables/style.css",
-                "Admin/Resources/Assets/Css/Pages/simple-datatables.css")
-            ->addScriptAfter("Admin/Resources/Vendors/Izitoast/iziToast.min.js",
-                "App/Package/Votes/Views/Resources/Js/testSitesId.js",
-                "Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js",
-                "Admin/Resources/Assets/Js/Pages/simple-datatables.js")
+            ->addStyle("Admin/Resources/Assets/Css/simple-datatables.css")
+            ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js",
+                "Admin/Resources/Vendors/Simple-datatables/config-datatables.js", "App/Package/Votes/Views/Resources/Js/testSitesId.js")
             ->view();
     }
 
@@ -91,8 +87,6 @@ class VotesSitesController extends AbstractController
         $votes = VotesSitesModel::getInstance()->getSiteById(filter_input(INPUT_POST, 'siteId'));
 
         View::createAdminView('Votes', 'list_sites')
-            ->addStyle("App/Package/Votes/Views/Resources/Vendors/Css/iziToast.min.css")
-            ->addScriptAfter("App/Package/Votes/Views/Resources/Vendors/Js/iziToast.min.js")
             ->addVariableList(["votes" => $votes])
             ->view();
     }

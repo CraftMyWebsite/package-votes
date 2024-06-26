@@ -35,8 +35,9 @@ class VotesRewardsController extends AbstractController
 
         View::createAdminView('Votes', 'rewards')
             ->addVariableList(["rewards" => $rewards, "rewardMethods" => $this->getRewardMethods()])
-            ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css", "Admin/Resources/Assets/Css/Pages/simple-datatables.css")
-            ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js", "Admin/Resources/Assets/Js/Pages/simple-datatables.js")
+            ->addStyle("Admin/Resources/Assets/Css/simple-datatables.css")
+            ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js",
+                "Admin/Resources/Vendors/Simple-datatables/config-datatables.js")
             ->view();
     }
 
@@ -52,7 +53,7 @@ class VotesRewardsController extends AbstractController
         if (!is_null($advancedAction)) {
             $action = $advancedAction;
         } else {
-            $action = $rewardType;
+            $action = filter_input(INPUT_POST, $rewardType);
         }
 
         VotesRewardsModel::getInstance()->addReward($title, $action, $rewardType);
@@ -88,8 +89,6 @@ class VotesRewardsController extends AbstractController
 
         View::createAdminView('Votes', 'editRewards')
             ->addVariableList(["rewards" => $rewards, "rewardMethods" => $this->getRewardMethods()])
-            ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css", "Admin/Resources/Assets/Css/Pages/simple-datatables.css")
-            ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js", "Admin/Resources/Assets/Js/Pages/simple-datatables.js")
             ->view();
     }
 

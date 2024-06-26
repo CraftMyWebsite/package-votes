@@ -22,10 +22,10 @@ if (!is_null($rewardId)) {
 <div class="mt-3 mb-4 row">
         <div class="col-12 col-lg-6">
             <label for="<?=$varName?>_min">Mini :</label>
-            <input value="<?=$min ?? ""?>" placeholder="Montant" type="number" id="<?=$varName?>_min" name="<?=$varName?>_min" class="form-control" required="true">
+            <input value="<?=$min ?? ""?>" placeholder="Montant" type="number" id="<?=$varName?>_min" name="<?=$varName?>_min" class="input" required>
         </div>
         <div class="col-12 col-lg-6">
             <label for="<?=$varName?>_max">Maxi :</label>
-                <input value="<?=$max ?? ""?>" placeholder="Montant" type="number" id="<?=$varName?>_max" name="<?=$varName?>_max" class="form-control" required="true">
+                <input value="<?=$max ?? ""?>" placeholder="Montant" type="number" id="<?=$varName?>_max" name="<?=$varName?>_max" class="input" required>
         </div>
 </div>

@@ -100,7 +100,7 @@ return [
             "sites_totals" => "Votes par site (totaux)",
             "sites_current" => "Votes par site (mois en cours)",
             "top_current" => "Top voteurs du mois en cours",
-            "top_totals" => "Top voteurs du totaux",
+            "top_totals" => "Top voteurs depuis le début",
             "top_pastMonth" => "Top voteurs du mois précédent",
             "monthlyVotes" => "Votes du mois",
         ],
@@ -167,19 +167,19 @@ return [
 
     "permissions" => [
         "votes" => [
-            "configuration" => "Gérer les configurations des votes",
+            "configuration" => "Gérer les configurations",
             "site" => [
-                "list" => "Afficher les sites de vote",
-                "add" => "Ajouter un site de vote",
-                "edit" => "Modifier un site de vote",
-                "delete" => "Supprimer un site de vote",
+                "list" => "Afficher",
+                "add" => "Ajouter",
+                "edit" => "Modifier",
+                "delete" => "Supprimer",
             ],
             "rewards" => [
-                "edit" => "Modifier les récompenses",
-                "add" => "Ajouter une récompense",
-                "delete" => "Supprimer une récompense",
+                "edit" => "Modifier",
+                "add" => "Ajouter",
+                "delete" => "Supprimer",
             ],
-            "boost" => "Gérez les boosts de votes",
+            "boost" => "Gérez les boosts",
         ],
     ],
 ];

@@ -13,278 +13,206 @@ $description = LangManager::translate("votes.dashboard.desc");
 /* @var array $compatiblesSites */
 
 ?>
-<div class="d-flex flex-wrap justify-content-between">
-    <h3><i class="fa-solid fa-sliders"></i> <span
-            class="m-lg-auto"><?= LangManager::translate("votes.dashboard.title.manage_site") ?></span></h3>
-</div>
 
+<h3><i class="fa-solid fa-sliders"></i> <?= LangManager::translate("votes.dashboard.title.manage_site") ?></h3>
 
-<section class="row">
-    <div class="col-12 col-lg-4">
-        <div class="card">
-            <div class="card-header">
-                <h4><?= LangManager::translate("votes.dashboard.title.add_site") ?></h4>
-            </div>
-            <div class="card-body">
-                <form method="post" action="">
-                    <?php (new SecurityManager())->insertHiddenToken() ?>
-                    <h6><?= LangManager::translate("votes.dashboard.add_site.input.title") ?> :</h6>
-                    <div class="form-group position-relative has-icon-left">
-                        <input type="text" class="form-control" name="title" value="" required
+<div class="grid-3">
+    <div class="card">
+        <form method="post" action="">
+            <?php (new SecurityManager())->insertHiddenToken() ?>
+            <div class="space-y-4">
+                <h6><?= LangManager::translate("votes.dashboard.title.add_site") ?></h6>
+                <div>
+                    <label for="reward"><?= LangManager::translate("votes.dashboard.add_site.input.rewards") ?> :</label>
+                    <select name="reward" id="reward">
+                        <option <?= is_null($rewards) ? 'selected' : '' ?> value="0">
+                            <?= LangManager::translate("votes.dashboard.list_sites.noreward") ?>
+                        </option>
+                        <?php foreach ($rewards as $reward) : ?>
+                            <option value="<?= $reward?->getRewardsId() ?>"><?= $reward->getTitle() ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div>
+                    <label for="title"><?= LangManager::translate("votes.dashboard.add_site.input.title") ?> :</label>
+                    <div class="input-group">
+                        <i class="fa-solid fa-heading"></i>
+                        <input type="text" id="title" name="title" value="" required
                                placeholder="<?= LangManager::translate("votes.dashboard.add_site.placeholder.title") ?>">
-                        <div class="form-control-icon">
-                            <i class="fas fa-heading"></i>
-                        </div>
                     </div>
-                    <h6><?= LangManager::translate("votes.dashboard.add_site.input.time") ?> :</h6>
-                    <div class="form-group position-relative has-icon-left">
-                        <input type="number" class="form-control" name="time" value="" required
+                </div>
+                <div>
+                    <label for="time"><?= LangManager::translate("votes.dashboard.add_site.input.time") ?> :</label>
+                    <div class="input-group">
+                        <i class="fa-solid fa-hourglass-start"></i>
+                        <input type="number" id="time" name="time" value="" required
                                placeholder="<?= LangManager::translate("votes.dashboard.add_site.placeholder.time") ?>">
-                        <div class="form-control-icon">
-                            <i class="fas fa-hourglass-start"></i>
-                        </div>
                     </div>
-                    <h6><?= LangManager::translate("votes.dashboard.add_site.input.url") ?> :</h6>
-                    <div class="form-group position-relative has-icon-left">
-                        <input type="url" class="form-control" name="url" id="url" value="" required
+                </div>
+                <div>
+                    <label for="url"><?= LangManager::translate("votes.dashboard.add_site.input.url") ?> :</label>
+                    <div class="input-group">
+                        <i class="fa-solid fa-link"></i>
+                        <input type="number" name="url" id="url" value="" required
                                placeholder="<?= LangManager::translate("votes.dashboard.add_site.placeholder.url") ?>">
-                        <div class="form-control-icon">
-                            <i class="fas fa-link"></i>
-                        </div>
                     </div>
-                    <h6><?= LangManager::translate("votes.dashboard.add_site.input.id_unique") ?> :</h6>
-                    <div class="input-group mb-3">
-                        <input type="text" name="idUnique" id="idUnique" class="form-control"
+                </div>
+                <div>
+                    <label for="idUnique"><?= LangManager::translate("votes.dashboard.add_site.input.id_unique") ?> :</label>
+                    <div class="input-btn">
+                        <input type="tel" name="idUnique" id="idUnique"
                                placeholder="<?= LangManager::translate("votes.dashboard.add_site.placeholder.id_unique") ?>">
-                        <button class="btn btn-success" type="button" id="button-addon1" onclick="testId()">
-                            <?= LangManager::translate("votes.dashboard.add_site.btn.testid") ?>
-                        </button>
+                        <button type="button" id="button-addon1" onclick="testId()">
+                            <?= LangManager::translate("votes.dashboard.add_site.btn.testid") ?></button>
                     </div>
-
-                    <h6>
-                        <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'cmw-admin/votes/rewards' ?>">
-                            <i data-bs-toggle="tooltip"
-                               title="<?= LangManager::translate('votes.dashboard.list_sites.tooltip.rewards') ?>"
-                               class="fa-sharp fa-solid fa-circle-question"></i>
-                        </a>
-                        <?= LangManager::translate("votes.dashboard.add_site.input.rewards") ?> :
-                    </h6>
-                    <div class="form-group position-relative">
-                        <select name="reward" class="form-control" required>
-                            <option <?= is_null($rewards) ? 'selected' : '' ?> value="0">
-                                <?= LangManager::translate("votes.dashboard.list_sites.noreward") ?>
-                            </option>
-                            <?php foreach ($rewards as $reward) : ?>
-                                <option value="<?= $reward?->getRewardsId() ?>"><?= $reward->getTitle() ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-
-                    <div class="text-center">
-                        <a type="button" class="btn btn-outline-info" data-bs-toggle="modal"
-                           data-bs-target="#sitecompatible">
-                            <?= LangManager::translate("votes.dashboard.add_site.btn.sitescomp") ?>
-                        </a>
-                        <button type="submit" class="btn btn-primary float-right">
-                            <?= LangManager::translate("core.btn.add") ?>
-                        </button>
-                    </div>
-                </form>
+                </div>
+                <div class="lg:flex justify-center space-x-2">
+                    <button data-modal-toggle="modal-site" class="btn-success" type="button"><?= LangManager::translate("votes.dashboard.add_site.btn.sitescomp") ?></button>
+                    <button type="submit" class="btn-primary">
+                        <?= LangManager::translate("core.btn.add") ?>
+                    </button>
+                </div>
             </div>
-        </div>
+        </form>
     </div>
-    <div class="col-12 col-lg-8">
-        <div class="card">
-            <div class="card-header">
-                <h4><?= LangManager::translate("votes.dashboard.title.list_sites") ?></h4>
-            </div>
-            <div class="card-body">
-                <table class="table" id="table1">
-                    <thead>
+
+    <div class="card col-span-2">
+        <h6><?= LangManager::translate("votes.dashboard.title.list_sites") ?></h6>
+        <div class="table-container table-container-striped">
+            <table class="table" id="table1">
+                <thead>
+                <tr>
+                    <th><?= LangManager::translate("votes.dashboard.table.name") ?></th>
+                    <th><?= LangManager::translate("votes.dashboard.table.time") ?></th>
+                    <th><?= LangManager::translate("votes.dashboard.table.url") ?></th>
+                    <th><?= LangManager::translate("votes.dashboard.table.reward") ?></th>
+                    <th class="text-center"><?= LangManager::translate("votes.dashboard.table.action") ?></th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php $i = 1;
+                foreach ($sites as $site) : ?>
                     <tr>
-                        <th class="text-center"><?= LangManager::translate("votes.dashboard.table.name") ?></th>
-                        <th class="text-center"><?= LangManager::translate("votes.dashboard.table.time") ?></th>
-                        <th class="text-center"><?= LangManager::translate("votes.dashboard.table.url") ?></th>
-                        <th class="text-center"><?= LangManager::translate("votes.dashboard.table.reward") ?></th>
-                        <th class="text-center"><?= LangManager::translate("votes.dashboard.table.action") ?></th>
-                    </tr>
-                    </thead>
-                    <tbody class="text-center">
-                    <?php $i = 1;
-                    foreach ($sites as $site) : ?>
-                        <tr>
-                            <td><?= $site->getTitle() ?></td>
-                            <td><?= $site->getTime() ?> <?= LangManager::translate("votes.dashboard.table.min") ?></td>
-                            <td><?= mb_strimwidth($site->getUrl(), 0, 35, '...') ?></td>
-                            <td><?= $site->getRewards()?->getTitle() ?></td>
-                            <td>
-                                <a type="button" data-bs-toggle="modal"
-                                   data-bs-target="#edit-<?= $site->getSiteId() ?>">
-                                    <i class="text-primary me-3 fas fa-edit"></i>
-                                </a>
-                                <a type="button" data-bs-toggle="modal"
-                                   data-bs-target="#delete-<?= $site->getSiteId() ?>">
-                                    <i class="text-danger fas fa-trash-alt"></i>
-                                </a>
-                            </td>
-                        </tr>
-
-                        <!-- MODAL edit  -->
-
-                        <div class="modal modal-lg fade text-left" id="edit-<?= $site->getSiteId() ?>" tabindex="-1"
-                             role="dialog" aria-labelledby="myModalLabel160" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header bg-primary">
-                                        <h5 class="modal-title white"
-                                            id="myModalLabel160"><?= LangManager::translate("votes.dashboard.modal.editing") ?> <?= $site->getTitle() ?></h5>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form id="serveredit-<?= $site->getSiteId() ?>" method="post"
-                                              action="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'cmw-admin/votes/site/edit' ?>">
-                                            <?php (new SecurityManager())->insertHiddenToken() ?>
-                                            <input type="text" name="siteId" value="<?= $site->getSiteId() ?>" hidden>
-                                            <h6><?= LangManager::translate("votes.dashboard.add_site.input.title") ?>
-                                                :</h6>
-                                            <div class="form-group position-relative has-icon-left">
-                                                <input type="text" class="form-control" name="title"
-                                                       value="<?= $site->getTitle() ?>" required autocomplete="off"
-                                                       placeholder="<?= LangManager::translate("votes.dashboard.add_site.placeholder.title") ?>">
-                                                <div class="form-control-icon">
-                                                    <i class="fas fa-heading"></i>
-                                                </div>
-                                            </div>
-                                            <h6><?= LangManager::translate("votes.dashboard.add_site.input.time") ?>
-                                                :</h6>
-                                            <div class="form-group position-relative has-icon-left">
-                                                <input type="number" class="form-control" name="time"
-                                                       value="<?= $site->getTime() ?>" required autocomplete="off"
-                                                       placeholder="<?= LangManager::translate("votes.dashboard.add_site.placeholder.time") ?>">
-                                                <div class="form-control-icon">
-                                                    <i class="fas fa-hourglass-start"></i>
-                                                </div>
-                                            </div>
-                                            <h6><?= LangManager::translate("votes.dashboard.add_site.input.url") ?>
-                                                :</h6>
-                                            <div class="form-group position-relative has-icon-left">
-                                                <input type="url" class="form-control" name="url"
-                                                       id="urlEdit-<?= $site->getSiteId() ?>"
-                                                       value="<?= $site->getUrl() ?>" required autocomplete="off"
-                                                       placeholder="<?= LangManager::translate("votes.dashboard.add_site.placeholder.url") ?>">
-                                                <div class="form-control-icon">
-                                                    <i class="fas fa-link"></i>
-                                                </div>
-                                            </div>
-                                            <h6><?= LangManager::translate("votes.dashboard.add_site.input.id_unique") ?>
-                                                :</h6>
-                                            <div class="input-group mb-3">
-                                                <input type="text" name="idUnique"
-                                                       id="idUniqueEdit-<?= $site->getSiteId() ?>"
-                                                       value="<?= $site->getIdUnique() ?>" required class="form-control"
-                                                       placeholder="<?= LangManager::translate("votes.dashboard.add_site.placeholder.id_unique") ?>">
-                                                <button class="btn btn-success" type="button" id="button-addon1"
-                                                        onclick="testId(<?= $site->getSiteId() ?>)">
-                                                    <?= LangManager::translate("votes.dashboard.add_site.btn.testid") ?>
-                                                </button>
-                                            </div>
-
-                                            <h6><?= LangManager::translate("votes.dashboard.add_site.input.rewards") ?>
-                                                :</h6>
-                                            <div class="form-group position-relative">
-                                                <select name="reward" class="form-control">
-                                                    <option <?= $site->getRewards() === NULL ? 'selected' : '' ?>
-                                                        value="0">
-                                                        <?= LangManager::translate("votes.dashboard.list_sites.noreward") ?>
-                                                    </option>
-
-                                                    <!-- Get all rewards -->
-                                                    <?php foreach ($rewards as $reward) : ?>
-                                                        <option
-                                                            value="<?= $reward?->getRewardsId() ?>" <?= ($site?->getRewards()?->getRewardsId() === $reward?->getRewardsId() ? "selected" : "") ?>><?= $reward->getTitle() ?></option>
-                                                    <?php endforeach; ?>
-                                                </select>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
-                                            <i class="bx bx-x d-block d-sm-none"></i>
-                                            <span
-                                                class="d-none d-sm-block"><?= LangManager::translate("core.btn.close") ?></span>
-                                        </button>
-                                        <button type="submit" form="serveredit-<?= $site->getSiteId() ?>"
-                                                class="btn btn-primary ml-1" data-bs-dismiss="modal">
-                                            <i class="bx bx-check d-block d-sm-none"></i>
-                                            <span
-                                                class="d-none d-sm-block"><?= LangManager::translate("core.btn.save") ?></span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- MODAL delete  -->
-
-                        <div class="modal fade text-left" id="delete-<?= $site->getSiteId() ?>" tabindex="-1"
-                             role="dialog" aria-labelledby="myModalLabel160" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header bg-danger">
-                                        <h5 class="modal-title white"
-                                            id="myModalLabel160"><?= LangManager::translate("votes.dashboard.modal.delete") ?> <?= $site->getTitle() ?></h5>
+                        <td><?= $site->getTitle() ?></td>
+                        <td><?= $site->getTime() ?> <?= LangManager::translate("votes.dashboard.table.min") ?></td>
+                        <td><a class="link" target="_blank" href="<?= $site->getUrl() ?>"><?= mb_strimwidth($site->getUrl(), 0, 35, '...') ?></a></td>
+                        <td><?= $site->getRewards()?->getTitle() ?></td>
+                        <td class="text-center space-x-2">
+                            <button data-modal-toggle="modal-edit-<?= $site->getSiteId() ?>" type="button"><i class="text-info fas fa-edit"></i></button>
+                            <button data-modal-toggle="modal-delete-<?= $site->getSiteId() ?>" type="button"><i class="text-danger fas fa-trash-alt"></i></button>
+                            <div id="modal-delete-<?= $site->getSiteId() ?>" class="modal-container">
+                                <div class="modal">
+                                    <div class="modal-header-danger">
+                                        <h6><?= LangManager::translate("votes.dashboard.modal.delete") ?> <?= $site->getTitle() ?></h6>
+                                        <button type="button" data-modal-hide="modal-delete-<?= $site->getSiteId() ?>"><i class="fa-solid fa-xmark"></i></button>
                                     </div>
                                     <div class="modal-body">
                                         <?= LangManager::translate("votes.dashboard.modal.deletealert") ?>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
-                                            <i class="bx bx-x d-block d-sm-none"></i>
-                                            <span
-                                                class="d-none d-sm-block"><?= LangManager::translate("core.btn.close") ?></span>
-                                        </button>
-                                        <a href="delete/<?= $site->getSiteId() ?>" class="btn btn-danger ml-1">
-                                            <i class="bx bx-check d-block d-sm-none"></i>
-                                            <span
-                                                class="d-none d-sm-block"><?= LangManager::translate("core.btn.delete") ?></span>
+                                        <a href="delete/<?= $site->getSiteId() ?>" class="btn-danger">
+                                            <?= LangManager::translate("core.btn.delete") ?>
                                         </a>
-                                        </form>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <?php ++$i; endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
+
+                            <div id="modal-edit-<?= $site->getSiteId() ?>" class="modal-container">
+                                <div class="modal">
+                                    <div class="modal-header">
+                                        <h6><?= LangManager::translate("votes.dashboard.modal.editing") ?> <?= $site->getTitle() ?></h6>
+                                        <button type="button" data-modal-hide="modal-edit-<?= $site->getSiteId() ?>"><i class="fa-solid fa-xmark"></i></button>
+                                    </div>
+                                    <form method="post" action="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'cmw-admin/votes/site/edit' ?>">
+                                        <?php (new SecurityManager())->insertHiddenToken() ?>
+                                        <div class="modal-body">
+                                            <input type="text" name="siteId" value="<?= $site->getSiteId() ?>" hidden>
+                                            <div class="space-y-4" style="text-align: left">
+                                                <div>
+                                                    <label for="title"><?= LangManager::translate("votes.dashboard.add_site.input.title") ?> :</label>
+                                                    <div class="input-group">
+                                                        <i class="fa-solid fa-heading"></i>
+                                                        <input type="text" id="title" name="title" value="<?= $site->getTitle() ?>" required
+                                                               placeholder="<?= LangManager::translate("votes.dashboard.add_site.placeholder.title") ?>">
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <label for="time"><?= LangManager::translate("votes.dashboard.add_site.input.time") ?> :</label>
+                                                    <div class="input-group">
+                                                        <i class="fa-solid fa-hourglass-start"></i>
+                                                        <input type="number" id="time" name="time" value="<?= $site->getTime() ?>" required
+                                                               placeholder="<?= LangManager::translate("votes.dashboard.add_site.placeholder.time") ?>">
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <label for="urlEdit-<?= $site->getSiteId() ?>"><?= LangManager::translate("votes.dashboard.add_site.input.url") ?> :</label>
+                                                    <div class="input-group">
+                                                        <i class="fa-solid fa-link"></i>
+                                                        <input type="url" name="url" id="urlEdit-<?= $site->getSiteId() ?>"
+                                                               value="<?= $site->getUrl() ?>" required
+                                                               placeholder="<?= LangManager::translate("votes.dashboard.add_site.placeholder.url") ?>">
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <label for="idUniqueEdit-<?= $site->getSiteId() ?>"><?= LangManager::translate("votes.dashboard.add_site.input.id_unique") ?> :</label>
+                                                    <div class="input-btn">
+                                                        <input type="tel" name="idUnique" id="idUniqueEdit-<?= $site->getSiteId() ?>"
+                                                               value="<?= $site->getIdUnique() ?>"
+                                                               placeholder="<?= LangManager::translate("votes.dashboard.add_site.placeholder.id_unique") ?>">
+                                                        <button type="button" id="button-addon1" onclick="testId(<?= $site->getSiteId() ?>)">
+                                                            <?= LangManager::translate("votes.dashboard.add_site.btn.testid") ?></button>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <label for="reward"><?= LangManager::translate("votes.dashboard.add_site.input.rewards") ?> :</label>
+                                                    <select name="reward" id="reward">
+                                                        <option <?= $site->getRewards() === NULL ? 'selected' : '' ?>
+                                                            value="0">
+                                                            <?= LangManager::translate("votes.dashboard.list_sites.noreward") ?>
+                                                        </option>
+                                                        <?php foreach ($rewards as $reward) : ?>
+                                                            <option
+                                                                value="<?= $reward?->getRewardsId() ?>" <?= ($site?->getRewards()?->getRewardsId() === $reward?->getRewardsId() ? "selected" : "") ?>><?= $reward->getTitle() ?></option>
+                                                        <?php endforeach; ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn-primary">
+                                                <?= LangManager::translate("core.btn.edit") ?>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <?php ++$i; endforeach; ?>
+                </tbody>
+            </table>
         </div>
     </div>
-</section>
+</div>
+
 
 <!-- MODAL SiteCompatibles -->
-
-<div class="modal modal-lg fade text-left" id="sitecompatible" tabindex="-1" role="dialog"
-     aria-labelledby="myModalLabel160" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
-        <div class="modal-content">
-            <div class="modal-header bg-primary">
-                <h5 class="modal-title white"
-                    id="myModalLabel160"><?= LangManager::translate("votes.dashboard.add_site.sitescomp.modal_title") ?></h5>
-            </div>
-            <div class="modal-body">
-                <?php foreach ($compatiblesSites as $site => $url): ?>
-                    <li><a class="text-white" href="<?= $url ?>" target="_blank"><?= $url ?></a></li>
-                <?php endforeach; ?>
-            </div>
-            <div class="modal-footer">
-                <a href="https://github.com/CraftMyWebsite/package-votes/issues/new?assignees=&labels=&template=ajouts-d-un-site-de-vote.md&title=%5BNEW+WEBSITE%5D"
-                   class="btn btn-primary"
-                   target="_blank"><?= LangManager::translate("votes.dashboard.add_site.sitescomp.request") ?>
-                </a>
-                <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal">
-                    <i class="bx bx-x d-block d-sm-none"></i>
-                    <span class="d-none d-sm-block"><?= LangManager::translate("core.btn.close") ?></span>
-                </button>
-            </div>
+<div id="modal-site" class="modal-container">
+    <div class="modal">
+        <div class="modal-header">
+            <h6><?= LangManager::translate("votes.dashboard.add_site.sitescomp.modal_title") ?></h6>
+            <button type="button" data-modal-hide="modal-site"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="modal-body">
+            <?php foreach ($compatiblesSites as $site => $url): ?>
+                <li><a class="link" href="<?= $url ?>" target="_blank"><?= $url ?></a></li>
+            <?php endforeach; ?>
+        </div>
+        <div class="modal-footer">
+            <a href="https://github.com/CraftMyWebsite/package-votes/issues/new?assignees=&labels=&template=ajouts-d-un-site-de-vote.md&title=%5BNEW+WEBSITE%5D"
+               class="btn-primary"
+               target="_blank"><?= LangManager::translate("votes.dashboard.add_site.sitescomp.request") ?>
+            </a>
         </div>
     </div>
-</div>                               
+</div>
