@@ -167,19 +167,19 @@ return [
 
     "permissions" => [
         "votes" => [
-            "configuration" => "Manage votes configuration",
+            "configuration" => "Manage configuration",
             "site" => [
-                "list" => "Show vote websites",
-                "add" => "Add vote website",
-                "edit" => "Edit vote website",
-                "delete" => "Delete vote website",
+                "list" => "Show",
+                "add" => "Add",
+                "edit" => "Edit",
+                "delete" => "Delete",
             ],
             "rewards" => [
-                "edit" => "Edit rewards",
-                "add" => "Add rewards",
-                "delete" => "Delete rewards",
+                "edit" => "Edit",
+                "add" => "Add",
+                "delete" => "Delete",
             ],
-            "boost" => "Manage website boosts",
+            "boost" => "Manage boosts",
         ],
     ],
 ];

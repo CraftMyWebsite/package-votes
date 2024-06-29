@@ -16,6 +16,10 @@ class Permissions implements IPermissionInit
                 description: LangManager::translate('votes.permissions.votes.configuration'),
             ),
             new PermissionInitType(
+                code: 'votes.boost',
+                description: LangManager::translate('votes.permissions.votes.boost'),
+            ),
+            new PermissionInitType(
                 code: 'votes.site.list',
                 description: LangManager::translate('votes.permissions.votes.site.list'),
             ),
@@ -32,20 +36,16 @@ class Permissions implements IPermissionInit
                 description: LangManager::translate('votes.permissions.votes.site.delete'),
             ),
             new PermissionInitType(
-                code: 'votes.rewards.edit',
-                description: LangManager::translate('votes.permissions.votes.rewards.edit'),
-            ),
-            new PermissionInitType(
                 code: 'votes.rewards.add',
                 description: LangManager::translate('votes.permissions.votes.rewards.add'),
             ),
             new PermissionInitType(
-                code: 'votes.rewards.delete',
-                description: LangManager::translate('votes.permissions.votes.rewards.delete'),
+                code: 'votes.rewards.edit',
+                description: LangManager::translate('votes.permissions.votes.rewards.edit'),
             ),
             new PermissionInitType(
-                code: 'votes.boost',
-                description: LangManager::translate('votes.permissions.votes.boost'),
+                code: 'votes.rewards.delete',
+                description: LangManager::translate('votes.permissions.votes.rewards.delete'),
             ),
         ];
     }

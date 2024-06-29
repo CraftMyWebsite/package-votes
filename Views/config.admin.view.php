@@ -9,32 +9,27 @@ $description = LangManager::translate("votes.dashboard.desc");
 /** @var \CMW\Entity\Votes\VotesConfigEntity $config */
 ?>
 
-<div class="d-flex flex-wrap justify-content-between">
-    <h3><i class="fa-solid fa-gears"></i> <span
-            class="m-lg-auto"><?= LangManager::translate("votes.dashboard.title.config") ?></span></h3>
-</div>
+<h3><?= LangManager::translate("votes.dashboard.title.config") ?></h3>
 
-<section class="row">
-    <div class="col-12 col-lg-4">
+<div class="center-flex">
+    <div class="flex-content-lg">
         <div class="card">
-            <div class="card-header">
-                <h4><?= LangManager::translate("votes.dashboard.title.settings") ?></h4>
-            </div>
-            <div class="card-body">
-                <form method="post" action="">
-                    <?php (new SecurityManager())->insertHiddenToken() ?>
-                    <h6><?= LangManager::translate("votes.dashboard.config.placeholder.top_show") ?> :</h6>
-                    <div class="form-group position-relative has-icon-left">
-                        <input type="text" class="form-control" name="topShow" value="<?= $config->getTopShow() ?>"
-                               required autocomplete="off"
-                               placeholder="<?= LangManager::translate("votes.dashboard.config.placeholder.top_show") ?>">
-                        <div class="form-control-icon">
-                            <i class="fas fa-trophy"></i>
+            <h6><?= LangManager::translate("votes.dashboard.title.settings") ?></h6>
+            <form method="post" action="">
+                <?php (new SecurityManager())->insertHiddenToken() ?>
+                <div class="space-y-4">
+                    <div>
+                        <label for="topShow"><?= LangManager::translate("votes.dashboard.config.placeholder.top_show") ?> :</label>
+                        <div class="input-group">
+                            <i class="fa-solid fa-trophy"></i>
+                            <input type="number" id="topShow" name="topShow" value="<?= $config->getTopShow() ?>"
+                                   required autocomplete="off"
+                                   placeholder="<?= LangManager::translate("votes.dashboard.config.placeholder.top_show") ?>">
                         </div>
                     </div>
-                    <h6><?= LangManager::translate("votes.dashboard.config.placeholder.reset") ?> :</h6>
-                    <div class="form-group position-relative">
-                        <select name="reset" class="form-control" required>
+                    <div>
+                        <label for="reset"><?= LangManager::translate("votes.dashboard.config.placeholder.reset") ?> :</label>
+                        <select id="reset" name="reset" required>
                             <option value="0" <?= $config->getReset() === 0 ? 'selected' : '' ?>>
                                 <?= LangManager::translate("votes.dashboard.config.reset.0") ?>
                             </option>
@@ -46,9 +41,9 @@ $description = LangManager::translate("votes.dashboard.desc");
                             </option>
                         </select>
                     </div>
-                    <h6><?= LangManager::translate("votes.dashboard.config.placeholder.enable_api") ?> :</h6>
-                    <div class="form-group position-relative">
-                        <select name="api" class="form-control" required>
+                    <div>
+                        <label for="api"><?= LangManager::translate("votes.dashboard.config.placeholder.enable_api") ?> :</label>
+                        <select name="api" id="api" class="form-control" required>
                             <option value="1" <?= $config->isEnableApi() ? "selected" : "" ?>>
                                 <?= LangManager::translate("votes.dashboard.config.enable_api.1") ?>
                             </option>
@@ -57,15 +52,14 @@ $description = LangManager::translate("votes.dashboard.desc");
                                 <?= LangManager::translate("votes.dashboard.config.enable_api.0") ?></option>
                         </select>
                     </div>
-
-                    <div class="form-group position-relative">
-                        <label class="form-check-label" for="needLogin">
-                            <?= LangManager::translate("votes.dashboard.config.needLogin") ?>
+                    <div>
+                        <label class="toggle">
+                            <p class="toggle-label"><?= LangManager::translate("votes.dashboard.config.needLogin") ?></p>
+                            <input type="checkbox" value="" class="toggle-input" id="needLogin" name="needLogin"
+                                <?= $config->isNeedLogin() ? 'checked' : '' ?>>
+                            <div class="toggle-slider"></div>
                         </label>
-                        <input class="form-check-input" type="checkbox" id="needLogin" name="needLogin"
-                            <?= $config->isNeedLogin() ? 'checked' : '' ?>>
                     </div>
-
                     <input type="number" name="autoTopRewardActive" value="1" hidden>
                     <!-- /!\ JSON function /!\-->
                     <input type="text" name="autoTopReward" value='cc le JSON' hidden>
@@ -92,12 +86,12 @@ $description = LangManager::translate("votes.dashboard.desc");
 
                         </script>
                     -->
-                    <div class="text-center">
+                    <div>
                         <button type="submit"
-                                class="btn btn-primary"><?= LangManager::translate("core.btn.save") ?></button>
+                                class="btn-center btn-primary"><?= LangManager::translate("core.btn.save") ?></button>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
-</section>
+</div>
