@@ -36,7 +36,7 @@ class VotesRewardsController extends AbstractController
         View::createAdminView('Votes', 'rewards')
             ->addVariableList(["rewards" => $rewards, "rewardMethods" => $this->getRewardMethods()])
             ->addStyle("Admin/Resources/Assets/Css/simple-datatables.css")
-            ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js",
+            ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/simple-datatables.js",
                 "Admin/Resources/Vendors/Simple-datatables/config-datatables.js")
             ->view();
     }

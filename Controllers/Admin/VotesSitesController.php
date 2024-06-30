@@ -37,7 +37,7 @@ class VotesSitesController extends AbstractController
         View::createAdminView('Votes', 'list_sites')
             ->addVariableList(["sites" => $sites, "rewards" => $rewards, "compatiblesSites" => $compatiblesSites])
             ->addStyle("Admin/Resources/Assets/Css/simple-datatables.css")
-            ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js",
+            ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/simple-datatables.js",
                 "Admin/Resources/Vendors/Simple-datatables/config-datatables.js", "App/Package/Votes/Views/Resources/Js/testSitesId.js")
             ->view();
     }

@@ -41,7 +41,7 @@ class VotesStatsController extends AbstractController
             ->addScriptBefore("Admin/Resources/Vendors/Apexcharts/Js/apexcharts.js",
                 "App/Package/Votes/Views/Resources/Js/main.js")
             ->addStyle("Admin/Resources/Assets/Css/simple-datatables.css")
-            ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js",
+            ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/simple-datatables.js",
                 "Admin/Resources/Vendors/Simple-datatables/config-datatables.js")
             ->addVariableList(["stats" => $stats, "all" => $all, "month" => $month, "week" => $week, "day" => $day,
                 "listSites" => $listSites, "actualTop" => $actualTop,
