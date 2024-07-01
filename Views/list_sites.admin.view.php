@@ -53,7 +53,7 @@ $description = LangManager::translate("votes.dashboard.desc");
                     <label for="url"><?= LangManager::translate("votes.dashboard.add_site.input.url") ?> :</label>
                     <div class="input-group">
                         <i class="fa-solid fa-link"></i>
-                        <input type="number" name="url" id="url" value="" required
+                        <input type="url" name="url" id="url" value="" required
                                placeholder="<?= LangManager::translate("votes.dashboard.add_site.placeholder.url") ?>">
                     </div>
                 </div>
