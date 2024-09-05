@@ -49,14 +49,14 @@ class Package implements IPackageConfig
                         url: 'votes/config',
                     ),
                     new PackageSubMenuType(
-                        title: 'Gestion des sites',
-                        permission: 'votes.site.list',
-                        url: 'votes/site/list',
-                    ),
-                    new PackageSubMenuType(
                         title: 'Récompenses',
                         permission: 'votes.rewards.edit',
                         url: 'votes/rewards',
+                    ),
+                    new PackageSubMenuType(
+                        title: 'Gestion des sites',
+                        permission: 'votes.site.list',
+                        url: 'votes/site/list',
                     ),
                     new PackageSubMenuType(
                         title: 'Statistiques',
@@ -78,14 +78,14 @@ class Package implements IPackageConfig
                         url: 'votes/config',
                     ),
                     new PackageSubMenuType(
-                        title: 'Manage sites',
-                        permission: 'votes.site.list',
-                        url: 'votes/site/list',
-                    ),
-                    new PackageSubMenuType(
                         title: 'Rewards',
                         permission: 'votes.rewards.edit',
                         url: 'votes/rewards',
+                    ),
+                    new PackageSubMenuType(
+                        title: 'Manage sites',
+                        permission: 'votes.site.list',
+                        url: 'votes/site/list',
                     ),
                     new PackageSubMenuType(
                         title: 'Statistics',
