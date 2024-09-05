@@ -7,7 +7,7 @@ use CMW\Controller\Votes\Admin\VotesRewardsController;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Package\AbstractController;
-use CMW\Manager\Requests\Request;
+
 use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
 use CMW\Model\Users\UsersModel;
@@ -48,7 +48,7 @@ class VotesPublicController extends AbstractController
     }
 
     #[Link('/vote/testsend/:id', Link::GET, ["id" => "[0-9]+"])]
-    private function votesWebsiteTestPublic(Request $request, int $id): void
+    private function votesWebsiteTestPublic(int $id): void
     {
         if (UsersController::isAdminLogged()) {
             $userId = UsersModel::getCurrentUser()?->getId();
@@ -71,7 +71,7 @@ class VotesPublicController extends AbstractController
     }
 
     #[Link('/vote/send/:id', Link::GET, ["id" => "[0-9]+"])]
-    public function votesWebsitePublic(Request $request, int $id): void
+    public function votesWebsitePublic(int $id): void
     {
 
         $userId = UsersModel::getCurrentUser()?->getId();
@@ -139,7 +139,7 @@ class VotesPublicController extends AbstractController
     }
 
     #[Link('/vote/geturl/:id', Link::GET, ["id" => "[0-9]+"])]
-    public function votesGetWebsiteUrlPublic(Request $request, int $id): void
+    public function votesGetWebsiteUrlPublic(int $id): void
     {
         print VotesSitesModel::getInstance()->getSiteById($id)?->getUrl();
     }

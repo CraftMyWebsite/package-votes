@@ -8,7 +8,7 @@ use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
-use CMW\Manager\Requests\Request;
+
 use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
 use CMW\Model\Votes\CheckVotesModel;
@@ -98,7 +98,7 @@ class VotesSitesController extends AbstractController
     }
 
     #[NoReturn] #[Link("/site/delete/:id", Link::GET, ['id' => '[0-9]+'], "/cmw-admin/votes")]
-    private function deleteSitePostAdmin(Request $request, int $id): void
+    private function deleteSitePostAdmin(int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.delete");
 

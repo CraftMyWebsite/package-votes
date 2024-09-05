@@ -10,7 +10,7 @@ use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Loader\Loader;
 use CMW\Manager\Package\AbstractController;
-use CMW\Manager\Requests\Request;
+
 use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
 use CMW\Model\Votes\VotesRewardsModel;
@@ -66,7 +66,7 @@ class VotesRewardsController extends AbstractController
     }
 
     #[NoReturn] #[Link("/rewards/delete/:id", Link::GET, ['id' => '[0-9]+'], "/cmw-admin/votes")]
-    private function deleteRewardPostAdmin(Request $request, int $id): void
+    private function deleteRewardPostAdmin(int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.rewards.delete");
 
@@ -82,7 +82,7 @@ class VotesRewardsController extends AbstractController
     }
 
     #[Link("/rewards/edit/:id", Link::GET, [], "/cmw-admin/votes")]
-    private function votesRewardsEdit(Request $request, int $id): void
+    private function votesRewardsEdit(int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.rewards.edit");
 
@@ -94,7 +94,7 @@ class VotesRewardsController extends AbstractController
     }
 
     #[NoReturn] #[Link("/rewards/edit/:id", Link::POST, [], "/cmw-admin/votes")]
-    private function editRewardPost(Request $request, int $id): void
+    private function editRewardPost(int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.rewards.edit");
 
