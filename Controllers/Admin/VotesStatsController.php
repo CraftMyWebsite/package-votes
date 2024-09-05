@@ -18,7 +18,7 @@ use CMW\Model\Votes\VotesStatsModel;
 class VotesStatsController extends AbstractController
 {
     #[Link("/stats", Link::GET, [], "/cmw-admin/votes")]
-    public function statsVotes(): void
+    private function statsVotes(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.stats");
 

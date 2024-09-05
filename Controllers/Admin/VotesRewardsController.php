@@ -50,6 +50,7 @@ class VotesRewardsController extends AbstractController
         $title = FilterManager::filterInputStringPost("title");
 
         $advancedAction = $this->getRewardMethodByVarName($rewardType)?->execRewardActionLogic();
+
         if (!is_null($advancedAction)) {
             $action = $advancedAction;
         } else {
@@ -129,8 +130,14 @@ class VotesRewardsController extends AbstractController
         } else {
             echo VotesRewardsModel::getInstance()->getRewardById(filter_input(INPUT_POST, "id"))?->getAction();
         }
-
     }
+
+
+    /***
+     *
+     * PUBLIC METHODS
+     *
+     */
 
     /**
      * @return \CMW\Interface\Votes\IRewardMethod[]

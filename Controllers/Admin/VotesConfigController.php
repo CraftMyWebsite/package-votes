@@ -12,6 +12,7 @@ use CMW\Manager\Views\View;
 use CMW\Model\Votes\VotesConfigModel;
 use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
+use JetBrains\PhpStorm\NoReturn;
 
 /**
  * Class: @VotesConfigController
@@ -23,7 +24,7 @@ class VotesConfigController extends AbstractController
 {
     #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/votes")]
     #[Link("/config", Link::GET, [], "/cmw-admin/votes")]
-    public function votesConfig(): void
+    private function votesConfig(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.configuration");
 
@@ -34,8 +35,8 @@ class VotesConfigController extends AbstractController
             ->view();
     }
 
-    #[Link("/config", Link::POST, [], "/cmw-admin/votes")]
-    public function votesConfigPost(): void
+    #[NoReturn] #[Link("/config", Link::POST, [], "/cmw-admin/votes")]
+    private function votesConfigPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.configuration");
 
@@ -46,8 +47,11 @@ class VotesConfigController extends AbstractController
 
         VotesConfigModel::getInstance()->updateConfig($topShow, $reset, $autoTopRewardActive, $autoTopReward, $enableApi, $needLogin);
 
-        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
-            LangManager::translate("core.toaster.config.success"));
+        Flash::send(
+            Alert::SUCCESS,
+            LangManager::translate("core.toaster.success"),
+            LangManager::translate("core.toaster.config.success"),
+        );
 
         Redirect::redirectPreviousRoute();
     }

@@ -17,10 +17,10 @@ use JetBrains\PhpStorm\ExpectedValues;
  */
 class VotesApiController extends AbstractController
 {
-    private const usernameRegex = "^[a-zA-Z0-9_]{2,16}$";
+    private const string usernameRegex = "^[a-zA-Z0-9_]{2,16}$";
 
     #[Link("/getVotePoints/:pseudo", Link::GET, ["pseudo" => self::usernameRegex], scope: "/api/votes")]
-    public function getVotePoints(Request $request, string $pseudo): void
+    private function getVotePoints(Request $request, string $pseudo): void
     {
         $votePoints = VotesStatsModel::getInstance()->getPlayerVotepoints($pseudo);
 
@@ -29,7 +29,7 @@ class VotesApiController extends AbstractController
     }
 
     #[Link("/getTopVotesPoints/rank/:rank", Link::GET, ["rank" => "[0-9]+"], scope: "/api/votes")]
-    public function getTopVotePoints(Request $request, int $rank): void
+    private function getTopVotePoints(Request $request, int $rank): void
     {
         $votePoints = VotesStatsModel::getInstance()->getRankTopVotePoints($rank);
 
@@ -38,7 +38,7 @@ class VotesApiController extends AbstractController
     }
 
     #[Link("/getPlayerCurrentVotes/:pseudo", Link::GET, ["pseudo" => self::usernameRegex], scope: "/api/votes")]
-    public function getPlayerCurrentVotes(Request $request, string $pseudo): void
+    private function getPlayerCurrentVotes(Request $request, string $pseudo): void
     {
         $votes = VotesStatsModel::getInstance()->getPlayerCurrentVotes($pseudo);
 
@@ -47,7 +47,7 @@ class VotesApiController extends AbstractController
     }
 
     #[Link("/getPlayerTotalVotes/:pseudo", Link::GET, ["pseudo" => self::usernameRegex], scope: "/api/votes")]
-    public function getPlayerTotalVotes(Request $request, string $pseudo): void
+    private function getPlayerTotalVotes(Request $request, string $pseudo): void
     {
         $votes = VotesStatsModel::getInstance()->getPlayerTotalVotes($pseudo);
 
@@ -62,7 +62,7 @@ class VotesApiController extends AbstractController
      * @desc Type: all, month, week, day, hour, minute
      */
     #[Link("/getVotes/:type", Link::GET, ["type" => ".*?"], scope: "/api/votes")]
-    public function getVotes(Request $request, #[ExpectedValues(["all", "month", "week", "day", "hour", "minute"])] string $type): void
+    private function getVotes(Request $request, #[ExpectedValues(["all", "month", "week", "day", "hour", "minute"])] string $type): void
     {
         $votes = count(VotesStatsModel::getInstance()->statsVotes($type));
 
@@ -72,7 +72,7 @@ class VotesApiController extends AbstractController
 
 
     #[Link("/getTopActual", Link::GET, scope: "/api/votes")]
-    public function getActualTop(): void
+    private function getActualTop(): void
     {
         $votes = VotesStatsModel::getInstance()->getActualTop();
 
@@ -81,7 +81,7 @@ class VotesApiController extends AbstractController
     }
 
     #[Link("/getTopGlobal", Link::GET, scope: "/api/votes")]
-    public function getTopGlobal(): void
+    private function getTopGlobal(): void
     {
         $votes = VotesStatsModel::getInstance()->getGlobalTop();
 
@@ -90,7 +90,7 @@ class VotesApiController extends AbstractController
     }
 
     #[Link("/getTopVotesActual/:rank", Link::GET, ["rank" => "[0-9]+"], scope: "/api/votes")]
-    public function getActualTopSpecificRank(Request $request, int $rank): void
+    private function getActualTopSpecificRank(Request $request, int $rank): void
     {
         $votes = VotesStatsModel::getInstance()->getActualTopPlayerRank($rank);
 
@@ -99,7 +99,7 @@ class VotesApiController extends AbstractController
     }
 
     #[Link("/getTopVotesGlobal/:rank", Link::GET, ["rank" => "[0-9]+"], scope: "/api/votes")]
-    public function getGlobalTopSpecificRank(Request $request, int $rank): void
+    private function getGlobalTopSpecificRank(Request $request, int $rank): void
     {
         $votes = VotesStatsModel::getInstance()->getGlobalTopPlayerRank($rank);
 

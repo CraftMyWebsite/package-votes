@@ -55,7 +55,7 @@ $description = LangManager::translate("votes.dashboard.desc");
         </form>
     </div>
     <div class="card">
-        <h6><?= LangManager::translate("votes.dashboard.title.list_sites") ?></h6>
+        <h6><?= LangManager::translate("votes.dashboard.rewards.list.title") ?></h6>
         <div class="table-container table-container-striped">
             <table class="table" id="table1">
                 <thead>

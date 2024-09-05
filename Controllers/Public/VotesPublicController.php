@@ -18,6 +18,7 @@ use CMW\Model\Votes\VotesStatsModel;
 use CMW\Utils\Redirect;
 use CMW\Utils\Website;
 use JsonException;
+use function is_null;
 
 
 /**
@@ -42,26 +43,30 @@ class VotesPublicController extends AbstractController
         $view->addVariableList(["sites" => $sites,
             "topCurrent" => $topCurrent, "topGlobal" => $topGlobal]);
         $view->addStyle("Admin/Resources/Vendors/Izitoast/iziToast.min.css");
-        $view->addScriptAfter("Admin/Resources/Vendors/Izitoast/iziToast.min.js","App/Package/Votes/Views/Resources/Js/public.js","App/Package/Votes/Views/Resources/Js/VotesStatus.js","App/Package/Votes/Views/Resources/Js/VotesLogic.js" );
+        $view->addScriptAfter("Admin/Resources/Vendors/Izitoast/iziToast.min.js", "App/Package/Votes/Views/Resources/Js/public.js", "App/Package/Votes/Views/Resources/Js/VotesStatus.js", "App/Package/Votes/Views/Resources/Js/VotesLogic.js");
         $view->view();
     }
 
     #[Link('/vote/testsend/:id', Link::GET, ["id" => "[0-9]+"])]
-    public function votesWebsiteTestPublic(Request $request, int $id): void
+    private function votesWebsiteTestPublic(Request $request, int $id): void
     {
         if (UsersController::isAdminLogged()) {
             $userId = UsersModel::getCurrentUser()?->getId();
-            $reward = VotesSitesModel::getInstance()->getSiteById($id)?->getRewards() ?? null;
+            $reward = VotesSitesModel::getInstance()->getSiteById($id)?->getRewards();
             if (!is_null($reward)) {
                 $site = VotesSitesModel::getInstance()->getSiteById($id);
-                VotesRewardsController::getInstance()->getRewardMethodByVarName($reward->getVarName())->execReward($reward, $site, $userId);
+                if (!is_null($site)) {
+                    VotesRewardsController::getInstance()->getRewardMethodByVarName($reward->getVarName())?->execReward($reward, $site, $userId);
+                    Flash::send(Alert::SUCCESS, "Votes", "Récompense envoyée !");
+                    Redirect::redirectPreviousRoute();
+                }
             } else {
                 Flash::send(Alert::SUCCESS, "Votes", "Merci pour votre vote !");
-                Redirect::redirect("vote");
+                Redirect::redirectPreviousRoute();
             }
         } else {
             Flash::send(Alert::ERROR, "Votes", "Vous n'êtes pas en mesure de réaliser ce test !");
-            Redirect::redirect("vote");
+            Redirect::redirectPreviousRoute();
         }
     }
 
@@ -90,7 +95,9 @@ class VotesPublicController extends AbstractController
                         VotesModel::getInstance()->storeVote($userId, $id);
                         if (!is_null($reward)) {
                             $site = VotesSitesModel::getInstance()->getSiteById($id);
-                            VotesRewardsController::getInstance()->getRewardMethodByVarName($reward->getVarName())->execReward($reward, $site, $userId);
+                            if (!is_null($site)) {
+                                VotesRewardsController::getInstance()->getRewardMethodByVarName($reward->getVarName())?->execReward($reward, $site, $userId);
+                            }
                         }
                         $this->returnData("send", true);
                     } else {
@@ -102,7 +109,9 @@ class VotesPublicController extends AbstractController
 
                     if (!is_null($reward)) {
                         $site = VotesSitesModel::getInstance()->getSiteById($id);
-                        VotesRewardsController::getInstance()->getRewardMethodByVarName($reward->getVarName())->execReward($reward, $site, $userId);
+                        if (!is_null($site)) {
+                            VotesRewardsController::getInstance()->getRewardMethodByVarName($reward->getVarName())?->execReward($reward, $site, $userId);
+                        }
                     }
 
                     $this->returnData("send", true);

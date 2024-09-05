@@ -16,6 +16,9 @@ use CMW\Model\Votes\VotesRewardsModel;
 use CMW\Model\Votes\VotesSitesModel;
 use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
+use JetBrains\PhpStorm\NoReturn;
+use function file_exists;
+use function is_array;
 
 /**
  * Class: @VotesSitesController
@@ -26,7 +29,7 @@ use CMW\Utils\Utils;
 class VotesSitesController extends AbstractController
 {
     #[Link("/site/list", Link::GET, [], "/cmw-admin/votes")]
-    public function listSites(): void
+    private function listSites(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.list");
 
@@ -42,25 +45,8 @@ class VotesSitesController extends AbstractController
             ->view();
     }
 
-    public function getCompatiblesSites(): array
-    {
-        $file = EnvManager::getInstance()->getValue("DIR") . "App/Package/Votes/SitesCompatibles.php";
-
-        if (!file_exists($file)) {
-            return [];
-        }
-
-        $content = include $file;
-
-        if (!is_array($content)) {
-            return [];
-        }
-
-        return $content;
-    }
-
-    #[Link("/site/list", Link::POST, [], "/cmw-admin/votes")]
-    public function addSiteAdminPost(): void
+    #[NoReturn] #[Link("/site/list", Link::POST, [], "/cmw-admin/votes")]
+    private function addSiteAdminPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.add");
 
@@ -80,7 +66,7 @@ class VotesSitesController extends AbstractController
     }
 
     #[Link("/site/list", Link::GET, [], "/cmw-admin/votes")]
-    public function votesSitesEdit(): void
+    private function votesSitesEdit(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.edit");
 
@@ -91,8 +77,8 @@ class VotesSitesController extends AbstractController
             ->view();
     }
 
-    #[Link("/site/edit", Link::POST, [], "/cmw-admin/votes")]
-    public function votesSitesEditPost(): void
+    #[NoReturn] #[Link("/site/edit", Link::POST, [], "/cmw-admin/votes")]
+    private function votesSitesEditPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.edit");
 
@@ -111,8 +97,8 @@ class VotesSitesController extends AbstractController
         Redirect::redirectPreviousRoute();
     }
 
-    #[Link("/site/delete/:id", Link::GET, ['id' => '[0-9]+'], "/cmw-admin/votes")]
-    public function deleteSitePostAdmin(Request $request, int $id): void
+    #[NoReturn] #[Link("/site/delete/:id", Link::GET, ['id' => '[0-9]+'], "/cmw-admin/votes")]
+    private function deleteSitePostAdmin(Request $request, int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.delete");
 
@@ -130,7 +116,7 @@ class VotesSitesController extends AbstractController
      * @throws \JsonException
      */
     #[Link("/site/test/id", Link::POST, [], "/cmw-admin/votes", secure: false)]
-    public function checkSiteId(): void
+    private function checkSiteId(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.site.add");
 
@@ -161,5 +147,29 @@ class VotesSitesController extends AbstractController
                 ],
             ], JSON_THROW_ON_ERROR));
         }
+    }
+
+
+    /***
+     *
+     * PUBLIC METHODS
+     *
+     */
+
+    public function getCompatiblesSites(): array
+    {
+        $file = EnvManager::getInstance()->getValue("DIR") . "App/Package/Votes/SitesCompatibles.php";
+
+        if (!file_exists($file)) {
+            return [];
+        }
+
+        $content = include $file;
+
+        if (!is_array($content)) {
+            return [];
+        }
+
+        return $content;
     }
 }
