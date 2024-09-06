@@ -6,7 +6,6 @@ use CMW\Entity\Users\UserEntity;
 
 class VotesPlayerStatsEntity
 {
-
     private ?int $votes;
     private ?UserEntity $user;
 

@@ -1,7 +1,7 @@
 <?php
 
-$title = "Voter";
-$description = "Votez pour votre serveur préféré !";
+$title = 'Voter';
+$description = 'Votez pour votre serveur préféré !';
 
 /* @var \CMW\Entity\Votes\VotesSitesEntity[] $sites */
 ?>

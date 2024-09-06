@@ -108,7 +108,7 @@ class VotesSitesEntity
 
     public function getSendLink(): string
     {
-        return EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . "vote/send/" . $this->siteId;
+        return EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'vote/send/' . $this->siteId;
     }
 
     /**
@@ -151,7 +151,6 @@ class VotesSitesEntity
      */
     public function getTimeRemainingFormatted(): ?string
     {
-        return date(CoreModel::getInstance()->fetchOption("dateFormat"), $this->getTimeRemaining());
+        return date(CoreModel::getInstance()->fetchOption('dateFormat'), $this->getTimeRemaining());
     }
-
 }

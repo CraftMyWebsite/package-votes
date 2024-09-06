@@ -4,8 +4,8 @@ use CMW\Controller\Votes\VotesController;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Security\SecurityManager;
 
-$title = LangManager::translate("votes.dashboard.title.rewards");
-$description = LangManager::translate("votes.dashboard.desc");
+$title = LangManager::translate('votes.dashboard.title.rewards');
+$description = LangManager::translate('votes.dashboard.desc');
 
 /* @var \CMW\Entity\Votes\VotesRewardsEntity $rewards */
 /* @var \CMW\Entity\Minecraft\MinecraftServerEntity[] $minecraftServers */
@@ -14,7 +14,7 @@ $description = LangManager::translate("votes.dashboard.desc");
 ?>
 <div class="d-flex flex-wrap justify-content-between">
     <h3><i class="fa-solid fa-award"></i>
-        <span class="m-lg-auto"><?= LangManager::translate("votes.dashboard.title.rewards") ?></span></h3>
+        <span class="m-lg-auto"><?= LangManager::translate('votes.dashboard.title.rewards') ?></span></h3>
 </div>
 
 <section class="row">
@@ -23,18 +23,18 @@ $description = LangManager::translate("votes.dashboard.desc");
                 <form method="post" action="">
                     <?php (new SecurityManager())->insertHiddenToken() ?>
                     <div>
-                        <label for="title"><?= LangManager::translate("votes.dashboard.rewards.add.placeholder.title") ?> :</label>
+                        <label for="title"><?= LangManager::translate('votes.dashboard.rewards.add.placeholder.title') ?> :</label>
                         <div class="input-group">
                             <i class="fa-solid fa-heading"></i>
                             <input type="text" id="title" name="title" value="<?= $rewards->getTitle() ?>" required
-                                   placeholder="<?= LangManager::translate("votes.dashboard.rewards.add.placeholder.title") ?>">
+                                   placeholder="<?= LangManager::translate('votes.dashboard.rewards.add.placeholder.title') ?>">
                         </div>
                     </div>
                     <div>
                         <label for="reward_type_selected">Type de récompenses :</label>
                         <select class="form-select" name="reward_type_selected" id="reward_type_selected" required>
                             <?php foreach ($rewardMethods as $rewardMethod): ?>
-                                <option value="<?= $rewardMethod->varName() ?>" <?= $rewardMethod->varName() === $rewards->getVarName() ? "selected" : "" ?>><?= $rewardMethod->name() ?></option>
+                                <option value="<?= $rewardMethod->varName() ?>" <?= $rewardMethod->varName() === $rewards->getVarName() ? 'selected' : '' ?>><?= $rewardMethod->name() ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -48,7 +48,7 @@ $description = LangManager::translate("votes.dashboard.desc");
                     </div>
                     <div class="text-center">
                         <button type="submit" class="btn btn-primary float-right">
-                            <?= LangManager::translate("core.btn.edit") ?>
+                            <?= LangManager::translate('core.btn.edit') ?>
                         </button>
                     </div>
                 </form>

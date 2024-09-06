@@ -18,12 +18,12 @@ class VotesModel extends AbstractModel
     public function storeVote(int $idUser, string $idSite): void
     {
         $var = [
-            "id_user" => $idUser,
-            "ip" => Website::getClientIp(),
-            "id_site" => $idSite,
+            'id_user' => $idUser,
+            'ip' => Website::getClientIp(),
+            'id_site' => $idSite,
         ];
 
-        $sql = "INSERT INTO cmw_votes_votes (votes_id_user, votes_ip, votes_id_site) VALUES (:id_user, :ip, :id_site)";
+        $sql = 'INSERT INTO cmw_votes_votes (votes_id_user, votes_ip, votes_id_site) VALUES (:id_user, :ip, :id_site)';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
@@ -38,12 +38,12 @@ class VotesModel extends AbstractModel
     public function getPlayerLastStoredVote(int $idUser, int $idSite): array
     {
         $var = [
-            "idUser" => $idUser,
-            "idSite" => $idSite,
+            'idUser' => $idUser,
+            'idSite' => $idSite,
         ];
 
-        $sql = "SELECT votes_id, votes_date FROM `cmw_votes_votes` WHERE votes_id_user = :idUser AND votes_id_site = :idSite 
-                ORDER BY votes_date DESC LIMIT 1";
+        $sql = 'SELECT votes_id, votes_date FROM `cmw_votes_votes` WHERE votes_id_user = :idUser AND votes_id_site = :idSite 
+                ORDER BY votes_date DESC LIMIT 1';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
@@ -73,5 +73,4 @@ class VotesModel extends AbstractModel
 
         return $currentDate >= $targetDate;
     }
-
 }

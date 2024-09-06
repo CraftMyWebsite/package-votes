@@ -22,12 +22,12 @@ class VotesRewardsModel extends AbstractModel
             return null;
         }
 
-        $sql = "SELECT * FROM cmw_votes_rewards WHERE votes_rewards_rewards_id=:rewards_id";
+        $sql = 'SELECT * FROM cmw_votes_rewards WHERE votes_rewards_rewards_id=:rewards_id';
 
         $db = DatabaseManager::getInstance();
         $res = $db->prepare($sql);
 
-        if (!$res->execute(["rewards_id" => $id])) {
+        if (!$res->execute(['rewards_id' => $id])) {
             return null;
         }
 
@@ -39,16 +39,15 @@ class VotesRewardsModel extends AbstractModel
             $res['votes_rewards_title'],
             $res['votes_rewards_action']
         );
-
     }
 
     public function deleteReward($id): void
     {
         $var = [
-            "rewards_id" => $id,
+            'rewards_id' => $id,
         ];
 
-        $sql = "DELETE FROM cmw_votes_rewards WHERE votes_rewards_rewards_id=:rewards_id";
+        $sql = 'DELETE FROM cmw_votes_rewards WHERE votes_rewards_rewards_id=:rewards_id';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
@@ -63,7 +62,7 @@ class VotesRewardsModel extends AbstractModel
             'varName' => $varName
         ];
 
-        $sql = "INSERT INTO cmw_votes_rewards (votes_rewards_title, votes_rewards_action, votes_rewards_var_name) VALUES (:title, :action, :varName)";
+        $sql = 'INSERT INTO cmw_votes_rewards (votes_rewards_title, votes_rewards_action, votes_rewards_var_name) VALUES (:title, :action, :varName)';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
@@ -79,14 +78,14 @@ class VotesRewardsModel extends AbstractModel
     public function updateReward(int $rewardsId, string $title, string $action, string $varName): ?VotesRewardsEntity
     {
         $var = [
-            "rewards_id" => $rewardsId,
-            "title" => $title,
-            "action" => $action,
+            'rewards_id' => $rewardsId,
+            'title' => $title,
+            'action' => $action,
             'varName' => $varName
         ];
 
-        $sql = "UPDATE cmw_votes_rewards SET votes_rewards_title=:title, votes_rewards_action=:action, votes_rewards_var_name=:varName
-                         WHERE votes_rewards_rewards_id=:rewards_id";
+        $sql = 'UPDATE cmw_votes_rewards SET votes_rewards_title=:title, votes_rewards_action=:action, votes_rewards_var_name=:varName
+                         WHERE votes_rewards_rewards_id=:rewards_id';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
@@ -99,10 +98,10 @@ class VotesRewardsModel extends AbstractModel
 
     public function giveRewardVotePoints(int $userId, int $amount): bool
     {
-        $sql = "INSERT INTO cmw_votes_votepoints (votes_votepoints_id_user, votes_votepoints_amount)
+        $sql = 'INSERT INTO cmw_votes_votepoints (votes_votepoints_id_user, votes_votepoints_amount)
             VALUES (:id_user, :amount)
             ON DUPLICATE KEY UPDATE
-            votes_votepoints_amount = votes_votepoints_amount + :amount_on_update";
+            votes_votepoints_amount = votes_votepoints_amount + :amount_on_update';
 
         $params = [
             'id_user' => $userId,
@@ -120,24 +119,24 @@ class VotesRewardsModel extends AbstractModel
      * @param int $amount
      * @return bool
      */
-    public function removeRewardVotePoints(int $userId , int $amount): bool
+    public function removeRewardVotePoints(int $userId, int $amount): bool
     {
-        $sql = "UPDATE cmw_votes_votepoints SET votes_votepoints_amount = votes_votepoints_amount - :amount WHERE votes_votepoints_id_user = :user_id;";
+        $sql = 'UPDATE cmw_votes_votepoints SET votes_votepoints_amount = votes_votepoints_amount - :amount WHERE votes_votepoints_id_user = :user_id;';
 
         $db = DatabaseManager::getInstance();
 
-        return $db->prepare($sql)->execute(array("amount" => $amount, "user_id" => $userId));
+        return $db->prepare($sql)->execute(array('amount' => $amount, 'user_id' => $userId));
     }
 
     public function setLog(int $userId, int $rewardsId): void
     {
         $var = [
-            "user_id" => $userId,
-            "reward_id" => $rewardsId,
+            'user_id' => $userId,
+            'reward_id' => $rewardsId,
         ];
 
-        $sql = "INSERT INTO cmw_votes_logs_rewards (votes_logs_rewards_user_id, votes_logs_rewards_reward_id) 
-                    VALUES (:user_id, :reward_id)";
+        $sql = 'INSERT INTO cmw_votes_logs_rewards (votes_logs_rewards_user_id, votes_logs_rewards_reward_id) 
+                    VALUES (:user_id, :reward_id)';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
@@ -152,10 +151,10 @@ class VotesRewardsModel extends AbstractModel
             $amount = $max;
         }
 
-        $sql = "INSERT INTO cmw_votes_votepoints (votes_votepoints_id_user, votes_votepoints_amount)
+        $sql = 'INSERT INTO cmw_votes_votepoints (votes_votepoints_id_user, votes_votepoints_amount)
             VALUES (:id_user, :amount)
             ON DUPLICATE KEY UPDATE
-            votes_votepoints_amount = votes_votepoints_amount + :amount_on_update";
+            votes_votepoints_amount = votes_votepoints_amount + :amount_on_update';
 
         $params = [
             'id_user' => $userId,
@@ -176,7 +175,7 @@ class VotesRewardsModel extends AbstractModel
 
     public function getRewards(): array
     {
-        $sql = "SELECT * FROM cmw_votes_rewards";
+        $sql = 'SELECT * FROM cmw_votes_rewards';
         $db = DatabaseManager::getInstance();
 
         $res = $db->prepare($sql);
@@ -188,7 +187,7 @@ class VotesRewardsModel extends AbstractModel
         $toReturn = [];
 
         while ($reward = $res->fetch()) {
-            $toReturn[] = $this->getRewardById($reward["votes_rewards_rewards_id"]);
+            $toReturn[] = $this->getRewardById($reward['votes_rewards_rewards_id']);
         }
 
         return $toReturn;

@@ -13,7 +13,6 @@ use JsonException;
  */
 class CheckVotesModel extends AbstractModel
 {
-
     /**
      * @param string $url
      * @param string $idUnique
@@ -23,8 +22,7 @@ class CheckVotesModel extends AbstractModel
      */
     public function isVoteSend(string $url, string $idUnique, string $ipPlayer): bool
     {
-
-        //List of all websites:
+        // List of all websites:
 
         if (self::checkUrl($url, 'serveur-prive.net')) {
             return self::checkJsonData("https://serveur-prive.net/api/vote/json/$idUnique/$ipPlayer", 'status', 1);
@@ -43,12 +41,12 @@ class CheckVotesModel extends AbstractModel
         }
 
         if (self::checkUrl($url, 'serveursminecraft.org')) {
-            return !self::checkPlainData("https://www.serveursminecraft.org/sm_api/peutVoter.php?id=$idUnique&ip=$ipPlayer", "true")
-                && !self::checkPlainData("https://www.serveursminecraft.org/sm_api/peutVoter.php?id=$idUnique&ip=$ipPlayer", "");
+            return !self::checkPlainData("https://www.serveursminecraft.org/sm_api/peutVoter.php?id=$idUnique&ip=$ipPlayer", 'true') &&
+                !self::checkPlainData("https://www.serveursminecraft.org/sm_api/peutVoter.php?id=$idUnique&ip=$ipPlayer", '');
         }
 
         if (self::checkUrl($url, 'liste-serveurs-minecraft.org')) {
-            return self::checkPlainData("https://api.liste-serveurs-minecraft.org/vote/vote_verification.php?server_id=$idUnique&ip=$ipPlayer&duration=5", "1");
+            return self::checkPlainData("https://api.liste-serveurs-minecraft.org/vote/vote_verification.php?server_id=$idUnique&ip=$ipPlayer&duration=5", '1');
         }
 
         if (self::checkUrl($url, 'serveur-minecraft.com')) {
@@ -93,8 +91,9 @@ class CheckVotesModel extends AbstractModel
         $result = @file_get_contents($url, false, $context);
 
         try {
-            if ($result && ($result = json_decode($result, true, 512, JSON_THROW_ON_ERROR))
-                && $result[$valueIndex] == $expectedValue) {
+            if ($result &&
+                    ($result = json_decode($result, true, 512, JSON_THROW_ON_ERROR)) &&
+                    $result[$valueIndex] == $expectedValue) {
                 return true;
             }
         } catch (JsonException) {
@@ -138,7 +137,7 @@ class CheckVotesModel extends AbstractModel
             'http' => ['ignore_errors' => true],
         ]);
 
-        //List of all websites:
+        // List of all websites:
         if (self::checkUrl($url, 'serveur-prive.net')) {
             return self::checkJsonData("https://serveur-prive.net/api/stats/json/$siteId/position", 'status', 1);
         }
@@ -164,7 +163,7 @@ class CheckVotesModel extends AbstractModel
         }
 
         if (self::checkUrl($url, 'serveur-minecraft.com')) {
-            return self::containData("https://serveur-minecraft.com/$siteId", "<title>An Error Occurred: Not Found</title>");
+            return self::containData("https://serveur-minecraft.com/$siteId", '<title>An Error Occurred: Not Found</title>');
         }
 
         if (self::checkUrl($url, 'liste-serveurs-minecraft.com')) {
@@ -194,8 +193,6 @@ class CheckVotesModel extends AbstractModel
         $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
         curl_close($handle);
 
-        return (int)$httpCode === $expectedValue;
+        return (int) $httpCode === $expectedValue;
     }
-
-
 }

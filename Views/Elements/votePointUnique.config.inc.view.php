@@ -12,7 +12,7 @@ if (!is_null($rewardId)) {
 
 ?>
 <div class="mt-3 mb-4">
-    <label for="<?=$varName?>">Montant</label>
-    <input value="<?=$action ?? ""?>" placeholder="Montant" type="number" id="<?=$varName?>" name="<?=$varName?>" class="input" required>
+    <label for="<?= $varName ?>">Montant</label>
+    <input value="<?= $action ?? '' ?>" placeholder="Montant" type="number" id="<?= $varName ?>" name="<?= $varName ?>" class="input" required>
 </div>
 

@@ -4,7 +4,6 @@ namespace CMW\Entity\Votes;
 
 class VotesConfigEntity
 {
-
     private int $topShow;
     private int $reset;
     private int $autoTopRewardActive;

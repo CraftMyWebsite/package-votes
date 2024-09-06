@@ -34,7 +34,7 @@ class VotesPaymentController extends AbstractController
             Redirect::redirectToHome();
         }
 
-        $priceTypeMethod = ShopItemsController::getInstance()->getPriceTypeMethodsByVarName("votePoints");
+        $priceTypeMethod = ShopItemsController::getInstance()->getPriceTypeMethodsByVarName('votePoints');
         $votePointsStock = VotesStatsModel::getInstance()->getVotePointByUserId($user->getId());
 
         $totalAmount = 0;
@@ -43,7 +43,7 @@ class VotesPaymentController extends AbstractController
         }
 
         if ($totalAmount > $votePointsStock) {
-            $message = "Vous n'avez pas assez de ".$priceTypeMethod->name();
+            $message = "Vous n'avez pas assez de " . $priceTypeMethod->name();
             Emitter::send(ShopPaymentCancelEvent::class, $message);
         } else {
             if (VotesRewardsModel::getInstance()->removeRewardVotePoints($user->getId(), $totalAmount)) {

@@ -21,21 +21,21 @@ class ShopPaymentMethodeVotesImplementations implements IPaymentMethod
 
         if (str_contains($url, 'shop/command')) {
             $tokenStock = VotesStatsModel::getInstance()->getVotePointByUserId(UsersModel::getCurrentUser()->getId());
-            return ShopPaymentMethodSettingsModel::getInstance()->getSetting($this->varName().'_name')." - Solde: $tokenStock" ?? "Points de votes - Solde: $tokenStock";
+            return ShopPaymentMethodSettingsModel::getInstance()->getSetting($this->varName() . '_name') . " - Solde: $tokenStock" ?? "Points de votes - Solde: $tokenStock";
         } else {
-            return ShopPaymentMethodSettingsModel::getInstance()->getSetting($this->varName().'_name') ?? "Points de votes";
+            return ShopPaymentMethodSettingsModel::getInstance()->getSetting($this->varName() . '_name') ?? 'Points de votes';
         }
     }
 
-    //Must be the same as PriceType Implementation VarName !!
+    // Must be the same as PriceType Implementation VarName !!
     public function varName(): string
     {
-        return "votePoints";
+        return 'votePoints';
     }
 
     public function faIcon(?string $customClass = null): ?string
     {
-        $icon = ShopPaymentMethodSettingsModel::getInstance()->getSetting($this->varName().'_icon') ?? "fa-solid fa-ticket";
+        $icon = ShopPaymentMethodSettingsModel::getInstance()->getSetting($this->varName() . '_icon') ?? 'fa-solid fa-ticket';
         return "<i class='$icon $customClass'></i>";
     }
 
@@ -67,17 +67,17 @@ class ShopPaymentMethodeVotesImplementations implements IPaymentMethod
     {
         $formattedPrice = number_format($this->fees(), 2, '.', '');
         $symbol = ShopPaymentsController::getInstance()->getPaymentByVarName($this->varName())->faIcon();
-        $symbolIsAfter = ShopSettingsModel::getInstance()->getSettingValue("after");
+        $symbolIsAfter = ShopSettingsModel::getInstance()->getSettingValue('after');
         if ($symbolIsAfter) {
-            return $formattedPrice . " " .$symbol;
+            return $formattedPrice . ' ' . $symbol;
         } else {
-            return $symbol . " " . $formattedPrice;
+            return $symbol . ' ' . $formattedPrice;
         }
     }
 
     public function isActive(): bool
     {
-        return ShopPaymentMethodSettingsModel::getInstance()->getSetting($this->varName().'_is_active') ?? 1;
+        return ShopPaymentMethodSettingsModel::getInstance()->getSetting($this->varName() . '_is_active') ?? 1;
     }
 
     public function isVirtualCurrency(): bool
@@ -88,7 +88,7 @@ class ShopPaymentMethodeVotesImplementations implements IPaymentMethod
     public function includeConfigWidgets(): void
     {
         $varName = $this->varName();
-        require_once EnvManager::getInstance()->getValue("DIR") . "App/Package/Votes/Views/Elements/votePoints.config.inc.view.php";
+        require_once EnvManager::getInstance()->getValue('DIR') . 'App/Package/Votes/Views/Elements/votePoints.config.inc.view.php';
     }
 
     public function doPayment(array $cartItems, UserEntity $user, ShopDeliveryUserAddressEntity $address): void

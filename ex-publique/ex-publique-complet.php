@@ -5,8 +5,8 @@ use CMW\Controller\Users\UsersController;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Theme\ThemeManager;
 
-$title = "Mon-Serveur | Voter";
-$description = "Votez pour le serveur et gagnez des récompenses uniques!";
+$title = 'Mon-Serveur | Voter';
+$description = 'Votez pour le serveur et gagnez des récompenses uniques!';
 
 /* @var \CMW\Entity\Votes\VotesSitesEntity[] $sites */
 /* @var \CMW\Entity\Votes\VotesPlayerStatsEntity[] $topCurrent */
@@ -36,7 +36,7 @@ $description = "Votez pour le serveur et gagnez des récompenses uniques!";
                                 <br>
 
                                 <strong>Connectez-vous</strong> dès maintenant en cliquant <a
-                                    href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>login">ici</a>
+                                    href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>login">ici</a>
                             </p>
 
 
@@ -120,7 +120,8 @@ $description = "Votez pour le serveur et gagnez des récompenses uniques!";
                                 <tbody>
 
                                 <?php $i = 0;
-                                foreach ($topCurrent as $top): $i++; ?>
+                                foreach ($topCurrent as $top):
+                                    $i++; ?>
 
                                     <tr>
                                         <td>#<?= $i ?></td>
@@ -156,7 +157,8 @@ $description = "Votez pour le serveur et gagnez des récompenses uniques!";
                                 <tbody>
 
                                 <?php $i = 0;
-                                foreach ($topGlobal as $top): $i++; ?>
+                                foreach ($topGlobal as $top):
+                                    $i++; ?>
 
                                     <tr>
                                         <td>#<?= $i ?></td>

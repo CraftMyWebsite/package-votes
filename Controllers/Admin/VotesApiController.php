@@ -16,42 +16,42 @@ use JetBrains\PhpStorm\ExpectedValues;
  */
 class VotesApiController extends AbstractController
 {
-    private const string usernameRegex = "^[a-zA-Z0-9_]{2,16}$";
+    private const string usernameRegex = '^[a-zA-Z0-9_]{2,16}$';
 
-    #[Link("/getVotePoints/:pseudo", Link::GET, ["pseudo" => self::usernameRegex], scope: "/api/votes")]
+    #[Link('/getVotePoints/:pseudo', Link::GET, ['pseudo' => self::usernameRegex], scope: '/api/votes')]
     private function getVotePoints(string $pseudo): void
     {
         $votePoints = VotesStatsModel::getInstance()->getPlayerVotepoints($pseudo);
 
-        $toReturn = APIManager::createResponse(data: ["votepoints" => $votePoints]);
-        print($toReturn);
+        $toReturn = APIManager::createResponse(data: ['votepoints' => $votePoints]);
+        print ($toReturn);
     }
 
-    #[Link("/getTopVotesPoints/rank/:rank", Link::GET, ["rank" => "[0-9]+"], scope: "/api/votes")]
+    #[Link('/getTopVotesPoints/rank/:rank', Link::GET, ['rank' => '[0-9]+'], scope: '/api/votes')]
     private function getTopVotePoints(int $rank): void
     {
         $votePoints = VotesStatsModel::getInstance()->getRankTopVotePoints($rank);
 
         $toReturn = APIManager::createResponse(data: $votePoints);
-        print($toReturn);
+        print ($toReturn);
     }
 
-    #[Link("/getPlayerCurrentVotes/:pseudo", Link::GET, ["pseudo" => self::usernameRegex], scope: "/api/votes")]
+    #[Link('/getPlayerCurrentVotes/:pseudo', Link::GET, ['pseudo' => self::usernameRegex], scope: '/api/votes')]
     private function getPlayerCurrentVotes(string $pseudo): void
     {
         $votes = VotesStatsModel::getInstance()->getPlayerCurrentVotes($pseudo);
 
-        $toReturn = APIManager::createResponse(data: ["votes" => $votes]);
-        print($toReturn);
+        $toReturn = APIManager::createResponse(data: ['votes' => $votes]);
+        print ($toReturn);
     }
 
-    #[Link("/getPlayerTotalVotes/:pseudo", Link::GET, ["pseudo" => self::usernameRegex], scope: "/api/votes")]
+    #[Link('/getPlayerTotalVotes/:pseudo', Link::GET, ['pseudo' => self::usernameRegex], scope: '/api/votes')]
     private function getPlayerTotalVotes(string $pseudo): void
     {
         $votes = VotesStatsModel::getInstance()->getPlayerTotalVotes($pseudo);
 
-        $toReturn = APIManager::createResponse(data: ["votes" => $votes]);
-        print($toReturn);
+        $toReturn = APIManager::createResponse(data: ['votes' => $votes]);
+        print ($toReturn);
     }
 
     /**
@@ -59,49 +59,48 @@ class VotesApiController extends AbstractController
      * @return void
      * @desc Type: all, month, week, day, hour, minute
      */
-    #[Link("/getVotes/:type", Link::GET, ["type" => ".*?"], scope: "/api/votes")]
-    private function getVotes(#[ExpectedValues(["all", "month", "week", "day", "hour", "minute"])] string $type): void
+    #[Link('/getVotes/:type', Link::GET, ['type' => '.*?'], scope: '/api/votes')]
+    private function getVotes(#[ExpectedValues(['all', 'month', 'week', 'day', 'hour', 'minute'])] string $type): void
     {
         $votes = count(VotesStatsModel::getInstance()->statsVotes($type));
 
-        $toReturn = APIManager::createResponse(data: ["votes" => $votes]);
-        print($toReturn);
+        $toReturn = APIManager::createResponse(data: ['votes' => $votes]);
+        print ($toReturn);
     }
 
-
-    #[Link("/getTopActual", Link::GET, scope: "/api/votes")]
+    #[Link('/getTopActual', Link::GET, scope: '/api/votes')]
     private function getActualTop(): void
     {
         $votes = VotesStatsModel::getInstance()->getActualTop();
 
         $toReturn = APIManager::createResponse(data: $votes);
-        print($toReturn);
+        print ($toReturn);
     }
 
-    #[Link("/getTopGlobal", Link::GET, scope: "/api/votes")]
+    #[Link('/getTopGlobal', Link::GET, scope: '/api/votes')]
     private function getTopGlobal(): void
     {
         $votes = VotesStatsModel::getInstance()->getGlobalTop();
 
         $toReturn = APIManager::createResponse(data: $votes);
-        print($toReturn);
+        print ($toReturn);
     }
 
-    #[Link("/getTopVotesActual/:rank", Link::GET, ["rank" => "[0-9]+"], scope: "/api/votes")]
+    #[Link('/getTopVotesActual/:rank', Link::GET, ['rank' => '[0-9]+'], scope: '/api/votes')]
     private function getActualTopSpecificRank(int $rank): void
     {
         $votes = VotesStatsModel::getInstance()->getActualTopPlayerRank($rank);
 
         $toReturn = APIManager::createResponse(data: $votes);
-        print($toReturn);
+        print ($toReturn);
     }
 
-    #[Link("/getTopVotesGlobal/:rank", Link::GET, ["rank" => "[0-9]+"], scope: "/api/votes")]
+    #[Link('/getTopVotesGlobal/:rank', Link::GET, ['rank' => '[0-9]+'], scope: '/api/votes')]
     private function getGlobalTopSpecificRank(int $rank): void
     {
         $votes = VotesStatsModel::getInstance()->getGlobalTopPlayerRank($rank);
 
         $toReturn = APIManager::createResponse(data: $votes);
-        print($toReturn);
+        print ($toReturn);
     }
 }

@@ -7,7 +7,6 @@ use CMW\Manager\Package\AbstractController;
 use CMW\Model\Votes\VotesRewardsModel;
 use JsonException;
 
-
 /**
  * Class: @VotePointRandomController
  * @package Votes
@@ -33,6 +32,6 @@ class VotePointRandomController extends AbstractController
             $max = 0;
         }
 
-        VotesRewardsModel::getInstance()->giveRewardVotePointsRandom($userId,$min,$max);
+        VotesRewardsModel::getInstance()->giveRewardVotePointsRandom($userId, $min, $max);
     }
 }

@@ -17,17 +17,17 @@ use CMW\Model\Votes\VotesStatsModel;
  */
 class VotesStatsController extends AbstractController
 {
-    #[Link("/stats", Link::GET, [], "/cmw-admin/votes")]
+    #[Link('/stats', Link::GET, [], '/cmw-admin/votes')]
     private function statsVotes(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.stats");
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'votes.stats');
 
         $stats = VotesStatsModel::getInstance();
 
-        $all = $stats->statsVotes("all");
-        $month = $stats->statsVotes("month");
-        $week = $stats->statsVotes("week");
-        $day = $stats->statsVotes("day");
+        $all = $stats->statsVotes('all');
+        $month = $stats->statsVotes('month');
+        $week = $stats->statsVotes('week');
+        $day = $stats->statsVotes('day');
 
         $listSites = VotesSitesModel::getInstance()->getSites();
 
@@ -38,14 +38,14 @@ class VotesStatsController extends AbstractController
         $previous3Months = $stats->get3PreviousMonthsVotes();
 
         View::createAdminView('Votes', 'stats')
-            ->addScriptBefore("Admin/Resources/Vendors/Apexcharts/Js/apexcharts.js",
-                "App/Package/Votes/Views/Resources/Js/main.js")
-            ->addStyle("Admin/Resources/Assets/Css/simple-datatables.css")
-            ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/simple-datatables.js",
-                "Admin/Resources/Vendors/Simple-datatables/config-datatables.js")
-            ->addVariableList(["stats" => $stats, "all" => $all, "month" => $month, "week" => $week, "day" => $day,
-                "listSites" => $listSites, "actualTop" => $actualTop,
-                "globalTop" => $globalTop, "previousTop" => $previousTop, "previous3Months" => $previous3Months])
+            ->addScriptBefore('Admin/Resources/Vendors/Apexcharts/Js/apexcharts.js',
+                'App/Package/Votes/Views/Resources/Js/main.js')
+            ->addStyle('Admin/Resources/Assets/Css/simple-datatables.css')
+            ->addScriptAfter('Admin/Resources/Vendors/Simple-datatables/simple-datatables.js',
+                'Admin/Resources/Vendors/Simple-datatables/config-datatables.js')
+            ->addVariableList(['stats' => $stats, 'all' => $all, 'month' => $month, 'week' => $week, 'day' => $day,
+                'listSites' => $listSites, 'actualTop' => $actualTop,
+                'globalTop' => $globalTop, 'previousTop' => $previousTop, 'previous3Months' => $previous3Months])
             ->view();
     }
 }

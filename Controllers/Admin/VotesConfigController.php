@@ -22,26 +22,27 @@ use JetBrains\PhpStorm\NoReturn;
  */
 class VotesConfigController extends AbstractController
 {
-    #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/votes")]
-    #[Link("/config", Link::GET, [], "/cmw-admin/votes")]
+    #[Link(path: '/', method: Link::GET, scope: '/cmw-admin/votes')]
+    #[Link('/config', Link::GET, [], '/cmw-admin/votes')]
     private function votesConfig(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.configuration");
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'votes.configuration');
 
         $config = VotesConfigModel::getInstance()->getConfig();
 
         View::createAdminView('Votes', 'config')
-            ->addVariableList(["config" => $config])
+            ->addVariableList(['config' => $config])
             ->view();
     }
 
-    #[NoReturn] #[Link("/config", Link::POST, [], "/cmw-admin/votes")]
+    #[NoReturn]
+    #[Link('/config', Link::POST, [], '/cmw-admin/votes')]
     private function votesConfigPost(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "votes.configuration");
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'votes.configuration');
 
-        [$topShow, $reset, $autoTopRewardActive, $autoTopReward, $enableApi] = Utils::filterInput("topShow",
-            "reset", "autoTopRewardActive", "autoTopReward", "api");
+        [$topShow, $reset, $autoTopRewardActive, $autoTopReward, $enableApi] = Utils::filterInput('topShow',
+            'reset', 'autoTopRewardActive', 'autoTopReward', 'api');
 
         $needLogin = isset($_POST['needLogin']) ? 1 : 0;
 
@@ -49,8 +50,8 @@ class VotesConfigController extends AbstractController
 
         Flash::send(
             Alert::SUCCESS,
-            LangManager::translate("core.toaster.success"),
-            LangManager::translate("core.toaster.config.success"),
+            LangManager::translate('core.toaster.success'),
+            LangManager::translate('core.toaster.config.success'),
         );
 
         Redirect::redirectPreviousRoute();

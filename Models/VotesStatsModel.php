@@ -7,7 +7,6 @@ use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Package\AbstractModel;
 use CMW\Model\Users\UsersModel;
 
-
 /**
  * Class @VotesStatsModel
  * @package votes
@@ -21,62 +20,56 @@ class VotesStatsModel extends AbstractModel
     public int $votesTotaux;
     public int $votesCurrent;
 
-
     /**
      * @param string $type insert the type you want: "all", "month", "week", "day", "hour", "minute"
      * @return array
      */
     public function statsVotes(string $type): array
     {
-
         $rangeStart = null;
         $rangeFinish = null;
 
-        if ($type === "all") {
-
-            $sql = "SELECT * FROM cmw_votes_votes";
+        if ($type === 'all') {
+            $sql = 'SELECT * FROM cmw_votes_votes';
 
             $db = DatabaseManager::getInstance();
             $req = $db->prepare($sql);
             $res = $req->execute();
-
-        } else if ($type === "month" || $type === "week" || $type === "day" || $type === "hour" || $type === "minute") {
-
-            if ($type === "month") {
-                $rangeStart = date("Y-m-d 00:00:00", strtotime("first day of this month"));
-                $rangeFinish = date("Y-m-d 00:00:00", strtotime("last day of this month"));
+        } else if ($type === 'month' || $type === 'week' || $type === 'day' || $type === 'hour' || $type === 'minute') {
+            if ($type === 'month') {
+                $rangeStart = date('Y-m-d 00:00:00', strtotime('first day of this month'));
+                $rangeFinish = date('Y-m-d 00:00:00', strtotime('last day of this month'));
             }
 
             switch ($type) {
-                case "month":
-                    $rangeStart = date("Y-m-d 00:00:00", strtotime("first day of this month"));
-                    $rangeFinish = date("Y-m-d 00:00:00", strtotime("last day of this month"));
+                case 'month':
+                    $rangeStart = date('Y-m-d 00:00:00', strtotime('first day of this month'));
+                    $rangeFinish = date('Y-m-d 00:00:00', strtotime('last day of this month'));
                     break;
-                case "week":
-                    $rangeStart = date("Y-m-d 00:00:00", strtotime("monday this week"));
-                    $rangeFinish = date("Y-m-d 00:00:00", strtotime("sunday this week"));
+                case 'week':
+                    $rangeStart = date('Y-m-d 00:00:00', strtotime('monday this week'));
+                    $rangeFinish = date('Y-m-d 00:00:00', strtotime('sunday this week'));
                     break;
-                case "day":
-                    $rangeStart = date("Y-m-d 00:00:00");
-                    $rangeFinish = date("Y-m-d 23:59:59");
+                case 'day':
+                    $rangeStart = date('Y-m-d 00:00:00');
+                    $rangeFinish = date('Y-m-d 23:59:59');
                     break;
-                case "hour":
-                    $rangeStart = date("Y-m-d h:00:00");
-                    $rangeFinish = date("Y-m-d h:00:00", strtotime("+1 hour"));
+                case 'hour':
+                    $rangeStart = date('Y-m-d h:00:00');
+                    $rangeFinish = date('Y-m-d h:00:00', strtotime('+1 hour'));
                     break;
-                case "minute":
-                    $rangeStart = date("Y-m-d h:i:00");
-                    $rangeFinish = date("Y-m-d h:i:00", strtotime("+1 minute"));
+                case 'minute':
+                    $rangeStart = date('Y-m-d h:i:00');
+                    $rangeFinish = date('Y-m-d h:i:00', strtotime('+1 minute'));
                     break;
             }
 
-
             $var = [
-                "range_start" => $rangeStart,
-                "range_finish" => $rangeFinish,
+                'range_start' => $rangeStart,
+                'range_finish' => $rangeFinish,
             ];
 
-            $sql = "SELECT * FROM cmw_votes_votes WHERE votes_date BETWEEN (:range_start) AND (:range_finish)";
+            $sql = 'SELECT * FROM cmw_votes_votes WHERE votes_date BETWEEN (:range_start) AND (:range_finish)';
 
             $db = DatabaseManager::getInstance();
             $req = $db->prepare($sql);
@@ -93,7 +86,7 @@ class VotesStatsModel extends AbstractModel
     public function statsVotesSitesTotaux(string $title): int
     {
         $var = [
-            "title" => $title,
+            'title' => $title,
         ];
 
         $sql = 'SELECT cmw_votes_votes.votes_id, cmw_votes_sites.votes_sites_title FROM cmw_votes_votes 
@@ -114,13 +107,13 @@ class VotesStatsModel extends AbstractModel
 
     public function statsVotesSitesMonth(string $title): int
     {
-        $rangeStart = date("Y-m-d 00:00:00", strtotime("first day of this month"));
-        $rangeFinish = date("Y-m-d 00:00:00", strtotime("last day of this month"));
+        $rangeStart = date('Y-m-d 00:00:00', strtotime('first day of this month'));
+        $rangeFinish = date('Y-m-d 00:00:00', strtotime('last day of this month'));
 
         $var = [
-            "title" => $title,
-            "range_start" => $rangeStart,
-            "range_finish" => $rangeFinish,
+            'title' => $title,
+            'range_start' => $rangeStart,
+            'range_finish' => $rangeFinish,
         ];
 
         $sql = 'SELECT cmw_votes_votes.votes_id, cmw_votes_sites.votes_sites_title FROM cmw_votes_votes 
@@ -143,7 +136,7 @@ class VotesStatsModel extends AbstractModel
 
     public function getNumberOfSites(): int
     {
-        $sql = "SELECT votes_sites_id FROM cmw_votes_sites";
+        $sql = 'SELECT votes_sites_id FROM cmw_votes_sites';
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
         $res = $req->execute();
@@ -157,7 +150,6 @@ class VotesStatsModel extends AbstractModel
         return 0;
     }
 
-
     /**
      * @return VotesPlayerStatsEntity[]
      * @desc Public function for the top votes (actual month)
@@ -165,11 +157,11 @@ class VotesStatsModel extends AbstractModel
     public function getActualTop(): array
     {
         if (DatabaseManager::isMariadb()) {
-            $sql = "SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) AS votes, cmw_users.user_id AS userId FROM cmw_votes_votes
-                    JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user";
+            $sql = 'SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) AS votes, cmw_users.user_id AS userId FROM cmw_votes_votes
+                    JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user';
         } else {
-            $sql = "SELECT COUNT(cmw_votes_votes.votes_id) AS votes, cmw_users.user_id AS userId FROM cmw_votes_votes
-                    JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user";
+            $sql = 'SELECT COUNT(cmw_votes_votes.votes_id) AS votes, cmw_users.user_id AS userId FROM cmw_votes_votes
+                    JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user';
         }
 
         $conf = VotesConfigModel::getInstance()->getConfig();
@@ -182,17 +174,17 @@ class VotesStatsModel extends AbstractModel
 
         switch ($reset) {
             case 1:
-                $sql .= " WHERE MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE())";
+                $sql .= ' WHERE MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE())';
                 break;
             case 2:
-                $sql .= " WHERE WEEK(cmw_votes_votes.votes_date) = WEEK(CURRENT_DATE())";
+                $sql .= ' WHERE WEEK(cmw_votes_votes.votes_date) = WEEK(CURRENT_DATE())';
                 break;
         }
 
-        $sql .= " GROUP BY userId
-                  ORDER BY COUNT(cmw_votes_votes.votes_id) DESC ";
+        $sql .= ' GROUP BY userId
+                  ORDER BY COUNT(cmw_votes_votes.votes_id) DESC ';
 
-        $sql .= "LIMIT " . $conf?->getTopShow();
+        $sql .= 'LIMIT ' . $conf?->getTopShow();
 
         $db = DatabaseManager::getInstance();
         $res = $db->prepare($sql);
@@ -213,7 +205,6 @@ class VotesStatsModel extends AbstractModel
         return $toReturn;
     }
 
-
     /**
      * @return VotesPlayerStatsEntity[]
      * @desc Public function for the top votes (global)
@@ -221,15 +212,15 @@ class VotesStatsModel extends AbstractModel
     public function getGlobalTop(): array
     {
         if (DatabaseManager::isMariadb()) {
-            $sql = "SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) AS votes, cmw_users.user_id AS userId FROM cmw_votes_votes 
+            $sql = 'SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) AS votes, cmw_users.user_id AS userId FROM cmw_votes_votes 
                     JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user GROUP BY userId
-                    ORDER BY COUNT(cmw_votes_votes.votes_id) DESC ";
+                    ORDER BY COUNT(cmw_votes_votes.votes_id) DESC ';
         } else {
-            $sql = "SELECT COUNT(cmw_votes_votes.votes_id) AS votes, cmw_users.user_id AS userId FROM cmw_votes_votes 
+            $sql = 'SELECT COUNT(cmw_votes_votes.votes_id) AS votes, cmw_users.user_id AS userId FROM cmw_votes_votes 
                     JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user GROUP BY userId 
-                    ORDER BY COUNT(cmw_votes_votes.votes_id) DESC ";
+                    ORDER BY COUNT(cmw_votes_votes.votes_id) DESC ';
         }
-        $sql .= "LIMIT " . (new VotesConfigModel())->getConfig()?->getTopShow();
+        $sql .= 'LIMIT ' . (new VotesConfigModel())->getConfig()?->getTopShow();
 
         $db = DatabaseManager::getInstance();
         $res = $db->prepare($sql);
@@ -258,20 +249,20 @@ class VotesStatsModel extends AbstractModel
     public function getActualTopPlayerRank(int $rank): array
     {
         if (DatabaseManager::isMariadb()) {
-            $sql = "SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) AS votes, cmw_users.user_id AS userId FROM cmw_votes_votes
+            $sql = 'SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) AS votes, cmw_users.user_id AS userId FROM cmw_votes_votes
                     JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user
                     WHERE MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE())
                     GROUP BY userId
-                    ORDER BY COUNT(cmw_votes_votes.votes_id) DESC ";
+                    ORDER BY COUNT(cmw_votes_votes.votes_id) DESC ';
         } else {
-            $sql = "SELECT COUNT(cmw_votes_votes.votes_id) AS votes, cmw_users.user_id AS userId FROM cmw_votes_votes
+            $sql = 'SELECT COUNT(cmw_votes_votes.votes_id) AS votes, cmw_users.user_id AS userId FROM cmw_votes_votes
                     JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user
                     WHERE MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE())
                     GROUP BY userId
-                    ORDER BY COUNT(cmw_votes_votes.votes_id) DESC ";
+                    ORDER BY COUNT(cmw_votes_votes.votes_id) DESC ';
         }
 
-        $sql .= "LIMIT 1 OFFSET " . $rank - 1;
+        $sql .= 'LIMIT 1 OFFSET ' . $rank - 1;
 
         $db = DatabaseManager::getInstance();
         $res = $db->prepare($sql);
@@ -300,16 +291,16 @@ class VotesStatsModel extends AbstractModel
     public function getGlobalTopPlayerRank(int $rank): array
     {
         if (DatabaseManager::isMariadb()) {
-            $sql = "SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) AS votes, cmw_users.user_id AS userId FROM cmw_votes_votes 
+            $sql = 'SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) AS votes, cmw_users.user_id AS userId FROM cmw_votes_votes 
                     JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user GROUP BY userId
-                    ORDER BY COUNT(cmw_votes_votes.votes_id) DESC ";
+                    ORDER BY COUNT(cmw_votes_votes.votes_id) DESC ';
         } else {
-            $sql = "SELECT COUNT(cmw_votes_votes.votes_id) AS votes, cmw_users.user_id AS userId FROM cmw_votes_votes 
+            $sql = 'SELECT COUNT(cmw_votes_votes.votes_id) AS votes, cmw_users.user_id AS userId FROM cmw_votes_votes 
                     JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user GROUP BY userId 
-                    ORDER BY COUNT(cmw_votes_votes.votes_id) DESC ";
+                    ORDER BY COUNT(cmw_votes_votes.votes_id) DESC ';
         }
 
-        $sql .= "LIMIT 1 OFFSET " . $rank - 1;
+        $sql .= 'LIMIT 1 OFFSET ' . $rank - 1;
 
         $db = DatabaseManager::getInstance();
         $res = $db->prepare($sql);
@@ -336,15 +327,15 @@ class VotesStatsModel extends AbstractModel
     public function getActualTopNoLimit(): array
     {
         if (DatabaseManager::isMariadb()) {
-            $sql = "SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) AS votes, cmw_users.user_id AS userId 
+            $sql = 'SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) AS votes, cmw_users.user_id AS userId 
                     FROM cmw_votes_votes JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user 
                     WHERE MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE()) GROUP BY cmw_users.user_pseudo 
-                    ORDER BY COUNT(cmw_votes_votes.votes_id) DESC";
+                    ORDER BY COUNT(cmw_votes_votes.votes_id) DESC';
         } else {
-            $sql = "SELECT COUNT(cmw_votes_votes.votes_id) AS votes, ANY_VALUE(cmw_users.user_id) AS userId FROM cmw_votes_votes 
+            $sql = 'SELECT COUNT(cmw_votes_votes.votes_id) AS votes, ANY_VALUE(cmw_users.user_id) AS userId FROM cmw_votes_votes 
                     JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user 
                     WHERE MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE()) GROUP BY cmw_users.user_pseudo 
-                    ORDER BY COUNT(cmw_votes_votes.votes_id) DESC";
+                    ORDER BY COUNT(cmw_votes_votes.votes_id) DESC';
         }
 
         $db = DatabaseManager::getInstance();
@@ -372,14 +363,14 @@ class VotesStatsModel extends AbstractModel
     public function getGlobalTopNoLimit(): array
     {
         if (DatabaseManager::isMariadb()) {
-            $sql = "SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) AS votes, cmw_users.user_id AS userId
+            $sql = 'SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) AS votes, cmw_users.user_id AS userId
                     FROM cmw_votes_votes JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user 
-                    GROUP BY cmw_users.user_pseudo ORDER BY COUNT(cmw_votes_votes.votes_id) DESC";
+                    GROUP BY cmw_users.user_pseudo ORDER BY COUNT(cmw_votes_votes.votes_id) DESC';
         } else {
-            $sql = "SELECT COUNT(cmw_votes_votes.votes_id) AS votes, ANY_VALUE(cmw_users.user_id) AS userId 
+            $sql = 'SELECT COUNT(cmw_votes_votes.votes_id) AS votes, ANY_VALUE(cmw_users.user_id) AS userId 
                     FROM cmw_votes_votes JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user 
                     GROUP BY cmw_users.user_pseudo 
-                    ORDER BY COUNT(cmw_votes_votes.votes_id) DESC";
+                    ORDER BY COUNT(cmw_votes_votes.votes_id) DESC';
         }
 
         $db = DatabaseManager::getInstance();
@@ -407,17 +398,17 @@ class VotesStatsModel extends AbstractModel
     public function getPreviousMonthTop(): array
     {
         if (DatabaseManager::isMariadb()) {
-            $sql = "SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) AS votes, cmw_users.user_id AS userId FROM cmw_votes_votes 
+            $sql = 'SELECT DISTINCT COUNT(cmw_votes_votes.votes_id) AS votes, cmw_users.user_id AS userId FROM cmw_votes_votes 
                     JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user 
                     WHERE MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH)  
                     GROUP BY cmw_users.user_pseudo 
-                    ORDER BY COUNT(cmw_votes_votes.votes_id) DESC";
+                    ORDER BY COUNT(cmw_votes_votes.votes_id) DESC';
         } else {
-            $sql = "SELECT COUNT(cmw_votes_votes.votes_id) AS votes, ANY_VALUE(cmw_users.user_id) AS userId FROM cmw_votes_votes 
+            $sql = 'SELECT COUNT(cmw_votes_votes.votes_id) AS votes, ANY_VALUE(cmw_users.user_id) AS userId FROM cmw_votes_votes 
                     JOIN cmw_users ON cmw_users.user_id = cmw_votes_votes.votes_id_user 
                     WHERE MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH) 
                     GROUP BY cmw_users.user_pseudo 
-                    ORDER BY COUNT(cmw_votes_votes.votes_id) DESC";
+                    ORDER BY COUNT(cmw_votes_votes.votes_id) DESC';
         }
         $db = DatabaseManager::getInstance();
         $res = $db->prepare($sql);
@@ -442,21 +433,21 @@ class VotesStatsModel extends AbstractModel
     {
         $toReturn = [];
 
-        $sqlCurrent = "SELECT COUNT(votes_id) AS votes FROM cmw_votes_votes WHERE MONTH(votes_date) = MONTH(CURRENT_DATE())";
-        $sqlPrevious = "SELECT COUNT(votes_id) AS votes FROM cmw_votes_votes WHERE MONTH(votes_date) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH)";
-        $sql2MonthsAgo = "SELECT COUNT(votes_id) AS votes FROM cmw_votes_votes WHERE MONTH(votes_date) = MONTH(CURRENT_DATE - INTERVAL 2 MONTH)";
+        $sqlCurrent = 'SELECT COUNT(votes_id) AS votes FROM cmw_votes_votes WHERE MONTH(votes_date) = MONTH(CURRENT_DATE())';
+        $sqlPrevious = 'SELECT COUNT(votes_id) AS votes FROM cmw_votes_votes WHERE MONTH(votes_date) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH)';
+        $sql2MonthsAgo = 'SELECT COUNT(votes_id) AS votes FROM cmw_votes_votes WHERE MONTH(votes_date) = MONTH(CURRENT_DATE - INTERVAL 2 MONTH)';
 
         $db = DatabaseManager::getInstance();
 
-        //2MonthsAgo
+        // 2MonthsAgo
         $req = $db->query($sql2MonthsAgo);
         $toReturn[] = $req->fetch()['votes'];
 
-        //Previous
+        // Previous
         $req = $db->query($sqlPrevious);
         $toReturn[] = $req->fetch()['votes'];
 
-        //Current
+        // Current
         $req = $db->query($sqlCurrent);
         $toReturn[] = $req->fetch()['votes'];
 
@@ -470,12 +461,12 @@ class VotesStatsModel extends AbstractModel
     public function getPlayerVotepoints(int|string $user): int
     {
         if (is_int($user)) {
-            $sql = "SELECT votes_votepoints_amount AS votepoints FROM cmw2.cmw_votes_votepoints 
-                    WHERE votes_votepoints_id_user = :user LIMIT 1";
+            $sql = 'SELECT votes_votepoints_amount AS votepoints FROM cmw2.cmw_votes_votepoints 
+                    WHERE votes_votepoints_id_user = :user LIMIT 1';
         } else {
-            $sql = "SELECT cmw_votes_votepoints.votes_votepoints_amount AS votepoints FROM cmw_votes_votepoints 
+            $sql = 'SELECT cmw_votes_votepoints.votes_votepoints_amount AS votepoints FROM cmw_votes_votepoints 
                     JOIN cmw_users ON cmw_votes_votepoints.votes_votepoints_id_user = cmw_users.user_id 
-                    WHERE cmw_users.user_pseudo = :user LIMIT 1";
+                    WHERE cmw_users.user_pseudo = :user LIMIT 1';
         }
 
         $db = DatabaseManager::getInstance();
@@ -494,18 +485,18 @@ class VotesStatsModel extends AbstractModel
      */
     public function getVotePointByUserId(int $userId): int
     {
-        $sql = "SELECT votes_votepoints_amount FROM cmw_votes_votepoints WHERE votes_votepoints_id_user = :user";
+        $sql = 'SELECT votes_votepoints_amount FROM cmw_votes_votepoints WHERE votes_votepoints_id_user = :user';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
-        if (!$req->execute(["user" => $userId])) {
+        if (!$req->execute(['user' => $userId])) {
             return 0;
         }
 
         $res = $req->fetch();
 
-        if(!$res){
+        if (!$res) {
             return 0;
         }
 
@@ -519,14 +510,14 @@ class VotesStatsModel extends AbstractModel
     public function getPlayerCurrentVotes(int|string $user): int
     {
         if (is_int($user)) {
-            $sql = "SELECT COUNT(cmw_votes_votes.votes_id) AS votes FROM cmw_votes_votes 
+            $sql = 'SELECT COUNT(cmw_votes_votes.votes_id) AS votes FROM cmw_votes_votes 
                     WHERE cmw_votes_votes.votes_id_user = :user
-                    AND MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE()) LIMIT 1";
+                    AND MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE()) LIMIT 1';
         } else {
-            $sql = "SELECT COUNT(cmw_votes_votes.votes_id) AS votes FROM cmw_votes_votes 
+            $sql = 'SELECT COUNT(cmw_votes_votes.votes_id) AS votes FROM cmw_votes_votes 
                     JOIN cmw_users ON cmw_votes_votes.votes_id_user = cmw_users.user_id 
                     WHERE cmw_users.user_pseudo = :user
-                    AND MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE()) LIMIT 1";
+                    AND MONTH(cmw_votes_votes.votes_date) = MONTH(CURRENT_DATE()) LIMIT 1';
         }
 
         $db = DatabaseManager::getInstance();
@@ -545,12 +536,11 @@ class VotesStatsModel extends AbstractModel
      */
     public function getRankTopVotePoints(int $rank): array
     {
-
-        $sql = "SELECT cmw_votes_votepoints.votes_votepoints_amount AS votes, cmw_users.user_pseudo FROM cmw_votes_votepoints
+        $sql = 'SELECT cmw_votes_votepoints.votes_votepoints_amount AS votes, cmw_users.user_pseudo FROM cmw_votes_votepoints
                 JOIN cmw_users ON cmw_users.user_id = cmw_votes_votepoints.votes_votepoints_id_user = cmw_users.user_id
-                ORDER BY cmw_votes_votepoints.votes_votepoints_amount DESC ";
+                ORDER BY cmw_votes_votepoints.votes_votepoints_amount DESC ';
 
-        $sql .= "LIMIT 1 OFFSET " . $rank - 1;
+        $sql .= 'LIMIT 1 OFFSET ' . $rank - 1;
 
         $db = DatabaseManager::getInstance();
 
@@ -570,12 +560,12 @@ class VotesStatsModel extends AbstractModel
     public function getPlayerTotalVotes(int|string $user): int
     {
         if (is_int($user)) {
-            $sql = "SELECT COUNT(cmw_votes_votes.votes_id) AS votes FROM cmw_votes_votes 
-                    WHERE cmw_votes_votes.votes_id_user = :user LIMIT 1";
+            $sql = 'SELECT COUNT(cmw_votes_votes.votes_id) AS votes FROM cmw_votes_votes 
+                    WHERE cmw_votes_votes.votes_id_user = :user LIMIT 1';
         } else {
-            $sql = "SELECT COUNT(cmw_votes_votes.votes_id) AS votes FROM cmw_votes_votes 
+            $sql = 'SELECT COUNT(cmw_votes_votes.votes_id) AS votes FROM cmw_votes_votes 
                     JOIN cmw_users ON cmw_votes_votes.votes_id_user = cmw_users.user_id 
-                    WHERE cmw_users.user_pseudo = :user LIMIT 1";
+                    WHERE cmw_users.user_pseudo = :user LIMIT 1';
         }
 
         $db = DatabaseManager::getInstance();
@@ -587,5 +577,4 @@ class VotesStatsModel extends AbstractModel
 
         return 0;
     }
-
 }

@@ -5,15 +5,15 @@ use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Security\SecurityManager;
 use CMW\Utils\Log;
 
-$title = LangManager::translate("votes.dashboard.title.rewards");
-$description = LangManager::translate("votes.dashboard.desc");
+$title = LangManager::translate('votes.dashboard.title.rewards');
+$description = LangManager::translate('votes.dashboard.desc');
 
 /* @var \CMW\Entity\Votes\VotesRewardsEntity[] $rewards */
 /* @var \CMW\Entity\Minecraft\MinecraftServerEntity[] $minecraftServers */
 /* @var \CMW\Interface\Votes\IRewardMethod[] $rewardMethods */
 
 ?>
-<h3><i class="fa-solid fa-award"></i> <?= LangManager::translate("votes.dashboard.title.rewards") ?></h3>
+<h3><i class="fa-solid fa-award"></i> <?= LangManager::translate('votes.dashboard.title.rewards') ?></h3>
 
 <div class="grid-2">
     <div class="card">
@@ -21,20 +21,20 @@ $description = LangManager::translate("votes.dashboard.desc");
         <form method="post" action="rewards/add">
             <?php (new SecurityManager())->insertHiddenToken() ?>
             <div class="space-y-4">
-                <h6><?= LangManager::translate("votes.dashboard.rewards.add.title") ?></h6>
+                <h6><?= LangManager::translate('votes.dashboard.rewards.add.title') ?></h6>
                 <div>
-                    <label for="title"><?= LangManager::translate("votes.dashboard.rewards.add.placeholder.title") ?> :</label>
+                    <label for="title"><?= LangManager::translate('votes.dashboard.rewards.add.placeholder.title') ?> :</label>
                     <div class="input-group">
                         <i class="fa-solid fa-heading"></i>
                         <input type="text" id="title" name="title" value="" required
-                               placeholder="<?= LangManager::translate("votes.dashboard.rewards.add.placeholder.title") ?>">
+                               placeholder="<?= LangManager::translate('votes.dashboard.rewards.add.placeholder.title') ?>">
                     </div>
                 </div>
                 <div>
                     <label for="reward_type_selected">Type de récompenses :</label>
                     <select class="form-select" name="reward_type_selected" id="reward_type_selected" required>
                         <?php foreach ($rewardMethods as $rewardMethod): ?>
-                            <option value="<?= $rewardMethod->varName() ?>" <?= $rewardMethod->varName() === "nothing" ? "selected" : "" ?>>
+                            <option value="<?= $rewardMethod->varName() ?>" <?= $rewardMethod->varName() === 'nothing' ? 'selected' : '' ?>>
                                 <?= $rewardMethod->name() ?>
                             </option>
                         <?php endforeach; ?>
@@ -50,23 +50,23 @@ $description = LangManager::translate("votes.dashboard.desc");
                 </div>
             </div>
             <button type="submit" class="btn-center btn-primary">
-                <?= LangManager::translate("core.btn.add") ?>
+                <?= LangManager::translate('core.btn.add') ?>
             </button>
         </form>
     </div>
     <div class="card">
-        <h6><?= LangManager::translate("votes.dashboard.rewards.list.title") ?></h6>
+        <h6><?= LangManager::translate('votes.dashboard.rewards.list.title') ?></h6>
         <div class="table-container table-container-striped">
             <table class="table" id="table1">
                 <thead>
                 <tr>
-                    <th><?= LangManager::translate("votes.dashboard.table.name") ?></th>
-                    <th><?= LangManager::translate("votes.dashboard.table.type") ?></th>
+                    <th><?= LangManager::translate('votes.dashboard.table.name') ?></th>
+                    <th><?= LangManager::translate('votes.dashboard.table.type') ?></th>
                     <th></th>
                 </tr>
                 </thead>
                 <tbody>
-                <?php foreach ($rewards as $reward) : ?>
+                <?php foreach ($rewards as $reward): ?>
                     <tr>
                         <td><?= $reward->getTitle() ?></td>
                         <td><?= VotesRewardsController::getInstance()->getRewardMethodByVarName($reward->getVarName())->name() ?></td>
@@ -78,15 +78,15 @@ $description = LangManager::translate("votes.dashboard.desc");
                             <div id="modal-delete-<?= $reward->getRewardsId() ?>" class="modal-container">
                                 <div class="modal">
                                     <div class="modal-header-danger">
-                                        <h6><?= LangManager::translate("votes.dashboard.modal.delete") ?> <?= $reward->getTitle() ?></h6>
+                                        <h6><?= LangManager::translate('votes.dashboard.modal.delete') ?> <?= $reward->getTitle() ?></h6>
                                         <button type="button" data-modal-hide="modal-delete-<?= $reward->getRewardsId() ?>"><i class="fa-solid fa-xmark"></i></button>
                                     </div>
                                     <div class="modal-body">
-                                        <?= LangManager::translate("votes.dashboard.modal.deletealertreward") ?>
+                                        <?= LangManager::translate('votes.dashboard.modal.deletealertreward') ?>
                                     </div>
                                     <div class="modal-footer">
                                         <a href="rewards/delete/<?= $reward->getRewardsId() ?>"
-                                           class="btn-danger"><?= LangManager::translate("core.btn.delete") ?>
+                                           class="btn-danger"><?= LangManager::translate('core.btn.delete') ?>
                                         </a>
                                     </div>
                                 </div>

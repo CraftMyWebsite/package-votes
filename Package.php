@@ -10,17 +10,17 @@ class Package implements IPackageConfig
 {
     public function name(): string
     {
-        return "Votes";
+        return 'Votes';
     }
 
     public function version(): string
     {
-        return "0.0.1";
+        return '0.0.1';
     }
 
     public function authors(): array
     {
-        return ["Teyir"];
+        return ['Teyir'];
     }
 
     public function isGame(): bool
@@ -37,9 +37,9 @@ class Package implements IPackageConfig
     {
         return [
             new PackageMenuType(
-                lang: "fr",
-                icon: "fas fa-vote-yea",
-                title: "Votes",
+                lang: 'fr',
+                icon: 'fas fa-vote-yea',
+                title: 'Votes',
                 url: null,
                 permission: null,
                 subMenus: [
@@ -60,15 +60,15 @@ class Package implements IPackageConfig
                     ),
                     new PackageSubMenuType(
                         title: 'Statistiques',
-                        permission: 'votes.todo', //TODO PERMS
+                        permission: 'votes.todo',  // TODO PERMS
                         url: 'votes/stats',
                     ),
                 ]
             ),
             new PackageMenuType(
-                lang: "en",
-                icon: "fas fa-vote-yea",
-                title: "Votes",
+                lang: 'en',
+                icon: 'fas fa-vote-yea',
+                title: 'Votes',
                 url: null,
                 permission: null,
                 subMenus: [
@@ -89,7 +89,7 @@ class Package implements IPackageConfig
                     ),
                     new PackageSubMenuType(
                         title: 'Statistics',
-                        permission: 'votes.todo', //TODO PERMS
+                        permission: 'votes.todo',  // TODO PERMS
                         url: 'votes/stats',
                     ),
                 ]
@@ -99,12 +99,12 @@ class Package implements IPackageConfig
 
     public function requiredPackages(): array
     {
-        return ["Core"];
+        return ['Core'];
     }
 
     public function uninstall(): bool
     {
-        //Return true, we don't need other operations for uninstall.
+        // Return true, we don't need other operations for uninstall.
         return true;
     }
 }

@@ -49,5 +49,4 @@ class Permissions implements IPermissionInit
             ),
         ];
     }
-
 }
