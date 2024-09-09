@@ -14,6 +14,7 @@ use CMW\Model\Votes\CheckVotesModel;
 use CMW\Model\Votes\VotesModel;
 use CMW\Model\Votes\VotesSitesModel;
 use CMW\Model\Votes\VotesStatsModel;
+use CMW\Utils\Client;
 use CMW\Utils\Redirect;
 use CMW\Utils\Website;
 use JsonException;
@@ -84,7 +85,7 @@ class VotesPublicController extends AbstractController
         try {
             // First, check if the player can vote.
             if (CheckVotesModel::getInstance()->isVoteSend(VotesSitesModel::getInstance()->getSiteById($id)?->getUrl(),
-                    VotesSitesModel::getInstance()->getSiteById($id)?->getIdUnique(), Website::getClientIp())) {
+                    VotesSitesModel::getInstance()->getSiteById($id)?->getIdUnique(), Client::getIp())) {
                 // Check if the player has a vote stored
                 if (VotesModel::getInstance()->playerHasAVoteStored($userId, $id)) {
                     // Check if we can validate this vote

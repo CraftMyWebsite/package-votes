@@ -4,6 +4,7 @@ namespace CMW\Model\Votes;
 
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Package\AbstractModel;
+use CMW\Utils\Client;
 use CMW\Utils\Website;
 use PDO;
 
@@ -19,7 +20,7 @@ class VotesModel extends AbstractModel
     {
         $var = [
             'id_user' => $idUser,
-            'ip' => Website::getClientIp(),
+            'ip' => Client::getIp(),
             'id_site' => $idSite,
         ];
 
