@@ -8,6 +8,7 @@ use CMW\Event\Shop\ShopPaymentCompleteEvent;
 use CMW\Manager\Events\Emitter;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
+use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Model\Users\UsersModel;
 use CMW\Model\Votes\VotesRewardsModel;
@@ -24,6 +25,7 @@ class VotesPaymentController extends AbstractController
 {
     /**
      * @param \CMW\Entity\Shop\Carts\ShopCartItemEntity[] $cartItems
+     * @throws \ReflectionException
      */
     public function payByVotePoints(array $cartItems): void
     {
@@ -35,6 +37,15 @@ class VotesPaymentController extends AbstractController
         }
 
         $priceTypeMethod = ShopItemsController::getInstance()->getPriceTypeMethodsByVarName('votePoints');
+
+        if (!$priceTypeMethod) {
+            Flash::send(
+                Alert::ERROR,
+                LangManager::translate('core.toaster.error'),
+                LangManager::translate('core.toaster.internalError'),
+            );
+        }
+
         $votePointsStock = VotesStatsModel::getInstance()->getVotePointByUserId($user->getId());
 
         $totalAmount = 0;

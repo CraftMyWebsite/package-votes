@@ -30,7 +30,7 @@ use function is_null;
 class VotesPublicController extends AbstractController
 {
     #[Link('/vote', Link::GET)]
-    public function votesPublic(): void
+    private function votesPublic(): void
     {
         $sites = VotesSitesModel::getInstance()->getSites();
 
@@ -71,7 +71,7 @@ class VotesPublicController extends AbstractController
     }
 
     #[Link('/vote/send/:id', Link::GET, ['id' => '[0-9]+'])]
-    public function votesWebsitePublic(int $id): void
+    private function votesWebsitePublic(int $id): void
     {
         $userId = UsersModel::getCurrentUser()?->getId();
 
@@ -80,44 +80,39 @@ class VotesPublicController extends AbstractController
             return;
         }
 
-        $reward = VotesSitesModel::getInstance()->getSiteById($id)?->getRewards() ?? null;
+        $reward = VotesSitesModel::getInstance()->getSiteById($id)?->getRewards();
 
-        try {
-            // First, check if the player can vote.
-            if (CheckVotesModel::getInstance()->isVoteSend(VotesSitesModel::getInstance()->getSiteById($id)?->getUrl(),
-                    VotesSitesModel::getInstance()->getSiteById($id)?->getIdUnique(), Client::getIp())) {
-                // Check if the player has a vote stored
-                if (VotesModel::getInstance()->playerHasAVoteStored($userId, $id)) {
-                    // Check if we can validate this vote
-                    if (VotesModel::getInstance()->validateThisVote($userId, $id)) {
-                        VotesModel::getInstance()->storeVote($userId, $id);
-                        if (!is_null($reward)) {
-                            $site = VotesSitesModel::getInstance()->getSiteById($id);
-                            if (!is_null($site)) {
-                                VotesRewardsController::getInstance()->getRewardMethodByVarName($reward->getVarName())?->execReward($reward, $site, $userId);
-                            }
-                        }
-                        $this->returnData('send', true);
-                    } else {
-                        $this->returnData('already_vote', true);
-                    }
-                } else {  // The player don't have any vote for this website.
+        if (CheckVotesModel::getInstance()->isVoteSend(VotesSitesModel::getInstance()->getSiteById($id)?->getUrl(),
+                VotesSitesModel::getInstance()->getSiteById($id)?->getIdUnique(), Client::getIp())) {
+            // Check if the player has a vote stored
+            if (VotesModel::getInstance()->playerHasAVoteStored($userId, $id)) {
+                // Check if we can validate this vote
+                if (VotesModel::getInstance()->validateThisVote($userId, $id)) {
                     VotesModel::getInstance()->storeVote($userId, $id);
-
                     if (!is_null($reward)) {
                         $site = VotesSitesModel::getInstance()->getSiteById($id);
                         if (!is_null($site)) {
                             VotesRewardsController::getInstance()->getRewardMethodByVarName($reward->getVarName())?->execReward($reward, $site, $userId);
                         }
                     }
-
                     $this->returnData('send', true);
+                } else {
+                    $this->returnData('already_vote', true);
                 }
-            } else {  // The player has already voted.
-                $this->returnData('not_send');
+            } else {  // The player don't have any vote for this website.
+                VotesModel::getInstance()->storeVote($userId, $id);
+
+                if (!is_null($reward)) {
+                    $site = VotesSitesModel::getInstance()->getSiteById($id);
+                    if (!is_null($site)) {
+                        VotesRewardsController::getInstance()->getRewardMethodByVarName($reward->getVarName())?->execReward($reward, $site, $userId);
+                    }
+                }
+
+                $this->returnData('send', true);
             }
-        } catch (JsonException $e) {
-            echo 'Internal Error. ' . $e;
+        } else {  // The player has already voted.
+            $this->returnData('not_send');
         }
     }
 
@@ -135,7 +130,7 @@ class VotesPublicController extends AbstractController
     }
 
     #[Link('/vote/geturl/:id', Link::GET, ['id' => '[0-9]+'])]
-    public function votesGetWebsiteUrlPublic(int $id): void
+    private function votesGetWebsiteUrlPublic(int $id): void
     {
         print VotesSitesModel::getInstance()->getSiteById($id)?->getUrl();
     }
