@@ -3,8 +3,10 @@
 namespace CMW\Model\Votes;
 
 use CMW\Entity\Votes\VotesConfigEntity;
+use CMW\Manager\Cache\SimpleCacheManager;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Package\AbstractModel;
+use function is_null;
 
 /**
  * Class @VotesConfigModel
@@ -14,7 +16,14 @@ use CMW\Manager\Package\AbstractModel;
  */
 class VotesConfigModel extends AbstractModel
 {
-    public function updateConfig(int $topShow, int $reset, int $autoTopRewardActive, string $autoTopReward, int $enableApi, int $needLogin): ?VotesConfigEntity
+    public function updateConfig(
+        int    $topShow,
+        int    $reset,
+        int    $autoTopRewardActive,
+        string $autoTopReward,
+        int    $enableApi,
+        int    $needLogin,
+    ): ?VotesConfigEntity
     {
         $info = [
             'top_show' => $topShow,
@@ -22,7 +31,7 @@ class VotesConfigModel extends AbstractModel
             'auto_top_reward_active' => $autoTopRewardActive,
             'auto_top_reward' => $autoTopReward,
             'enable_api' => $enableApi,
-            'need_login' => $needLogin
+            'need_login' => $needLogin,
         ];
 
         $sql = 'UPDATE cmw_votes_config SET votes_config_top_show=:top_show, votes_config_reset=:reset,
@@ -33,14 +42,22 @@ class VotesConfigModel extends AbstractModel
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
         if ($req->execute($info)) {
-            return $this->getConfig();
+            return $this->getConfig(ignoreCache: true);
         }
 
         return null;
     }
 
-    public function getConfig(): ?VotesConfigEntity
+    public function getConfig(bool $ignoreCache = false): ?VotesConfigEntity
     {
+       if (!$ignoreCache){
+           $cacheData = SimpleCacheManager::getCache('config', 'Votes');
+
+           if (!is_null($cacheData)) {
+               return VotesConfigEntity::fromJson($cacheData);
+           }
+       }
+
         $sql = 'SELECT * FROM cmw_votes_config LIMIT 1';
 
         $db = DatabaseManager::getInstance();

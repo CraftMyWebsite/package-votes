@@ -3,6 +3,7 @@
 namespace CMW\Controller\Votes\Admin;
 
 use CMW\Controller\Users\UsersController;
+use CMW\Manager\Cache\SimpleCacheManager;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
@@ -10,9 +11,11 @@ use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
 use CMW\Model\Votes\VotesConfigModel;
+use CMW\Utils\Log;
 use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
 use JetBrains\PhpStorm\NoReturn;
+use function is_null;
 
 /**
  * Class: @VotesConfigController
@@ -35,8 +38,7 @@ class VotesConfigController extends AbstractController
             ->view();
     }
 
-    #[NoReturn]
-    #[Link('/config', Link::POST, [], '/cmw-admin/votes')]
+    #[NoReturn] #[Link('/config', Link::POST, [], '/cmw-admin/votes')]
     private function votesConfigPost(): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'votes.configuration');
@@ -46,7 +48,27 @@ class VotesConfigController extends AbstractController
 
         $needLogin = isset($_POST['needLogin']) ? 1 : 0;
 
-        VotesConfigModel::getInstance()->updateConfig($topShow, $reset, $autoTopRewardActive, $autoTopReward, $enableApi, $needLogin);
+        $updatedConfig = VotesConfigModel::getInstance()->updateConfig(
+            $topShow,
+            $reset,
+            $autoTopRewardActive,
+            $autoTopReward,
+            $enableApi,
+            $needLogin,
+        );
+
+        if (is_null($updatedConfig)) {
+            Flash::send(
+                Alert::ERROR,
+                LangManager::translate('core.toaster.error'),
+                LangManager::translate('core.toaster.internalError'),
+            );
+
+            Redirect::redirectPreviousRoute();
+        }
+
+        //Update cache
+        SimpleCacheManager::storeCache($updatedConfig->toJson(), 'config', 'Votes');
 
         Flash::send(
             Alert::SUCCESS,

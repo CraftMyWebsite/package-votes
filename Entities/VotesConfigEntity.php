@@ -2,6 +2,11 @@
 
 namespace CMW\Entity\Votes;
 
+use JsonException;
+use RuntimeException;
+use function json_decode;
+use function json_encode;
+
 class VotesConfigEntity
 {
     private int $topShow;
@@ -72,5 +77,48 @@ class VotesConfigEntity
     public function isNeedLogin(): bool
     {
         return $this->needLogin;
+    }
+
+    /**
+     * @return string
+     */
+    public function toJson(): string
+    {
+        $data = [
+            'top_show' => $this->topShow,
+            'reset' => $this->reset,
+            'auto_top_reward_active' => $this->autoTopRewardActive,
+            'auto_top_reward' => $this->autoTopReward,
+            'enable_api' => $this->enableApi,
+            'need_login' => $this->needLogin,
+        ];
+
+        try {
+            return json_encode($data, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            throw new \RuntimeException("Can't convert data to json. " . $e->getMessage());
+        }
+    }
+
+    /**
+     * @param string $data
+     * @return self
+     */
+    public static function fromJson(string $data): self
+    {
+        try {
+            $json = json_decode($data, true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            throw new RuntimeException("Can't convert json to data. " . $e->getMessage());
+        }
+
+        return new self(
+            $json['top_show'],
+            $json['reset'],
+            $json['auto_top_reward_active'],
+            $json['auto_top_reward'],
+            $json['enable_api'],
+            $json['need_login']
+        );
     }
 }
