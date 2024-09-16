@@ -33,9 +33,9 @@ return [
             'card_title' => 'Ajouter un site de votes',
             'input' => [
                 'title' => 'Titre du site de votes',
-                'time' => 'Temps entre chaques votes en minutes',
-                'id_unique' => 'Id ou clé API du site de vote',
-                'url' => 'Liens vers la page de votes',
+                'time' => 'Temps entre chaque votes en minutes',
+                'id_unique' => 'Identifiant ou clé API du site de vote',
+                'url' => 'Lien vers la page de votes',
                 'rewards' => 'Récompenses lors du vote',
             ],
             'placeholder' => [
@@ -47,7 +47,7 @@ return [
             ],
             'btn' => [
                 'sitescomp' => 'Sites compatibles',
-                'testid' => "Tester l'Id",
+                'testid' => "Tester l'Identifiant",
             ],
             'sitescomp' => [
                 'modal_title' => 'Liste des sites de votes compatibles',
@@ -60,7 +60,7 @@ return [
             'del_site' => [
                 'modal' => [
                     'title' => 'Suppression du site',
-                    'body' => 'Êtes-vous certains de vouloir supprimer ce site ?',
+                    'body' => 'Êtes-vous certain de vouloir supprimer ce site ?',
                 ],
             ],
             'tooltip' => [
@@ -70,18 +70,18 @@ return [
         ],
         'config' => [
             'reset' => [
-                '0' => 'Pas de reset de votes',
+                '0' => 'Pas de reset des votes',
                 '1' => 'Mensuel',
                 '2' => 'Hebdomadaire',
             ],
             'enable_api' => [
-                '0' => "Désactiver l'api locale",
-                '1' => "Activer l'api locale",
+                '0' => "Désactiver l'API locale",
+                '1' => "Activer l'API locale",
             ],
             'placeholder' => [
-                'reset' => 'Mode de reset des votes',
+                'reset' => 'Mode de réinitialisation des votes',
                 'top_show' => 'Nombre de voteurs à afficher',
-                'enable_api' => "Activer l'api du site",
+                'enable_api' => "Activer l'API du site",
             ],
             'needLogin' => 'Connexion requise',
         ],
@@ -127,7 +127,7 @@ return [
                 'title' => 'Cliquez sur la récompense que vous souhaitez éditer',
             ],
             'del' => [
-                'body' => 'Êtes-vous certains de vouloir supprimer cette récompense ?',
+                'body' => 'Êtes-vous certain de vouloir supprimer cette récompense ?',
                 'title' => 'Suppression de la récompense',
             ],
         ],
@@ -144,9 +144,9 @@ return [
                 'success' => 'Site <b>%name%</b> supprimé avec succès',
             ],
             'test_id' => [
-                'success' => 'Id unique validé !',
-                'error' => 'Id unique non validé !',
-                'empty_input' => 'Merci de remplir tous les champs !',
+                'success' => 'Identifiant unique validé !',
+                'error' => 'Identifiant unique non validé !',
+                'empty_input' => 'Merci de remplir l\'ensemble des champs !',
             ],
         ],
         'reward' => [
