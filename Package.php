@@ -37,7 +37,6 @@ class Package implements IPackageConfig
     {
         return [
             new PackageMenuType(
-                lang: 'fr',
                 icon: 'fas fa-vote-yea',
                 title: 'Votes',
                 url: null,
@@ -60,35 +59,6 @@ class Package implements IPackageConfig
                     ),
                     new PackageSubMenuType(
                         title: 'Statistiques',
-                        permission: 'votes.todo',  // TODO PERMS
-                        url: 'votes/stats',
-                    ),
-                ]
-            ),
-            new PackageMenuType(
-                lang: 'en',
-                icon: 'fas fa-vote-yea',
-                title: 'Votes',
-                url: null,
-                permission: null,
-                subMenus: [
-                    new PackageSubMenuType(
-                        title: 'Configuration',
-                        permission: 'votes.configuration',
-                        url: 'votes/config',
-                    ),
-                    new PackageSubMenuType(
-                        title: 'Rewards',
-                        permission: 'votes.rewards.edit',
-                        url: 'votes/rewards',
-                    ),
-                    new PackageSubMenuType(
-                        title: 'Manage sites',
-                        permission: 'votes.site.list',
-                        url: 'votes/site/list',
-                    ),
-                    new PackageSubMenuType(
-                        title: 'Statistics',
                         permission: 'votes.todo',  // TODO PERMS
                         url: 'votes/stats',
                     ),
