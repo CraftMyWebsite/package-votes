@@ -2,7 +2,7 @@
 
 namespace CMW\Entity\Votes;
 
-use CMW\Controller\Core\CoreController;
+use CMW\Utils\Date;
 use CMW\Manager\Env\EnvManager;
 use CMW\Model\Core\CoreModel;
 use CMW\Model\Users\UsersModel;
@@ -103,7 +103,7 @@ class VotesSitesEntity
      */
     public function getDateCreate(): string
     {
-        return CoreController::formatDate($this->dateCreate);
+        return Date::formatDate($this->dateCreate);
     }
 
     public function getSendLink(): string
