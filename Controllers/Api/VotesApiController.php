@@ -18,7 +18,7 @@ use JetBrains\PhpStorm\ExpectedValues;
  */
 class VotesApiController extends AbstractController
 {
-    private const usernameRegex = '[a-zA-Z0-9_]{2,16}$';
+    private const string usernameRegex = '[a-zA-Z0-9_]{2,16}$';
 
     /**
      * @return void
