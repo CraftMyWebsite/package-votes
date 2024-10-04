@@ -2,6 +2,7 @@
 
 namespace CMW\Package\Votes;
 
+use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\IPackageConfig;
 use CMW\Manager\Package\PackageMenuType;
 use CMW\Manager\Package\PackageSubMenuType;
@@ -43,22 +44,22 @@ class Package implements IPackageConfig
                 permission: null,
                 subMenus: [
                     new PackageSubMenuType(
-                        title: 'Configuration',
+                        title: LangManager::translate('votes.menu.config'),
                         permission: 'votes.configuration',
                         url: 'votes/config',
                     ),
                     new PackageSubMenuType(
-                        title: 'Récompenses',
+                        title: LangManager::translate('votes.menu.reward'),
                         permission: 'votes.rewards.edit',
                         url: 'votes/rewards',
                     ),
                     new PackageSubMenuType(
-                        title: 'Gestion des sites',
+                        title: LangManager::translate('votes.menu.sites'),
                         permission: 'votes.site.list',
                         url: 'votes/site/list',
                     ),
                     new PackageSubMenuType(
-                        title: 'Statistiques',
+                        title: LangManager::translate('votes.menu.stats'),
                         permission: 'votes.todo',  // TODO PERMS
                         url: 'votes/stats',
                     ),

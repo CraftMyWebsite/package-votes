@@ -175,4 +175,10 @@ return [
             'boost' => 'Manage boosts',
         ],
     ],
+    'menu' => [
+        'config' => 'Configuration',
+        'reward' => 'Rewards',
+        'sites' => 'Site management',
+        'stats' => 'Statistics',
+    ],
 ];

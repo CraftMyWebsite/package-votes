@@ -175,4 +175,10 @@ return [
             'boost' => 'Gérez les boosts',
         ],
     ],
+    'menu' => [
+        'config' => 'Configuration',
+        'reward' => 'Récompenses',
+        'sites' => 'Gestion des sites',
+        'stats' => 'Statistiques',
+    ],
 ];
