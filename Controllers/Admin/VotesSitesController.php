@@ -24,7 +24,7 @@ use function is_array;
  * Class: @VotesSitesController
  * @package Votes
  * @author Teyir & Zomb
- * @version 1.0
+ * @version 0.0.1
  */
 class VotesSitesController extends AbstractController
 {

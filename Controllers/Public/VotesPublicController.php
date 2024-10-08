@@ -25,7 +25,7 @@ use function is_null;
  * Class: @VotesPublicController
  * @package Votes
  * @author Teyir & Zomb
- * @version 1.0
+ * @version 0.0.1
  */
 class VotesPublicController extends AbstractController
 {

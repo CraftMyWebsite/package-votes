@@ -13,7 +13,7 @@ use CMW\Model\Votes\VotesStatsModel;
  * Class: @VotesStatsController
  * @package Votes
  * @author Teyir & Zomb
- * @version 1.0
+ * @version 0.0.1
  */
 class VotesStatsController extends AbstractController
 {
