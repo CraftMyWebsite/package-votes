@@ -37,14 +37,12 @@ class VotesPublicController extends AbstractController
         $topCurrent = VotesStatsModel::getInstance()->getActualTop();
         $topGlobal = VotesStatsModel::getInstance()->getGlobalTop();
 
-        // Include the Public view file ("Public/Themes/$themePath/Views/Votes/main.view.php")
-        $view = new View('Votes', 'main');
-
-        $view->addVariableList(['sites' => $sites,
-            'topCurrent' => $topCurrent, 'topGlobal' => $topGlobal]);
-        $view->addStyle('Admin/Resources/Vendors/Izitoast/iziToast.min.css');
-        $view->addScriptAfter('Admin/Resources/Vendors/Izitoast/iziToast.min.js', 'App/Package/Votes/Views/Resources/Js/public.js', 'App/Package/Votes/Views/Resources/Js/VotesStatus.js', 'App/Package/Votes/Views/Resources/Js/VotesLogic.js');
-        $view->view();
+        View::createPublicView('Votes', 'main')
+            ->addVariableList(['sites' => $sites,
+                'topCurrent' => $topCurrent, 'topGlobal' => $topGlobal])
+            ->addStyle('Admin/Resources/Vendors/Izitoast/iziToast.min.css')
+            ->addScriptAfter('Admin/Resources/Vendors/Izitoast/iziToast.min.js', 'App/Package/Votes/Views/Resources/Js/public.js', 'App/Package/Votes/Views/Resources/Js/VotesStatus.js', 'App/Package/Votes/Views/Resources/Js/VotesLogic.js')
+            ->view();
     }
 
     #[Link('/vote/testsend/:id', Link::GET, ['id' => '[0-9]+'])]
