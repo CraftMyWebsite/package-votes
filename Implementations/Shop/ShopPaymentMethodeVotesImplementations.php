@@ -82,7 +82,7 @@ class ShopPaymentMethodeVotesImplementations implements IPaymentMethod
 
     public function isVirtualCurrency(): bool
     {
-        return 1;
+        return true;
     }
 
     public function includeConfigWidgets(): void
