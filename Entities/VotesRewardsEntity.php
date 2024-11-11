@@ -2,7 +2,9 @@
 
 namespace CMW\Entity\Votes;
 
-class VotesRewardsEntity
+use CMW\Manager\Package\AbstractEntity;
+
+class VotesRewardsEntity extends AbstractEntity
 {
     private ?int $rewardsId;
     private string $varName;

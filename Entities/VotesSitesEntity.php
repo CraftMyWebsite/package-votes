@@ -2,13 +2,14 @@
 
 namespace CMW\Entity\Votes;
 
+use CMW\Manager\Package\AbstractEntity;
 use CMW\Utils\Date;
 use CMW\Manager\Env\EnvManager;
 use CMW\Model\Core\CoreModel;
 use CMW\Model\Users\UsersModel;
 use CMW\Model\Votes\VotesModel;
 
-class VotesSitesEntity
+class VotesSitesEntity extends AbstractEntity
 {
     private int $siteId;
     private string $title;
@@ -24,7 +25,7 @@ class VotesSitesEntity
      * @param string $url
      * @param int $time
      * @param string $idUnique
-     * @param \CMW\Entity\Votes\VotesRewardsEntity|null $rewardsId
+     * @param VotesRewardsEntity|null $rewardsId
      * @param string $dateCreate
      */
     public function __construct(int $siteId, string $title, string $url, int $time, string $idUnique, ?VotesRewardsEntity $rewardsId, string $dateCreate)
@@ -91,7 +92,7 @@ class VotesSitesEntity
     }
 
     /**
-     * @return \CMW\Entity\Votes\VotesRewardsEntity|null
+     * @return VotesRewardsEntity|null
      */
     public function getRewards(): ?VotesRewardsEntity
     {

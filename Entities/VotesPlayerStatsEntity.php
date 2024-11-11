@@ -3,15 +3,16 @@
 namespace CMW\Entity\Votes;
 
 use CMW\Entity\Users\UserEntity;
+use CMW\Manager\Package\AbstractEntity;
 
-class VotesPlayerStatsEntity
+class VotesPlayerStatsEntity extends AbstractEntity
 {
     private ?int $votes;
     private ?UserEntity $user;
 
     /**
      * @param int|null $votes
-     * @param \CMW\Entity\Users\UserEntity|null $player
+     * @param UserEntity|null $player
      */
     public function __construct(?int $votes, ?UserEntity $player)
     {
@@ -28,7 +29,7 @@ class VotesPlayerStatsEntity
     }
 
     /**
-     * @return \CMW\Entity\Users\UserEntity|null
+     * @return UserEntity|null
      */
     public function getUser(): ?UserEntity
     {
