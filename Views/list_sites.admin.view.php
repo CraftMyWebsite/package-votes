@@ -19,7 +19,7 @@ $description = LangManager::translate('votes.dashboard.desc');
 <div class="grid-3">
     <div class="card">
         <form method="post" action="">
-            <?php (new SecurityManager())->insertHiddenToken() ?>
+            <?php SecurityManager::getInstance()->insertHiddenToken() ?>
             <div class="space-y-4">
                 <h6><?= LangManager::translate('votes.dashboard.title.add_site') ?></h6>
                 <div>
@@ -166,7 +166,7 @@ $description = LangManager::translate('votes.dashboard.desc');
                                     </div>
                                     <form method="post"
                                           action="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'cmw-admin/votes/site/edit' ?>">
-                                        <?php (new SecurityManager())->insertHiddenToken() ?>
+                                        <?php SecurityManager::getInstance()->insertHiddenToken() ?>
                                         <div class="modal-body">
                                             <input type="text" name="siteId" value="<?= $site->getSiteId() ?>" hidden>
                                             <div class="space-y-4" style="text-align: left">

@@ -8,7 +8,7 @@ use CMW\Model\Shop\Payment\ShopPaymentMethodSettingsModel;
 ?>
 
 <form id="votePoints" action="payments/settings" method="post">
-    <?php (new SecurityManager())->insertHiddenToken(); ?>
+    <?php SecurityManager::getInstance()->insertHiddenToken(); ?>
 
 <div class="grid-2">
     <div>

@@ -19,7 +19,7 @@ $description = LangManager::translate('votes.dashboard.desc');
     <div class="card">
 
         <form method="post" action="rewards/add">
-            <?php (new SecurityManager())->insertHiddenToken() ?>
+            <?php SecurityManager::getInstance()->insertHiddenToken() ?>
             <div class="space-y-4">
                 <h6><?= LangManager::translate('votes.dashboard.rewards.add.title') ?></h6>
                 <div>

@@ -16,7 +16,7 @@ $description = LangManager::translate('votes.dashboard.desc');
         <div class="card">
             <h6><?= LangManager::translate('votes.dashboard.title.settings') ?></h6>
             <form method="post" action="">
-                <?php (new SecurityManager())->insertHiddenToken() ?>
+                <?php SecurityManager::getInstance()->insertHiddenToken() ?>
                 <div class="space-y-4">
                     <div>
                         <label for="topShow"><?= LangManager::translate('votes.dashboard.config.placeholder.top_show') ?> :</label>
