@@ -2,11 +2,11 @@
 
 namespace CMW\Entity\Votes;
 
+use CMW\Controller\Users\UsersSessionsController;
 use CMW\Manager\Package\AbstractEntity;
 use CMW\Utils\Date;
 use CMW\Manager\Env\EnvManager;
 use CMW\Model\Core\CoreModel;
-use CMW\Model\Users\UsersModel;
 use CMW\Model\Votes\VotesModel;
 
 class VotesSitesEntity extends AbstractEntity
@@ -134,11 +134,11 @@ class VotesSitesEntity extends AbstractEntity
      */
     public function getTimeRemaining(): ?int
     {
-        if (VotesModel::getInstance()->getPlayerLastStoredVote(UsersModel::getCurrentUser()?->getId(), $this->siteId) === []) {
+        if (VotesModel::getInstance()->getPlayerLastStoredVote(UsersSessionsController::getInstance()->getCurrentUser()?->getId(), $this->siteId) === []) {
             return null;
         }
 
-        $votesDate = VotesModel::getInstance()->getPlayerLastStoredVote(UsersModel::getCurrentUser()?->getId(), $this->siteId)['votes_date'];
+        $votesDate = VotesModel::getInstance()->getPlayerLastStoredVote(UsersSessionsController::getInstance()->getCurrentUser()?->getId(), $this->siteId)['votes_date'];
 
         if ($votesDate === null) {
             return null;

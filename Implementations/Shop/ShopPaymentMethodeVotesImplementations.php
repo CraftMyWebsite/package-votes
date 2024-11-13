@@ -3,6 +3,7 @@
 namespace CMW\Implementation\Votes\Shop;
 
 use CMW\Controller\Shop\Admin\Payment\ShopPaymentsController;
+use CMW\Controller\Users\UsersSessionsController;
 use CMW\Controller\Votes\Payment\VotesPaymentController;
 use CMW\Entity\Shop\Deliveries\ShopDeliveryUserAddressEntity;
 use CMW\Entity\Users\UserEntity;
@@ -10,7 +11,6 @@ use CMW\Interface\Shop\IPaymentMethod;
 use CMW\Manager\Env\EnvManager;
 use CMW\Model\Shop\Payment\ShopPaymentMethodSettingsModel;
 use CMW\Model\Shop\Setting\ShopSettingsModel;
-use CMW\Model\Users\UsersModel;
 use CMW\Model\Votes\VotesStatsModel;
 
 class ShopPaymentMethodeVotesImplementations implements IPaymentMethod
@@ -20,7 +20,7 @@ class ShopPaymentMethodeVotesImplementations implements IPaymentMethod
         $url = $_SERVER['REQUEST_URI'];
 
         if (str_contains($url, 'shop/command')) {
-            $tokenStock = VotesStatsModel::getInstance()->getVotePointByUserId(UsersModel::getCurrentUser()->getId());
+            $tokenStock = VotesStatsModel::getInstance()->getVotePointByUserId(UsersSessionsController::getInstance()->getCurrentUser()?->getId());
             return ShopPaymentMethodSettingsModel::getInstance()->getSetting($this->varName() . '_name') . " - Solde: $tokenStock" ?? "Points de votes - Solde: $tokenStock";
         } else {
             return ShopPaymentMethodSettingsModel::getInstance()->getSetting($this->varName() . '_name') ?? 'Points de votes';

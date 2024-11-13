@@ -3,20 +3,19 @@
 namespace CMW\Controller\Votes\Public;
 
 use CMW\Controller\Users\UsersController;
+use CMW\Controller\Users\UsersSessionsController;
 use CMW\Controller\Votes\Admin\VotesRewardsController;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
-use CMW\Model\Users\UsersModel;
 use CMW\Model\Votes\CheckVotesModel;
 use CMW\Model\Votes\VotesModel;
 use CMW\Model\Votes\VotesSitesModel;
 use CMW\Model\Votes\VotesStatsModel;
 use CMW\Utils\Client;
 use CMW\Utils\Redirect;
-use CMW\Utils\Website;
 use JsonException;
 
 use function is_null;
@@ -49,7 +48,7 @@ class VotesPublicController extends AbstractController
     private function votesWebsiteTestPublic(int $id): void
     {
         if (UsersController::isAdminLogged()) {
-            $userId = UsersModel::getCurrentUser()?->getId();
+            $userId = UsersSessionsController::getInstance()->getCurrentUser()?->getId();
             $reward = VotesSitesModel::getInstance()->getSiteById($id)?->getRewards();
             if (!is_null($reward)) {
                 $site = VotesSitesModel::getInstance()->getSiteById($id);
@@ -71,7 +70,7 @@ class VotesPublicController extends AbstractController
     #[Link('/vote/send/:id', Link::GET, ['id' => '[0-9]+'])]
     private function votesWebsitePublic(int $id): void
     {
-        $userId = UsersModel::getCurrentUser()?->getId();
+        $userId = UsersSessionsController::getInstance()->getCurrentUser()?->getId();
 
         if ($userId === null) {
             echo 'User not Found.';

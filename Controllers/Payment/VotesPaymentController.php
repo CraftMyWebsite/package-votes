@@ -3,6 +3,7 @@
 namespace CMW\Controller\Votes\Payment;
 
 use CMW\Controller\Shop\Admin\Item\ShopItemsController;
+use CMW\Controller\Users\UsersSessionsController;
 use CMW\Event\Shop\ShopPaymentCancelEvent;
 use CMW\Event\Shop\ShopPaymentCompleteEvent;
 use CMW\Manager\Events\Emitter;
@@ -10,7 +11,6 @@ use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
-use CMW\Model\Users\UsersModel;
 use CMW\Model\Votes\VotesRewardsModel;
 use CMW\Model\Votes\VotesStatsModel;
 use CMW\Utils\Redirect;
@@ -29,7 +29,7 @@ class VotesPaymentController extends AbstractController
      */
     public function payByVotePoints(array $cartItems): void
     {
-        $user = UsersModel::getCurrentUser();
+        $user = UsersSessionsController::getInstance()->getCurrentUser();
 
         if (!$user) {
             Flash::send(Alert::ERROR, 'Erreur', 'Utilisateur introuvable');
