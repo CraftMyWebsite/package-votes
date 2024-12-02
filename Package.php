@@ -47,21 +47,25 @@ class Package implements IPackageConfig
                         title: LangManager::translate('votes.menu.config'),
                         permission: 'votes.configuration',
                         url: 'votes/config',
+                        subMenus: []
                     ),
                     new PackageSubMenuType(
                         title: LangManager::translate('votes.menu.reward'),
                         permission: 'votes.rewards.edit',
                         url: 'votes/rewards',
+                        subMenus: []
                     ),
                     new PackageSubMenuType(
                         title: LangManager::translate('votes.menu.sites'),
                         permission: 'votes.site.list',
                         url: 'votes/site/list',
+                        subMenus: []
                     ),
                     new PackageSubMenuType(
                         title: LangManager::translate('votes.menu.stats'),
                         permission: 'votes.todo',  // TODO PERMS
                         url: 'votes/stats',
+                        subMenus: []
                     ),
                 ]
             ),
