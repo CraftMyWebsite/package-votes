@@ -22,8 +22,8 @@ class VotesConfigBlacklistModel extends AbstractModel
         $sql = 'SELECT ranking.user_id, ranking.author_id, ranking.created_at, user.user_pseudo, 
                     author.user_pseudo as author_pseudo
                     FROM cmw_votes_ignored_ranking ranking
-                    JOIN cmw.cmw_users user on ranking.user_id = user.user_id
-                    JOIN cmw.cmw_users author on ranking.author_id = author.user_id';
+                    JOIN cmw_users user on ranking.user_id = user.user_id
+                    JOIN cmw_users author on ranking.author_id = author.user_id';
         $db = DatabaseManager::getInstance();
 
         $req = $db->prepare($sql);
@@ -57,7 +57,7 @@ class VotesConfigBlacklistModel extends AbstractModel
             'author_id' => $authorId,
         ];
 
-        $sql = "INSERT INTO cmw.cmw_votes_ignored_ranking (user_id, author_id) VALUES (:user_id, :author_id)";
+        $sql = "INSERT INTO cmw_votes_ignored_ranking (user_id, author_id) VALUES (:user_id, :author_id)";
         $db = DatabaseManager::getInstance();
 
         return $db->prepare($sql)->execute($data);
@@ -69,7 +69,7 @@ class VotesConfigBlacklistModel extends AbstractModel
      */
     public function removeBlacklist(int $userId): bool
     {
-        $sql = "DELETE FROM cmw.cmw_votes_ignored_ranking WHERE user_id = :user_id";
+        $sql = "DELETE FROM cmw_votes_ignored_ranking WHERE user_id = :user_id";
         $db = DatabaseManager::getInstance();
         return $db->prepare($sql)->execute(['user_id' => $userId]);
     }
