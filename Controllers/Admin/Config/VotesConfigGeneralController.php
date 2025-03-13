@@ -1,9 +1,10 @@
 <?php
 
-namespace CMW\Controller\Votes\Admin;
+namespace CMW\Controller\Votes\Admin\Config;
 
 use CMW\Controller\Users\UsersController;
 use CMW\Manager\Cache\SimpleCacheManager;
+use CMW\Manager\Filter\FilterManager;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
@@ -11,42 +12,40 @@ use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
 use CMW\Model\Votes\VotesConfigModel;
-use CMW\Utils\Log;
 use CMW\Utils\Redirect;
-use CMW\Utils\Utils;
 use JetBrains\PhpStorm\NoReturn;
 use function is_null;
 
 /**
- * Class: @VotesConfigController
+ * Class: @VotesConfigGeneralController
  * @package Votes
- * @author Teyir & Zomb
- * @version 0.0.1
  */
-class VotesConfigController extends AbstractController
+class VotesConfigGeneralController extends AbstractController
 {
-    #[Link(path: '/', method: Link::GET, scope: '/cmw-admin/votes')]
-    #[Link('/config', Link::GET, [], '/cmw-admin/votes')]
-    private function votesConfig(): void
+    #[Link('/general', Link::GET, scope: '/cmw-admin/votes/config')]
+    private function generalConfig(): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'votes.configuration');
 
         $config = VotesConfigModel::getInstance()->getConfig();
 
-        View::createAdminView('Votes', 'config')
+        View::createAdminView('Votes', 'Config/general')
             ->addVariableList(['config' => $config])
             ->view();
     }
 
-    #[NoReturn] #[Link('/config', Link::POST, [], '/cmw-admin/votes')]
-    private function votesConfigPost(): void
+    #[NoReturn] #[Link('/general', Link::POST, scope: '/cmw-admin/votes/config')]
+    private function generalConfigPost(): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'votes.configuration');
 
-        [$topShow, $reset, $autoTopRewardActive, $autoTopReward, $enableApi] = Utils::filterInput('topShow',
-            'reset', 'autoTopRewardActive', 'autoTopReward', 'api');
+        $topShow = FilterManager::filterInputIntPost("top_show");
+        $reset = FilterManager::filterInputStringPost("reset", 1);
+        $autoTopRewardActive = FilterManager::filterInputIntPost("auto_top_reward_active");
+        $autoTopReward = FilterManager::filterInputStringPost("auto_top_reward");
+        $enableApi = FilterManager::filterInputIntPost("api", 1);
 
-        $needLogin = isset($_POST['needLogin']) ? 1 : 0;
+        $needLogin = isset($_POST['need_login']) ? 1 : 0;
 
         $updatedConfig = VotesConfigModel::getInstance()->updateConfig(
             $topShow,
@@ -68,7 +67,7 @@ class VotesConfigController extends AbstractController
         }
 
         //Update cache
-        SimpleCacheManager::storeCache($updatedConfig->toJson(), 'config', 'Votes');
+        SimpleCacheManager::storeCache($updatedConfig->toJson(), 'general', 'Votes/Config');
 
         Flash::send(
             Alert::SUCCESS,

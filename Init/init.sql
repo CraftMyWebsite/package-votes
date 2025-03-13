@@ -90,6 +90,20 @@ CREATE TABLE IF NOT EXISTS `cmw_votes_votepoints`
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `cmw_votes_ignored_ranking`
+(
+    `user_id`    INT(11)   NOT NULL,
+    `author_id`  INT(11)   NOT NULL,
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`user_id`),
+    CONSTRAINT `cmw_votes_ignored_ranking_ibfk_1` FOREIGN KEY (`user_id`)
+        REFERENCES `cmw_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `cmw_votes_ignored_ranking_ibfk_2` FOREIGN KEY (`author_id`)
+        REFERENCES `cmw_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
+
 
 #Generate Default config
 INSERT INTO cmw_votes_config (votes_config_top_show, votes_config_reset, votes_config_auto_top_reward_active,

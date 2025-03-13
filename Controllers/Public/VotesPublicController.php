@@ -10,14 +10,15 @@ use CMW\Manager\Flash\Flash;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
+use CMW\Mapper\Votes\VotesPublicPlayersStatsMapper;
 use CMW\Model\Votes\CheckVotesModel;
+use CMW\Model\Votes\Config\VotesConfigBlacklistModel;
 use CMW\Model\Votes\VotesModel;
 use CMW\Model\Votes\VotesSitesModel;
 use CMW\Model\Votes\VotesStatsModel;
 use CMW\Utils\Client;
 use CMW\Utils\Redirect;
 use JsonException;
-
 use function is_null;
 
 /**
@@ -35,6 +36,11 @@ class VotesPublicController extends AbstractController
 
         $topCurrent = VotesStatsModel::getInstance()->getActualTop();
         $topGlobal = VotesStatsModel::getInstance()->getGlobalTop();
+
+        //Ignore blacklisted players
+        $blacklists = VotesConfigBlacklistModel::getInstance()->getBlacklists();
+        $topCurrent = VotesPublicPlayersStatsMapper::removeIgnoredBlacklisted($topCurrent, $blacklists);
+        $topGlobal = VotesPublicPlayersStatsMapper::removeIgnoredBlacklisted($topGlobal, $blacklists);
 
         View::createPublicView('Votes', 'main')
             ->addVariableList(['sites' => $sites,
@@ -80,7 +86,7 @@ class VotesPublicController extends AbstractController
         $reward = VotesSitesModel::getInstance()->getSiteById($id)?->getRewards();
 
         if (CheckVotesModel::getInstance()->isVoteSend(VotesSitesModel::getInstance()->getSiteById($id)?->getUrl(),
-                VotesSitesModel::getInstance()->getSiteById($id)?->getIdUnique(), Client::getIp())) {
+            VotesSitesModel::getInstance()->getSiteById($id)?->getIdUnique(), Client::getIp())) {
             // Check if the player has a vote stored
             if (VotesModel::getInstance()->playerHasAVoteStored($userId, $id)) {
                 // Check if we can validate this vote

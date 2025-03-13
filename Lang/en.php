@@ -84,6 +84,11 @@ return [
                 'enable_api' => "Activate the site's API",
             ],
             'needLogin' => 'User need to be logged',
+            'blacklist' => [
+                'title' => 'Votes - Blacklist',
+                'description' => 'Votes - Blacklist',
+                'heading' => 'Votes - Manage the blacklist',
+            ],
         ],
         'stats' => [
             'somenumber' => 'Some numbers',
@@ -157,6 +162,12 @@ return [
                 'success' => 'Récompense <b>%name%</b> successfully deleted',
             ],
         ],
+        'user_not_found' => 'User not found',
+        'user_already_blacklisted' => 'User %pseudo% already blacklisted',
+        'error_add_blacklist' => 'Error adding the user to the blacklist',
+        'success_add_blacklist' => 'User %pseudo% successfully added to the blacklist',
+        'error_remove_blacklist' => 'Error removing %pseudo% from the blacklist',
+        'success_remove_blacklist' => 'User %pseudo% successfully removed from the blacklist',
     ],
     'permissions' => [
         'votes' => [
@@ -176,7 +187,11 @@ return [
         ],
     ],
     'menu' => [
-        'config' => 'Configuration',
+        'config' => [
+            'title' => 'Configuration',
+            'general' => 'General',
+            'blacklist' => 'Blacklist',
+        ],
         'reward' => 'Rewards',
         'sites' => 'Site management',
         'stats' => 'Statistics',

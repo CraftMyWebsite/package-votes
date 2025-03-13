@@ -16,7 +16,7 @@ class Package implements IPackageConfig
 
     public function version(): string
     {
-        return '1.0.0';
+        return '1.1.0';
     }
 
     public function authors(): array
@@ -44,10 +44,23 @@ class Package implements IPackageConfig
                 permission: null,
                 subMenus: [
                     new PackageSubMenuType(
-                        title: LangManager::translate('votes.menu.config'),
+                        title: LangManager::translate('votes.menu.config.title'),
                         permission: 'votes.configuration',
-                        url: 'votes/config',
-                        subMenus: []
+                        url: null,
+                        subMenus: [
+                            new PackageSubMenuType(
+                                title: LangManager::translate('votes.menu.config.general'),
+                                permission: 'votes.configuration',
+                                url: 'votes/config/general',
+                                subMenus: []
+                            ),
+                            new PackageSubMenuType(
+                                title: LangManager::translate('votes.menu.config.blacklist'),
+                                permission: 'votes.configuration',
+                                url: 'votes/config/blacklist',
+                                subMenus: []
+                            ),
+                        ]
                     ),
                     new PackageSubMenuType(
                         title: LangManager::translate('votes.menu.reward'),
