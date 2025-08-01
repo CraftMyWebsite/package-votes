@@ -7,13 +7,13 @@ use CMW\Controller\Users\UsersSessionsController;
 use CMW\Controller\Votes\Payment\VotesPaymentController;
 use CMW\Entity\Shop\Deliveries\ShopDeliveryUserAddressEntity;
 use CMW\Entity\Users\UserEntity;
-use CMW\Interface\Shop\IPaymentMethod;
+use CMW\Interface\Shop\IPaymentMethodV2;
 use CMW\Manager\Env\EnvManager;
 use CMW\Model\Shop\Payment\ShopPaymentMethodSettingsModel;
 use CMW\Model\Shop\Setting\ShopSettingsModel;
 use CMW\Model\Votes\VotesStatsModel;
 
-class ShopPaymentMethodeVotesImplementations implements IPaymentMethod
+class ShopPaymentMethodeVotesImplementations implements IPaymentMethodV2
 {
     public function name(): string
     {
@@ -91,7 +91,7 @@ class ShopPaymentMethodeVotesImplementations implements IPaymentMethod
         require_once EnvManager::getInstance()->getValue('DIR') . 'App/Package/Votes/Views/Elements/votePoints.config.inc.view.php';
     }
 
-    public function doPayment(array $cartItems, UserEntity $user, ShopDeliveryUserAddressEntity $address): void
+    public function doPayment(array $cartItems, UserEntity $user): void
     {
         VotesPaymentController::getInstance()->payByVotePoints($cartItems);
     }
